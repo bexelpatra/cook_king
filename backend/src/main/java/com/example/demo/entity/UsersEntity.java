@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.PinKind;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,10 @@ public class UsersEntity {
     private String token;
     private String password;
     private Date regDate;
+    private String email;
+    private String pin;
+    private PinKind pinKind;
+    private String nickname;
 
     @Builder
     public UsersEntity(int id, String name, String token, String password, Date regDate) {
@@ -36,15 +41,6 @@ public class UsersEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Basic
     @Column(name = "token")
@@ -91,5 +87,45 @@ public class UsersEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, token, password, regDate);
+    }
+
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Basic
+    @Column(name = "pin")
+    public String getPin() {
+        return pin;
+    }
+
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
+    @Basic
+    @Column(name = "pin_kind")
+    public PinKind getPinKind() {
+        return pinKind;
+    }
+
+    public void setPinKind(PinKind pinKind) {
+        this.pinKind = pinKind;
+    }
+
+    @Basic
+    @Column(name = "nickname")
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
