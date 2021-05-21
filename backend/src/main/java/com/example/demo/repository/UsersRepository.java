@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface UsersRepository extends JpaRepository<UsersEntity,Long> {
-    List<UsersEntity> findUsersEntitiesByIdGreaterThanEqual(int id);
+    UsersEntity findUsersEntityById(long id);
+
+    List<UsersEntity> findUsersEntitiesByIdGreaterThanEqual(long id);
 }
