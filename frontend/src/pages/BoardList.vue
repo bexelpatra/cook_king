@@ -1,4 +1,4 @@
-<!--fixme 레시피 게시물-->
+<!--fixme 게시물 리스트-->
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
@@ -12,7 +12,7 @@
   import {LocalStorage} from 'quasar';
 
   export default {
-    name: 'Board',
+    name: 'BoardList',
     computed:{
       ...mapGetters(['getLayout'])
     },
@@ -29,7 +29,7 @@
     beforeCreate() {},
     created() {},
     beforeMount() {
-      this.getLayout.title = '레시피 정보';
+      this.getLayout.title = '레시피';
       this.getLayout.headerLayout = true;
     },
     mounted() {},
