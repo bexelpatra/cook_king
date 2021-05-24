@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header>
+  <q-layout>
+    <q-header v-if="headerLayout">
       <q-toolbar>
         <q-btn
           flat
@@ -8,22 +8,20 @@
           round
           icon="menu"
           aria-label="Menu"
-          v-if="menuList"
           @click="leftDrawerOpen = !leftDrawerOpen"
-          style="border: 1px solid red"
         />
 
-        <q-toolbar-title class="absolute-center" style="border: 10px solid red">
+        <q-toolbar-title class="text-h5 text-weight-bold absolute-center">
           {{title}}
         </q-toolbar-title>
-        <q-space style="border: 1px solid red"/>
+
+        <q-space/>
         <q-btn
           flat
           dense
           round
           icon="menu"
           aria-label="Menu"
-          v-if="menuList"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
@@ -45,45 +43,36 @@
 </template>
 
 <script>
-import {mapActions,mapGetters,mapMutations,mapState} from 'vuex';
-import {LocalStorage} from 'quasar';
+  import {mapActions,mapMutations,mapGetters} from 'vuex';
+  import {LocalStorage} from 'quasar';
 
-export default {
-  name: 'MainLayout',
-  computed :{
-    ...mapGetters([]),
-  },
-  data () {
-    return {
-      leftDrawerOpen: false,
-      title:'쿠킹',
-      menuList : true,
-    }
-  },
-  methods :{
-    ...mapMutations([
-      'setLayout',
-    ]),
-    ...mapActions([]),
-  },
-  beforeCreate() {
-
-  },
-  created() {
-  },
-  beforeMount() {
-  },
-  mounted() {
-  },
-  beforeUpdate() {
-    this.setLayout(this);
-  },
-  updated() {
-  },
-  beforeDestroy() {
-  },
-  destroyed() {
-  },
-}
-
+  export default {
+    name: 'MainLayout',
+    computed:{
+      ...mapGetters([]),
+    },
+    data () {
+      return {
+        leftDrawerOpen: false,
+        title: "쿠킹",
+        headerLayout: true,
+      }
+    },
+    methods:{
+      ...mapMutations([
+        'setLayout'
+      ]),
+      ...mapActions([]),
+    },
+    beforeCreate() {},
+    created() {},
+    beforeMount() {
+      this.setLayout(this);
+    },
+    mounted() {},
+    beforeUpdate() {},
+    updated() {},
+    beforeDestroy() {},
+    destroyed() {}
+  }
 </script>
