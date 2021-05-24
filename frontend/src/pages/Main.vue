@@ -5,9 +5,21 @@
       <div class="text-h5 text-weight-bold q-pb-sm">
         인기 레시피
       </div>
-      <div class="flex flex-center full-width" style="border: solid 1px red; height: 50vw">
-        여기는 슬라이드 이미지<br>
-        하단에는 레시피 이름
+      <div class="flex flex-center" style="border: solid 1px red; height: 50vw">
+        <splide
+          :slides="slides"
+          class="no-padding q-mb-xs"
+          :options="splideOptions"
+        >
+          <splide-slide>
+              <img src="imgs/1.png"
+              >
+          </splide-slide>
+          <splide-slide>
+            <img src="imgs/2.png"
+            >
+          </splide-slide>
+        </splide>
       </div>
     </section>
 
@@ -50,7 +62,17 @@
     },
     data(){
       return{
-
+        slides : [],
+        splideOptions : {
+          type: 'slide',
+          focus : 'center',
+          padding : {
+            right : '1rem',
+            left : '1rem'
+          },
+          arrows : false,
+          drag : true
+        }
       }
     },
     methods:{
@@ -61,7 +83,7 @@
     beforeCreate() {},
     created() {},
     beforeMount() {
-      this.getLayout.title = '테스트1';
+      this.getLayout.title = 'Cook-King';
       this.getLayout.headerLayout = true;
     },
     mounted() {},
