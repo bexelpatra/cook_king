@@ -11,8 +11,12 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {path: '/main', name: 'main', component: () => import('pages/Main.vue')},
-      {path: '/board', name: 'board', component: () => import('pages/Content.vue')},
-      {path: '/JaisungTest', name: 'JaisungTest', component: () => import('pages/JaisungTest.vue')},
+      //게시물
+      {path: '/board', name: 'board', component: () => import('pages/Board.vue')},
+      {path: '/boardlist', name: 'boardlist', component: () => import('pages/BoardList.vue')},
+      {path: '/recipe', name: 'recipe', component: () => import('pages/Recipe.vue')},
+      //내 정보
+      {path: '/my', name: 'my', component: () => import('pages/MyInfo.vue')},
     ]
   },
 
