@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@splidejs/splide": "^2.4.21",
+    "@splidejs/vue-splide": "^0.3.5",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
