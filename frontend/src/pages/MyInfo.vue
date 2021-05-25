@@ -29,8 +29,7 @@
     beforeCreate() {},
     created() {},
     beforeMount() {
-      this.getLayout.title = '내정보';
-      this.getLayout.headerLayout = true;
+      this.getLayout.bottomFooter = true;
     },
     mounted() {},
     beforeUpdate() {},

@@ -1,4 +1,4 @@
-<!--fixme 게시물 작성-->
+<!--fixme 태그 -->
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
@@ -12,7 +12,7 @@
   import {LocalStorage} from 'quasar';
 
   export default {
-    name: 'Recipe',
+    name: 'Tag',
     computed:{
       ...mapGetters(['getLayout'])
     },
@@ -29,9 +29,7 @@
     beforeCreate() {},
     created() {},
     beforeMount() {
-      this.getLayout.title = '게시물작성';
       this.getLayout.bottomFooter = true;
-      this.getLayout.headerLayout = true;
     },
     mounted() {},
     beforeUpdate() {},

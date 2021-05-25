@@ -29,8 +29,7 @@
     beforeCreate() {},
     created() {},
     beforeMount() {
-      this.getLayout.title = '레시피';
-      this.getLayout.headerLayout = true;
+      this.getLayout.bottomFooter = true;
     },
     mounted() {},
     beforeUpdate() {},

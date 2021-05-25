@@ -30,6 +30,7 @@
     created() {},
     beforeMount() {
       this.getLayout.title = '레시피 정보';
+      this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = true;
     },
     mounted() {},
