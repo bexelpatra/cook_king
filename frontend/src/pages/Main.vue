@@ -100,6 +100,7 @@ fixme 추가적으로  레이아웃 설명
       ...mapActions([]),
 
       onMounted(index){
+        console.log(index)
         this.index = index;
       }
     },
