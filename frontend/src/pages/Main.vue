@@ -225,6 +225,7 @@
       ...mapActions([]),
 
       onMounted(index){
+        console.log(index)
         this.index = index;
       }
     },
