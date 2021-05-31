@@ -75,6 +75,7 @@ fixme 추가적으로  레이아웃 설명
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
+  import * as myUtil from '../boot/myUtils'
 
   export default {
     name: 'Main',
@@ -92,7 +93,8 @@ fixme 추가적으로  레이아웃 설명
           },
           arrows : false,
           drag : true
-        }
+        },
+        query :{},
       }
     },
     methods:{
@@ -111,7 +113,11 @@ fixme 추가적으로  레이아웃 설명
       this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = false;
     },
-    mounted() {},
+    mounted() {
+      this.query = myUtil.getQuery(this);
+      console.log(this.query);
+      console.log(this.query.name);
+    },
     beforeUpdate() {},
     updated() {},
     beforeDestroy() {},

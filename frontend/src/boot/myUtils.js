@@ -34,3 +34,18 @@ exports.pageMove = (vue,to,query) =>{
 exports.getQuery = (vue) =>{
   return vue.$router.history.current.query;
 }
+
+/**
+ *
+ * @param str
+ * @param length
+ * @returns {string}
+ */
+exports.strSummary = (str, len) =>{
+  str = str.toString();
+  if(str.length < len){
+    return str;
+  }
+  return str.substr(0,len)+"...";
+}
+
