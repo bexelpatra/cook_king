@@ -47,7 +47,7 @@
     </section>
 
     <!-- fixme set2 -->
-    <section class="q-mt-lg">
+    <section class="q-mt-sm">
       <div class="q-pa-md text-h5 text-weight-bold q-pt-md">
         한식 레시피
       </div>
@@ -81,7 +81,7 @@
     </section>
 
     <!-- fixme set3-->
-    <section class="q-mt-lg">
+    <section class="q-mt-sm">
       <div class="q-pa-md text-h5 text-weight-bold q-pt-md">
         양식 레시피
       </div>
@@ -115,7 +115,7 @@
     </section>
 
     <!-- fixme set4-->
-    <section class="q-mt-lg">
+    <section class="q-mt-sm">
       <div class="q-pa-md text-h5 text-weight-bold q-pt-md">
         일식 레시피
       </div>
@@ -149,7 +149,7 @@
     </section>
 
     <!-- fixme set5-->
-    <section class="q-mt-lg">
+    <section class="q-mt-sm">
       <div class="q-pa-md text-h5 text-weight-bold q-pt-md">
         중식 레시피
       </div>
