@@ -1,7 +1,7 @@
 <!--fixme q-Layout 에 view="LHh lpr lFf" 안적으면 footer가 안먹힘-->
 <template>
   <q-layout view="lHh lpr lFf">
-    <q-header v-if="headerLayout">
+    <q-header v-if="headerLayout" class="bg-white text-black">
       <q-toolbar>
         <!--fixme 뒤로가기 버튼-->
         <q-btn
@@ -19,7 +19,7 @@
 
         <!--fixme 즐겨찾기 추가 버튼-->
         <q-space/>
-        <section>
+        <section v-if="bookmarkbtn">
           <q-btn
             v-if="bookmark"
             flat
@@ -81,7 +81,7 @@
         title : '',
         backbotton: true,
         bookmark: true,
-
+        bookmarkbtn: true,
       }
     },
     methods:{
