@@ -20,7 +20,9 @@
       ...mapGetters([]),
     },
     data() {
-      return {}
+      return {
+        appVersion : LocalStorage.getItem("US_VS")
+      }
     },
 
     methods: {

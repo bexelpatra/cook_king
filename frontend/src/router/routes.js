@@ -27,6 +27,12 @@ const routes = [
       {path: '/signup', name: 'signup', component: () => import('pages/SignUp.vue')},
       //myUtil 샘플
       {path: '/test', name: 'test', component: () => import('pages/TEST.vue')},
+
+      //fixme Settings
+      //핀등록
+      {path: '/security', name: 'security', component: () => import('pages/settings/Security.vue')},
+      //핀/생체보안 설정
+      {path: '/personer', name: 'personer', component: () => import('pages/settings/Personal.vue')},
     ]
   },
 
