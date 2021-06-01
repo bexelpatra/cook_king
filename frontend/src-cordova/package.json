@@ -23,5 +23,8 @@
     "platforms": [
       "android"
     ]
+  },
+  "dependencies": {
+    "cordova-plugin-device": "^2.0.3"
   }
 }
