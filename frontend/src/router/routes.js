@@ -24,8 +24,11 @@ const routes = [
       //내 정보
       {path: '/my', name: 'my', component: () => import('pages/MyInfo.vue')},
 
-      //Settings
-      {path: '/version', name: 'version', component: () => import('pages/settings/Version.vue')},
+      //fixme Settings
+      //핀등록
+      {path: '/security', name: 'security', component: () => import('pages/settings/Security.vue')},
+      //핀/생체보안 설정
+      {path: '/personer', name: 'personer', component: () => import('pages/settings/Personal.vue')},
     ]
   },
 

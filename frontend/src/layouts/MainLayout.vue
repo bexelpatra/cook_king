@@ -11,6 +11,7 @@
           round
           icon="arrow_back"
           color="black"
+          @click="backBtn"
         />
 
         <q-toolbar-title class="text-h5 text-weight-bold absolute-center">
@@ -100,7 +101,9 @@
       //즐찾
       mybookPage(){ this.$router.push('bookmark'); },
       //내정보
-      myinfoPage(){ this.$router.push('my'); }
+      myinfoPage(){ this.$router.push('my'); },
+      //뒤로가기
+      backBtn(){ this.$router.back()},
     },
     beforeCreate() {},
     created() {},
