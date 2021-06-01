@@ -8,57 +8,68 @@
         </div>
 
         <!-- 검색창   -->
-        <div>
-          <q-card flat class="" style="border-radius: 10px; height: 4em" >
-            <div class="flex">
-              <q-select
-                style="width: 25%;"
-                v-model="searchOption"
-                :options="options"
-                me
-              />
+        <q-card flat class="" style="border-radius: 10px; height: 4em" >
+          <div class="flex">
+        <!-- 검색 조건을 입력하는 부분 -->
+            <q-select
+              style="width: 22%; font-size: 0.9em"
+              v-model="searchOption"
+              :options="options"
+            />
               <q-input
                 clearable
                 filled
-                label="#검색"
                 class="q-py-lg-xs"
                 v-model="keyword"
-                style="width: 55%;font-size: 2em"
+                style="width: 55%;font-size: 1em"
+                type="text"
               >
-
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
               </q-input>
-              <q-btn
-                flat
-                label="검색"
-                class=""
-                size="1em"
-                style="width: 20%;"
-                dense
-              />
-            </div>
-          </q-card>
-        </div>
 
+            <q-btn
+              flat
+              label="검색"
+              class=""
+              size="1em"
+              style="width: 20%;"
+              dense
+              @click="searching()"
+            />
+          </div>
+        </q-card>
       </div>
     </section>
 
     <section class="q-mt-md">
 <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
 <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
-      <div v-for="recipe in recipeList">
-        <q-card class="flex" style="width: 100%;height:5em;" >
-          <div class="q-pa-sm full-height" style="width: 20%;"><img :src=recipe.scr class="full-height"/></div>
-          <div class="q-pa-sm full-height" style="width: 70%;">
-            <div class="text-weight-bold" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-            <div class="q-py-xs">{{strSummary(recipe.introduce,16)}}</div>
-          </div>
+      <div v-if="recipeList!=null">
+        <div v-for="recipe in recipeList"  >
+          <q-card class="flex" style="width: 100%;height:5em;" @click.prevent="pageMove('',recipe)">
+            <div class="q-pa-sm full-height" style="width: 20%;">
+              <img :src=recipe.src class="" height="55" width="55"/>
+            </div>
+            <div class="q-pa-sm full-height" style="width: 70%;">
+              <div class="text-weight-bold" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
+              <div class="q-py-xs">{{strSummary(recipe.introduce,16)}}</div>
+            </div>
+          </q-card>
+        </div>
+
+        <q-btn class="full-width" @click="ttest(tt)">
+<!--          <q-icon name ="add_circle_outline"></q-icon>-->
+          <span>더보기</span>
+        </q-btn>
+      </div>
+      <div v-else>
+        <q-card>
+          <q-card-section>
+          </q-card-section>
         </q-card>
       </div>
-      <q-space style="color: #999999"/>
-      <q-input v-model="tt"/>
-      <q-btn @click="ttest(tt)">{{ttt}}</q-btn>
-      <q-btn @click="testt()">노티</q-btn>
-      <q-btn @click="testtt()">가즈아</q-btn>
     </section>
   </q-page>
 </template>
@@ -79,11 +90,15 @@
         recipeList : [{
           name : '워워우어워워',
           introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-          scr : '',
+          src : 'imgs/1.png',
+        },{
+          name : 'ds',
+          introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
+          src : 'imgs/2.png',
         }
         ],
         searchOption:'',
-        options : [1,2,3],
+        options : [{value : 1, label : '이름'},{value : 2, label : '재료'},{value : 3, label : '키워드'}],
         tt : 0,
         ttt : 0,
       }
@@ -102,8 +117,17 @@
         myUtil.pageMove(this,"Main",{name : 'dd',c8 : 'sadfnklasjkl'})
         this.$router.push({name :'',query : {}})
       },
+      // 문자길이 줄이기
       strSummary : (string, num)=>{
         return myUtil.strSummary(string,num);
+      },
+      // 페이지 이동
+      pageMove : (to,query) =>{
+        // myUtil.pageMove(this,to,query);
+      },
+      // 키워드로 검색하기
+      searching : args =>{
+        this.searchOption.label;
       }
     },
 
