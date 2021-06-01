@@ -23,6 +23,10 @@ const routes = [
       {path: '/bookmark', name: 'bookmark', component: () => import('pages/Bookmark.vue')},
       //내 정보
       {path: '/my', name: 'my', component: () => import('pages/MyInfo.vue')},
+      //회원가입
+      {path: '/signup', name: 'signup', component: () => import('pages/SignUp.vue')},
+      //myUtil 샘플
+      {path: '/test', name: 'test', component: () => import('pages/TEST.vue')},
 
       //fixme Settings
       //핀등록
