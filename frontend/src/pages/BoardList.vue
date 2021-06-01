@@ -8,14 +8,15 @@
         </div>
 
         <!-- 검색창   -->
-        <q-card flat class="" style="border-radius: 10px; height: 4em" >
-          <div class="flex">
-            <q-select
-              style="width: 25%;"
-              v-model="searchOption"
-              :options="options"
-              me
-            />
+        <div>
+          <q-card flat class="" style="border-radius: 10px; height: 4em" >
+            <div class="flex">
+              <q-select
+                style="width: 25%;"
+                v-model="searchOption"
+                :options="options"
+                me
+              />
               <q-input
                 clearable
                 filled
@@ -26,29 +27,33 @@
               >
 
               </q-input>
-            <q-btn
-              flat
-              label="검색"
-              class=""
-              size="1em"
-              style="width: 20%;"
-              dense
-            />
-          </div>
-        </q-card>
+              <q-btn
+                flat
+                label="검색"
+                class=""
+                size="1em"
+                style="width: 20%;"
+                dense
+              />
+            </div>
+          </q-card>
+        </div>
+
       </div>
     </section>
 
     <section class="q-mt-md">
 <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
 <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
-      <q-card class="flex" style="width: 100%;height:5em;" v-for="recipe in recipeList">
-        <div class="q-pa-sm full-height" style="width: 20%;"><img :src=recipe.scr class="full-height"/></div>
-        <div class="q-pa-sm full-height" style="width: 70%;">
-          <div class="text-weight-bold" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-          <div class="q-py-xs">{{strSummary(recipe.introduce,16)}}</div>
-        </div>
-      </q-card>
+      <div v-for="recipe in recipeList">
+        <q-card class="flex" style="width: 100%;height:5em;" >
+          <div class="q-pa-sm full-height" style="width: 20%;"><img :src=recipe.scr class="full-height"/></div>
+          <div class="q-pa-sm full-height" style="width: 70%;">
+            <div class="text-weight-bold" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
+            <div class="q-py-xs">{{strSummary(recipe.introduce,16)}}</div>
+          </div>
+        </q-card>
+      </div>
       <q-space style="color: #999999"/>
       <q-input v-model="tt"/>
       <q-btn @click="ttest(tt)">{{ttt}}</q-btn>
