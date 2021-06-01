@@ -23,6 +23,9 @@ const routes = [
       {path: '/bookmark', name: 'bookmark', component: () => import('pages/Bookmark.vue')},
       //내 정보
       {path: '/my', name: 'my', component: () => import('pages/MyInfo.vue')},
+
+      //Settings
+      {path: '/version', name: 'version', component: () => import('pages/settings/Version.vue')},
     ]
   },
 
