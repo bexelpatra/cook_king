@@ -1,9 +1,11 @@
 <template>
   <q-page>
     <splide :options="options">
-      <splide-slide v-for="i in 10">
-        <div>{{i}}</div>
-      </splide-slide>
+      <div v-for="i in 10">
+        <splide-slide>
+          <div>{{i}}</div>
+        </splide-slide>
+      </div>
     </splide>
     <section>
       <div class="">

@@ -11,29 +11,6 @@
       />
       <q-separator class=""/>
     </section>
-
-    <!--fixme setting 설정-->
-    <section>
-      <q-btn
-        class="full-width items-start flex q-my-md text-h6 text-grey-7"
-        icon="settings"
-        flat
-        label="설정"
-      />
-      <q-separator class=""/>
-    </section>
-
-    <!--fixme version 버전-->
-    <section>
-      <q-btn
-        class="full-width items-start flex q-my-md text-h6 text-grey-7"
-        icon="phonelink_setup"
-        flat
-        label="버전"
-        @click="version"
-      />
-      <q-separator class=""/>
-    </section>
   </q-page>
 </template>
 
@@ -53,18 +30,13 @@
     methods:{
       ...mapMutations([]),
       ...mapActions([]),
-
-      //페이지 이동
-      version(){
-        this.$router.push('version');
-      }
     },
 
     beforeCreate() {},
     created() {},
     beforeMount() {
       this.getLayout.headerLayout = true;
-      this.getLayout.title = "내정보";
+      this.getLayout.title = "앱 버전";
       this.getLayout.backbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
