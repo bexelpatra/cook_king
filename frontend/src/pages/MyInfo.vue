@@ -8,8 +8,9 @@
         icon="admin_panel_settings"
         flat
         label="개인/보안"
+        @click="securitybtn"
       />
-      <q-separator class=""/>
+      <q-separator/>
     </section>
 
     <!--fixme setting 설정-->
@@ -20,19 +21,17 @@
         flat
         label="설정"
       />
-      <q-separator class=""/>
+      <q-separator/>
     </section>
 
     <!--fixme version 버전-->
     <section>
-      <q-btn
-        class="full-width items-start flex q-my-md text-h6 text-grey-7"
-        icon="phonelink_setup"
-        flat
-        label="버전"
-        @click="version"
-      />
-      <q-separator class=""/>
+      <div class="row">
+        <q-icon class="q-ma-md items-start text-h4 text-grey-7 "
+                name="phonelink_setup"/>
+        <div class="q-my-md text-grey-6 text-h6">AppVersion V.{{ appVersion }}</div>
+      </div>
+      <q-separator/>
     </section>
   </q-page>
 </template>
@@ -48,6 +47,7 @@
     },
     data(){
       return{
+        appVersion: LocalStorage.getItem("US_VS"),
       }
     },
     methods:{
@@ -55,8 +55,8 @@
       ...mapActions([]),
 
       //페이지 이동
-      version(){
-        this.$router.push('version');
+      securitybtn(){
+        this.$router.push('personer');
       }
     },
 
