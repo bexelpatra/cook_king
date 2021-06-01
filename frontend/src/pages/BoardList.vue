@@ -77,7 +77,7 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
-  import * as myUtil from 'boot/myUtils';
+  import * as myUtil from 'boot/myUtilsOldVertion';
 
   export default {
     name: 'BoardList',
@@ -108,6 +108,7 @@
       ...mapActions([]),
       ttest(arg){
         this.ttt = myUtil.comma(arg);
+        myUtil.notify(this,"왜 ㅇ난ㅇㄹ모",'info')
         return myUtil.comma(arg);
       },
       testt(arg){
