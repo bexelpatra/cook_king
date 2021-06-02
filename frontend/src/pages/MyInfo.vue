@@ -4,7 +4,8 @@
     <!--fixme security 보안-->
     <section>
       <q-btn
-        class="full-width items-start flex q-my-md text-h6 text-grey-7"
+        class="full-width items-start flex text-h6 text-grey-7"
+        style="height: 17vw"
         icon="admin_panel_settings"
         flat
         label="개인/보안"
@@ -15,12 +16,13 @@
 
     <!--fixme setting 설정-->
     <section>
-      <q-btn
-        class="full-width items-start flex q-my-md text-h6 text-grey-7"
-        icon="settings"
-        flat
-        label="설정"
-      />
+        <q-btn
+          class="full-width items-start flex text-h6 text-grey-7"
+          style="height: 17vw"
+          icon="settings"
+          flat
+          label="설정"
+        />
       <q-separator/>
     </section>
 

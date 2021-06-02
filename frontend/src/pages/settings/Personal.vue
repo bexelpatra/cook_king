@@ -1,61 +1,64 @@
 <!--fixme 핀/생체정보 설정-->
 <template>
-  <q-page class="bg-white">
-    <!--fixme security 보안-->
-    <section class="q-pa-md">
+  <q-page class="bg-white q-pa-md">
+    <!-- 핀/생체 설정 -->
+    <section>
       <div class="flex q-my-md">
-        <div class="q-mt-sm text-h5 text-weight-bold" >보안 사용 안함</div>
+        <div class="q-mt-sm text-h6 text-weight-bold" >핀/생체 사용 안함</div>
         <q-space/>
-        <q-checkbox class="justify-end" color="orange" @input="(value, evt)=>{useCertificate(value,0)}" v-model="security"  val="noSecurity"/>
+        <!-- input 설정이 없어서 오류 발생-->
+        <q-checkbox class="justify-end" color="red" @input="(value, evt)=>{useCertificate(value,0)}" v-model="security"  val="noSecurity"/>
       </div>
 
-      <q-separator class="q-my-lg"/>
+      <q-separator class="q-my-md"/>
 
-      <!-- 1차보안 -->
-      <!-- fixme #804
-      1차 보안은 Pin등록을 해야된다.
-      체크가 안되어 있으면 위 보안 사용 안함 박스에 체크 해줘야 된다.
-      -->
-      <div>
-        <div class="text-weight-bold text-h6 text-grey-6">1차보안</div>
-        <div class="flex q-my-md" >
-          <span class="q-mt-sm text-weight-bold " style="font-size: 1.0rem">비밀번호</span>
+      <!-- Pin -->
+      <section>
+        <div class="flex">
+          <span class="flex flex-center text-h6 text-weight-bold">핀 등록하기</span>
           <q-space/>
-          <q-checkbox class=" justify-end" color="orange" :disable="haspDisable" @input="(value, evt)=>{useCertificate(value,1)}" v-model="hasp" val="passWord"/>
+          <q-btn class="q-mr-lg text-weight-bold" label="핀 변경" :disable="haspChange" outline @click=""></q-btn>
+          <!-- input 설정이 없어서 오류 발생-->
+          <q-checkbox class="justify-end" color="red" :disable="haspDisable" @input="(value, evt)=>{useCertificate(value,1)}" v-model="hasp" val="passWord"/>
         </div>
-        <q-btn class="full-width text-weight-bold" label="비밀번호 변경" :disable="haspChange" outline @click="goToRegistration"></q-btn>
-      </div>
+      </section>
 
-      <q-separator class="q-my-lg"/>
+      <q-separator class="q-my-md"/>
 
-      <!-- fixme #805
-
-      -->
-      <div class="text-weight-bold text-h6 text-grey-6">2차보안
-        <div class="notiText text-caption text-weight-thin text-blue-7">내 폰의 지문/안면인식 설정에 따라 지원됩니다.</div>
-      </div>
-      <!--      2차보안 핑거-->
-      <div class="flex no-wrap q-my-md" >
-        <div class="q-mt-sm text-weight-bold " style="font-size: 1.0rem">
-          생체 인증
-
+      <!-- fingerprint -->
+      <section>
+        <div class="flex">
+          <div class="flex flex-center text-h6 text-weight-bold">
+            생체 등록
+          </div>
+          <q-space/>
+          <!-- input 설정이 없어서 오류 발생-->
+          <q-toggle class=" justify-end" color="red" :disable="fingerDisable" @input="(e)=>{useCertificate(e,2)}" v-model="finger" />
         </div>
-        <q-space/>
-        <q-toggle class=" justify-end" :disable="fingerDisable" @input="(e)=>{useCertificate(e,2)}" v-model="finger" color="orange"/>
-      </div>
+      </section>
     </section>
 
-    <q-separator/>
+    <q-separator  class="q-my-md"/>
 
-    <!-- fixme step3 -->
+    <!-- 안내 문구 -->
     <section>
-      <div class="q-pa-md">
-        <span class="notiText text-weight-bold text-red-4"  style="font-size: 0.8rem">
-          ※ 1차 보안을 설정 해야 2차 보안 설정이 가능합니다.
-          ※ 생체 인증 등록/변경은 휴대폰 설정에서 가능합니다.
+      <div class="q-pa-sm">
+        <span class="text-weight-bold text-red-4"  style="font-size: 0.9rem">
+          ● 핀 등록해야 생체 등록 가능합니다.<q-space/>
+          ● 생체는 지원 안되는 핸드폰이 있습니다.<q-space/>
+          <br>
+          <span class="text-blue-5" style="font-size: 0.8rem">
+            <span class="text-grey-7">#핸드폰 생체 등록/확인 하기</span> <q-space/>
+            핸드폰 설정 -> 생체 인식 및 보안 -> 얼굴/지문 터치 <q-space/>
+          </span>
+          <br>
+          ● 비밀번호가 기억나지 나지 않으면<q-space/>
+          -> <span class="text-black">qwe2213@gmail.com</span> 으로 문의주세요.
         </span>
       </div>
     </section>
+
+    <q-separator class="q-my-md"/>
   </q-page>
 </template>
 
@@ -95,8 +98,8 @@
     created() {},
     beforeMount() {
       this.getLayout.headerLayout = true;
-      this.getLayout.title = "핀/생체정보";
-      this.getLayout.backbotton = false;
+      this.getLayout.title = "핀/생체";
+      this.getLayout.backbotton = true;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
     },

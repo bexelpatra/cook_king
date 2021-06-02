@@ -29,6 +29,9 @@
     beforeCreate() {},
     created() {},
     beforeMount() {
+      this.getLayout.headerLayout = false;
+      this.getLayout.backbotton = false;
+      this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
     },
     mounted() {},

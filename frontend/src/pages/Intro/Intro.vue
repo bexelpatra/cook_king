@@ -1,12 +1,17 @@
-<template>
-  <q-layout>
-    <div class="absolute full-height">
-      <span class="q-mt-lg absolute-top text-center text-white text-h5 z-top">우주 대레시피</span>
-      <img src="imgs/uro.png" class="full-width full-height"/>
-      <q-icon class="q-ml-sm z-top absolute-center text-green-3" style="font-size: 8rem; margin-top: 30vh"
-              name="thumb_up"/>
-      <span class="q-mb-lg absolute-bottom text-center text-white text-h5 z-top">우주 대레시피</span>
-    </div>
+<template class="fullscreen">
+  <q-layout >
+    <section>
+      <div class="absolute full-height">
+        <img src="video/IntroGif.gif" class="full-width full-height"/>
+        <q-icon class="q-pb-xl row absolute-center text-white" style="font-size: 8rem; "
+                name="thumb_up">
+        <span class="text-weight-bold text-h5">
+          <span class="text-purple">따봉</span>
+          <span class="text-weight-regular text-white">레시피</span>
+        </span>
+        </q-icon>
+      </div>
+    </section>
   </q-layout>
 </template>
 
@@ -37,7 +42,7 @@
     created() {
       setTimeout(() => {
         this.gotoMain();
-      }, 3000);
+      }, 3800);
     },
     beforeMount() {},
     mounted() {},
