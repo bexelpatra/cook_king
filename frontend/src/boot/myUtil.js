@@ -33,4 +33,12 @@ export class myUtil {
   notify = (message,color) =>{
     this.vue.$q.notify({message : message,color:color})
   }
+  dot = (len) =>{
+    let str = '';
+    let size = len/3;
+    for (let i=0; i<size; i++) {
+      str +='.'
+    }
+    return str;
+  }
 }
