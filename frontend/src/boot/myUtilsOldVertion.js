@@ -3,6 +3,8 @@
  * @param num 숫자
  * @returns {string}
  */
+// import routes from "src/router/routes";
+
 exports.comma = (num) => {
   let regexp = /\B(?=(\d{3})+(?!\d))/g;
   return num.toString().replace(regexp, ',');
@@ -13,8 +15,8 @@ exports.comma = (num) => {
  * @param message
  * @param color
  */
-exports.notify = (vue,message,color) =>{
-  vue.$q.notify({message : message,color:color});
+exports.notify = (q,message,color) =>{
+  q.notify({message : message,color:color});
 }
 /**
  *
@@ -24,7 +26,7 @@ exports.notify = (vue,message,color) =>{
  */
 exports.pageMove = (vue,to,query) =>{
   if(!to.toString().startsWith('/')) to ='/'+to;
-  vue.$router.push({path : to, query : query})
+  vue.$route.push({path : to, query : query})
 }
 /**
  * 쿼리로 받은 parater를 반환한다.
@@ -49,3 +51,6 @@ exports.strSummary = (str, len) =>{
   return str.substr(0,len)+"...";
 }
 
+exports.noti = (vue,message,color) =>{
+  vue.$q.notify({message : message,color:color});
+}
