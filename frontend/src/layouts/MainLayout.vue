@@ -50,7 +50,6 @@
       >
         <q-tab class="col text-red" name="home" icon="home" label="홈" @click="mainPage"/>
         <q-tab class="col text-blue" name="list" icon="list" label="레시피" @click="recipePage"/>
-        <q-tab class="col text-green" name="tag" icon="tag" label="태그" @click="tagPage"/>
         <q-tab class="col text-purple" name="archive" icon="archive" label="즐찾" @click="mybookPage"/>
         <q-tab class="col text-yellow" name="how_to_reg" icon="how_to_reg" label="내정보" @click="myinfoPage"/>
       </q-tabs>
@@ -96,8 +95,6 @@
       mainPage(){ this.$router.push('main'); },
       //레시피
       recipePage(){ this.$router.push('boardlist'); },
-      //태그
-      tagPage(){ this.$router.push('tag'); },
       //즐찾
       mybookPage(){ this.$router.push('bookmark'); },
       //내정보
