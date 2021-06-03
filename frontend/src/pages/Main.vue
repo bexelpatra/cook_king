@@ -186,7 +186,7 @@
 
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
-  import {LocalStorage} from 'quasar';
+  import {LocalStorage, Platform} from 'quasar';
 
   export default {
     name: 'Main',
@@ -227,19 +227,88 @@
       onMounted(index){
         console.log(index)
         this.index = index;
-      }
+      },
+
+      Device() {
+        let self = this;
+        // document.addEventListener("pause", this.onPause, false);
+        // document.addEventListener("resume", this.onResume, false);
+        // document.addEventListener("menubutton", this.onMenuKeyDown, false);
+        document.addEventListener("backbutton", this.exitBtn, false);
+        if (Platform.is.cordova /*&& Platform.is.android*/) {
+          // this.initShortcuts();
+
+        }
+      },
+      // onPause() {
+      // },
+      // onResume() {
+      // },
+      // onMenuKeyDown() {
+      // },
+      exitBtn() {
+        if (window.cordova && window.cordova.platformId !== 'android') {
+          return;
+        }
+        let linkSrc = window.location.href.split("#")[1];
+        if (linkSrc === "/Main") {
+          this.$q.dialog(
+            {
+              title: '<div class="text-h5 text-weight-bolder">밥먹드시 종료</div>',
+              message: '<div class="text-subtitle1 text-weight-bolder text-grey-7">앱을 종료하시겠습니까?</div>',
+              html: true,
+              ok: {
+                flat: true,
+                label: '네',
+                textColor: 'primary',
+                size: 'lg'
+              },
+              cancel: {
+                flat: true,
+                label: '아니오',
+                textColor: 'negative',
+                size: 'lg'
+              },
+            }
+          )
+            .onOk(() => {
+              this.exitApp();
+            })
+            .onCancel(() => {
+              console.log('Cancel');
+            });
+        }
+      },
+      exitApp() {
+        console.log("exitApp", navigator);
+        navigator.app.exitApp();
+      },
+
+
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      history.pushState(null, null, location.href);
+      window.onpopstate = ()=>{
+        history.go(1);
+      }
+    },
     beforeMount() {
       this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = false;
+      document.addEventListener("deviceready", this.Device, false);
     },
     mounted() {},
     beforeUpdate() {},
     updated() {},
-    beforeDestroy() {},
+    beforeDestroy() {
+      // document.removeEventListener("pause", this.onPause);
+      // document.removeEventListener("resume", this.onResume);
+      // document.removeEventListener("menubutton", this.onMenuKeyDown);
+      document.removeEventListener("backbutton", this.exitBtn);
+      document.removeEventListener("deviceready", this.Device);
+    },
     destroyed() {}
   }
 </script>
