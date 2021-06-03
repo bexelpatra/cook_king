@@ -18,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "test")
 @RequiredArgsConstructor
+@CrossOrigin
 public class TestController {
 
     // todo 의존주입 3가지 방법(repository는 controller에서 사용을 지양한다.)
@@ -38,17 +39,17 @@ public class TestController {
 
 //    @RequestMapping(value = "/test1",method = RequestMethod.GET)
     @GetMapping(value = "/test1")  // get 방식은 param만 받는다.
-    public ResponseEntity test1(){
+    public ResponseEntity test1(@RequestParam("name")String name, @RequestParam(value = "number",required = false)int x){
         Map<String,Object> result = new HashMap<>();
-        UsersEntity usersEntity = new UsersEntity();
-
+        result.put("time",System.nanoTime()/1000);
+        result.put("name",name);
+        result.put("nunmber",x);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @PostMapping(value = {"/test2","/test2/"}) // get을 제외한 방식은 @RequestBody를 통해서 받는다.
     public ResponseEntity test2(@RequestBody UsersDto usersDto){
         Map<String,Object> result = new HashMap<>();
-
 
         return new ResponseEntity(result, HttpStatus.OK);
     }

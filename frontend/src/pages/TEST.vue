@@ -29,6 +29,8 @@
 
         <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
 
+        <q-btn label="서버연결" @click="sample2()"/>
+        <div>{{xx}}</div>
       </section>
     </q-page>
 </template>
@@ -52,11 +54,25 @@
         message:'',
         to:'',
         query :{},
+        xx :{},
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['sample']),
+      sample2(){
+        let self = this;
+        this.sample({
+          onSuccess :(res) =>{
+            console.log(res)
+            self.xx = res.data;
+          },
+          onFail :(error) =>{
+
+          }
+        }
+        )
+      }
     },
 
     beforeCreate() {},
