@@ -63,7 +63,9 @@
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       this.getLayout.headerLayout = true;
       this.getLayout.title = "내정보";

@@ -186,7 +186,7 @@
 
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
-  import {LocalStorage} from 'quasar';
+  import {LocalStorage, Platform} from 'quasar';
 
   export default {
     name: 'Main',
@@ -227,19 +227,74 @@
       onMounted(index){
         console.log(index)
         this.index = index;
-      }
+      },
+
+      //fixme 디바이스 빽버튼 사용
+      Device() {
+        let self = this;
+        document.addEventListener("backbutton", this.exitBtn, false);
+      },
+
+      //fixme 빽버튼 메소드
+      exitBtn() {
+        if (window.cordova && window.cordova.platformId !== 'android') {
+          return;
+        }
+        let linkSrc = window.location.href.split("#")[1];
+        if (linkSrc === "/Main") {
+          this.$q.dialog(
+            {
+              title: '<div class="text-h5 text-weight-bolder"><span class="text-orange-6">따봉</span> 레시피 종료</div>',
+              message: '<div class="q-mt-lg  text-subtitle1 text-weight-thin ">따봉을 종료 하시겠습니까?</div>',
+              html: true,
+              ok: {
+                flat: true,
+                label: '네',
+                textColor: 'primary',
+                size: 'lg'
+              },
+              cancel: {
+                flat: true,
+                label: '아니오',
+                textColor: 'negative',
+                size: 'lg'
+              },
+            }
+          )
+            .onOk(() => {
+              this.exitApp();
+            })
+            .onCancel(() => {
+              console.log('Cancel');
+            });
+        }
+      },
+      exitApp() {
+        console.log("exitApp", navigator);
+        navigator.app.exitApp();
+      },
+
+
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      //fixme Intro로 못가게 하기 위한 코드
+      history.pushState(null, null, location.href);
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = false;
+      document.addEventListener("deviceready", this.Device, false);
     },
     mounted() {},
     beforeUpdate() {},
     updated() {},
-    beforeDestroy() {},
+    beforeDestroy() {
+      document.removeEventListener("backbutton", this.exitBtn);
+      document.removeEventListener("deviceready", this.Device);
+    },
     destroyed() {}
   }
 </script>

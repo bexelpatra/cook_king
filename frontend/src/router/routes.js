@@ -27,8 +27,10 @@ const routes = [
       {path: '/test', name: 'test', component: () => import('pages/TEST.vue')},
 
       //fixme Settings
-      //핀등록
+      //핀
       {path: '/security', name: 'security', component: () => import('pages/settings/Security.vue')},
+      //핀 등록
+      {path: '/pinregistration', name: 'pinregistration', component: () => import('pages/settings/PinRegistration.vue')},
       //핀/생체보안 설정
       {path: '/personer', name: 'personer', component: () => import('pages/settings/Personal.vue')},
     ]

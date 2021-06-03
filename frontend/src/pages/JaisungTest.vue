@@ -39,7 +39,9 @@
       ...mapActions([]),
     },
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       // this.getLayout.title = "테스트중입니다.";
     },

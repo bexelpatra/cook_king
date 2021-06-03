@@ -60,7 +60,9 @@
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       this.getLayout.bottomFooter = true;
     },
