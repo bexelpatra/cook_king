@@ -121,6 +121,7 @@
       ...mapMutations([]),
       ...mapActions([]),
 
+      /** KeyPad */
       onInput(key){
         console.log(key)
         this.number = (this.number + key).slice(0, this.maxLength);
@@ -134,6 +135,7 @@
         this.number = "";
       },
 
+      /** Click 구간 */
       pageMain() {
         this.$router.push('main');
       }

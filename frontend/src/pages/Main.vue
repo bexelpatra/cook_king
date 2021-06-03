@@ -195,6 +195,7 @@
     },
     data(){
       return{
+        /** Splide 데이터 */
         //main recipe
         mainslides : [],
         mainOptions : {
@@ -218,12 +219,14 @@
           drag : true,
           pagination : false
         }
+
       }
     },
     methods:{
       ...mapMutations([]),
       ...mapActions([]),
 
+      /** Splide */
       onMounted(index){
         console.log(index)
         this.index = index;
@@ -269,6 +272,7 @@
             });
         }
       },
+      //fixme 앱종료
       exitApp() {
         console.log("exitApp", navigator);
         navigator.app.exitApp();

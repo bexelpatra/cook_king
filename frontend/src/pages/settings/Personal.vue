@@ -17,7 +17,7 @@
         <div class="flex">
           <span class="flex flex-center text-h6 text-weight-bold">핀 등록하기</span>
           <q-space/>
-          <q-btn class="q-mr-lg text-weight-bold" label="핀 변경" :disable="haspChange" outline @click=""></q-btn>
+          <q-btn class="q-mr-lg text-weight-bold" label="핀 변경" :disable="haspChange" outline @click="PinChange"></q-btn>
           <!-- input 설정이 없어서 오류 발생-->
           <q-checkbox class="justify-end" color="red" :disable="haspDisable" @input="(value, evt)=>{useCertificate(value,1)}" v-model="hasp" val="passWord"/>
         </div>
@@ -92,6 +92,10 @@
       ...mapMutations([]),
       ...mapActions([]),
 
+      /** Click 구간 */
+      PinChange(){
+        this.$router.push('pinregistration');
+      },
     },
 
     beforeCreate() {},
