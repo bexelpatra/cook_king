@@ -27,7 +27,9 @@
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       this.getLayout.title = '게시물작성';
       this.getLayout.bottomFooter = true;

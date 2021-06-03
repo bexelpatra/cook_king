@@ -27,7 +27,9 @@
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       this.getLayout.headerLayout = false;
       this.getLayout.backbotton = false;

@@ -27,7 +27,9 @@
     },
 
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = ()=>{}
+    },
     beforeMount() {
       this.getLayout.title = '레시피 정보';
       this.getLayout.bottomFooter = true;

@@ -46,12 +46,13 @@
         v-model="tab"
         class="bg-black full-width"
         dense
-        align="justify"
+        indicator-color="transparent"
+        active-color="white"
       >
-        <q-tab class="col text-red" name="home" icon="home" label="홈" @click="mainPage"/>
-        <q-tab class="col text-blue" name="list" icon="list" label="레시피" @click="recipePage"/>
-        <q-tab class="col text-purple" name="archive" icon="archive" label="즐찾" @click="mybookPage"/>
-        <q-tab class="col text-yellow" name="how_to_reg" icon="how_to_reg" label="내정보" @click="myinfoPage"/>
+        <q-tab class="col text-white" name="home" icon="home" label="홈" @click="mainPage"/>
+        <q-tab class="col text-white" name="list" icon="list" label="레시피" @click="recipePage"/>
+        <q-tab class="col text-white" name="archive" icon="archive" label="즐찾" @click="mybookPage"/>
+        <q-tab class="col text-white" name="how_to_reg" icon="how_to_reg" label="내정보" @click="myinfoPage"/>
       </q-tabs>
     </q-footer>
 
@@ -103,7 +104,9 @@
       backBtn(){ this.$router.back()},
     },
     beforeCreate() {},
-    created() {},
+    created() {
+      window.onpopstate = () => {};
+    },
     beforeMount() {
       this.setLayout(this);
     },
