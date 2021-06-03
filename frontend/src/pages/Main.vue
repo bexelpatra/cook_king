@@ -219,7 +219,6 @@
           drag : true,
           pagination : false
         }
-
       }
     },
     methods:{
@@ -285,7 +284,7 @@
     created() {
       //fixme Intro로 못가게 하기 위한 코드
       history.pushState(null, null, location.href);
-      window.onpopstate = ()=>{}
+      window.onpopstate = ()=>{};
     },
     beforeMount() {
       this.getLayout.bottomFooter = true;
