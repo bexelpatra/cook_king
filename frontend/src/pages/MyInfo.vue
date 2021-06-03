@@ -56,7 +56,7 @@
       ...mapMutations([]),
       ...mapActions([]),
 
-      //페이지 이동
+      /** Click 구간 */
       securitybtn(){
         this.$router.push('personer');
       }
