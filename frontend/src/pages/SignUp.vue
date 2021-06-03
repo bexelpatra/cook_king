@@ -10,17 +10,18 @@
           <div class="flex full-width">
             <q-input label="이메일" v-model="email" style ="width: 70%"></q-input>
              <q-btn
-               v-if="!checkDuplicate"
                flat
                style=" width: 30%;font-size: 0.9em;"
                @click="duplicateCheck(email)">중복 확인</q-btn>
-            <q-btn
-               v-else
-               flat
-               style=" width: 30%;font-size: 0.8em;"
-               @click="emailCert()">이메일 인증</q-btn>
           </div>
-          <div v-if="checkEmail">
+          <div v-if="checkDuplicate" class="flex full-width">
+            <q-input label="인증번호" v-model="email" style ="width: 70%"></q-input>
+            <q-btn
+              flat
+              style=" width: 30%;font-size: 0.9em;"
+              @click="emailCert(email)">인증하기</q-btn>
+          </div>
+          <div v-if="checkEmail&&checkDuplicate">
             <q-input label="비밀번호" v-model="password"></q-input>
             <q-input label="비밀번호 확인" v-model="password2"></q-input>
           </div>
@@ -35,7 +36,7 @@
             flat
             label="계정 만들기"
             @click="signUp()"
-            :disable="!(checkDuplicate||checkEmail)"
+            :disable="(!checkDuplicate||!checkEmail)"
           />
           <div style="text-align: center" class="full-width q-mt-sm">
             <span>이미 계정이 있습니다. ->
@@ -84,11 +85,12 @@
         },
         // 기존에 저장된 메일이 있는지 확인
         duplicateCheck(email){
-
+          this.checkDuplicate = !this.checkDuplicate;
         },
         // 이메일 인증하기
         emailCert(){
           // 타이머추가, 인증번호 입력받기
+          this.checkEmail = !this.checkEmail;
         },
         // 회원가입하기
         signUp(){
