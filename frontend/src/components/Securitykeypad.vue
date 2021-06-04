@@ -56,7 +56,6 @@
           [array[i], array[j]] = [array[j], array[i]];
         }
         if(array.length <11){
-          console.log("##")
           array.splice(-1, 0, 10);
           array.splice(11, 0, 12);
         }
