@@ -77,7 +77,7 @@
       ...mapMutations([]),
       ...mapActions([]),
 
-      //fixme 키패드
+      /** KeyPad */
       onInput(key){
         console.log(key)
         this.number = (this.number + key).slice(0, this.maxLength);

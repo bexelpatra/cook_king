@@ -11,13 +11,6 @@
     />
 
     <div class="absolute-bottom">
-<!--      <div class="q-mb-lg q-px-lg text-left" style="font-size: 0.9rem;">-->
-<!--        <span>● 비밀번호를 등록/변경 해주세요.</span><br>-->
-<!--        <span>● 타인에게 비밀번호를 알려주지 마세요.</span><br>-->
-<!--        <span>● 밥먹드시에서 비밀번호 요구하지 않습니다.</span><br>-->
-<!--        <span>● 생체인식(지문,얼굴인식)은 핸드폰 설정에서 변경이 가능합니다.</span><br>-->
-<!--      </div>-->
-
       <div v-if="Password" class="full-width justify-center items-center">
         <div class="q-mb-md text-weight-bold flex flex-center" style="font-size: 1.2rem">보안 비밀번호 6자리를 입력해주세요.</div>
         <div class="bg-grey-3 flex flex-center text-weight-bold">
@@ -39,6 +32,7 @@
                 <q-btn
                   class="full-width text-grey-7 text-weight-bold bg-blue-2"
                   label="다음"
+                  flat
                   dense
                   size="xl"
                   @click=""
@@ -71,6 +65,7 @@
                 <q-btn
                   class="full-width text-grey-7 text-weight-bold bg-blue-2"
                   label="등록하기"
+                  flat
                   dense
                   size="xl"
                   @click=""
@@ -121,6 +116,7 @@
       ...mapMutations([]),
       ...mapActions([]),
 
+      /** KeyPad */
       onInput(key){
         console.log(key)
         this.number = (this.number + key).slice(0, this.maxLength);
@@ -134,6 +130,7 @@
         this.number = "";
       },
 
+      /** Click 구간 */
       pageMain() {
         this.$router.push('main');
       }
@@ -147,7 +144,7 @@
       this.getLayout.title = "";
       this.getLayout.backbotton = false;
       this.getLayout.bookmarkbtn = false;
-      this.getLayout.bottomFooter = true;
+      this.getLayout.bottomFooter = false;
     },
     mounted() {},
     beforeUpdate() {},

@@ -195,6 +195,7 @@
     },
     data(){
       return{
+        /** Splide 데이터 */
         //main recipe
         mainslides : [],
         mainOptions : {
@@ -224,6 +225,7 @@
       ...mapMutations([]),
       ...mapActions([]),
 
+      /** Splide */
       onMounted(index){
         console.log(index)
         this.index = index;
@@ -269,6 +271,7 @@
             });
         }
       },
+      //fixme 앱종료
       exitApp() {
         console.log("exitApp", navigator);
         navigator.app.exitApp();
@@ -281,7 +284,7 @@
     created() {
       //fixme Intro로 못가게 하기 위한 코드
       history.pushState(null, null, location.href);
-      window.onpopstate = ()=>{}
+      window.onpopstate = ()=>{};
     },
     beforeMount() {
       this.getLayout.bottomFooter = true;

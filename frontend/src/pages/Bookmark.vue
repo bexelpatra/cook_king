@@ -1,8 +1,18 @@
 <!--fixme 즐겨찾기-->
 <template>
-  <q-page class="bg-white q-pa-sm">
-    <section>
-
+  <q-page class="q-pa-md">
+    <section class="flex justify-between">
+      <div v-for="index in 3" :key="index">
+        <q-btn flat dense>
+          <q-card style="width: 42vw; height: 50vw">
+            <img class="justify-between" src="https://cdn.quasar.dev/img/mountains.jpg">
+            <div class="flex q-ml-sm">
+              <div class="text-h6">Card #{{ index }}</div>
+              <div class="text-subtitle2">by John Doe</div>
+            </div>
+          </q-card>
+        </q-btn>
+      </div>
     </section>
   </q-page>
 </template>
@@ -31,8 +41,9 @@
       window.onpopstate = ()=>{}
     },
     beforeMount() {
-      this.getLayout.headerLayout = false;
+      this.getLayout.headerLayout = true;
       this.getLayout.backbotton = false;
+      this.getLayout.title = "즐겨찾기"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
     },
