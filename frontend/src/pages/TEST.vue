@@ -31,6 +31,11 @@
 
         <q-btn label="서버연결" @click="sample2()"/>
         <div>{{xx}}</div>
+
+        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
+
+        <q-btn label="서버연결" @click="nong123()"/>
+        <div>{{nong.nong}}{{nong.number}}</div>
       </section>
     </q-page>
 </template>
@@ -55,11 +60,12 @@
         to:'',
         query :{},
         xx :{},
+        nong: {},
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['sample']),
+      ...mapActions(['sample','test123']),
       sample2(){
         let self = this;
         this.sample({
@@ -72,7 +78,19 @@
           }
         }
         )
-      }
+      },
+      nong123(){
+        let self = this;
+        this.test123({
+          onSuccess : (res) =>{
+            console.log(res);
+            self.nong = res.data;
+          },
+          onFail :(error) =>{
+
+          }
+        })
+      },
     },
 
     beforeCreate() {},
