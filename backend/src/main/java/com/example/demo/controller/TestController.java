@@ -53,4 +53,12 @@ public class TestController {
 
         return new ResponseEntity(result, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/test123")
+    public ResponseEntity test123(@RequestParam("nong")String nong, @RequestParam(value = "number",required = false)int x){
+        Map<String,Object> result = new HashMap<>();
+        result.put("nong",nong);
+        result.put("number",x);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
 }

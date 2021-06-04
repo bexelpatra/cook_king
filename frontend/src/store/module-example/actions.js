@@ -11,3 +11,12 @@ export const sample = (state, args) => {
     args.onFail(error);
   });
 };
+
+export const test123 = (state, args) => {
+  axios.get('http://localhost:8081/test/test123?nong=호로롤&number=1818')
+    .then((res)=>{
+      args.onSuccess(res);
+    }).catch((error)=>{
+      args.onFail(error);
+  });
+};
