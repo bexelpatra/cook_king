@@ -31,6 +31,7 @@
 
         <q-btn label="서버연결" @click="sample2()"/>
         <div>{{xx}}</div>
+        <q-btn label="쿼링" @click="querying()"/>
       </section>
     </q-page>
 </template>
@@ -55,11 +56,12 @@
         to:'',
         query :{},
         xx :{},
+        xxx :'',
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['sample']),
+      ...mapActions(['sample','addQuery']),
       sample2(){
         let self = this;
         this.sample({
@@ -72,6 +74,10 @@
           }
         }
         )
+      },
+      querying(){
+        this.xxx = this.addQuery({name :"naa",id:5,nums :[1,2,3],maps :{a:1,b:2}});
+        console.log(this.xxx);
       }
     },
 
