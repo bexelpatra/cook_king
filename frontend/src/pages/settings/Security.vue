@@ -21,7 +21,7 @@
                   class="q-mr-md cursor-pointer"
                   @click="isPwd = !isPwd"
                 />
-                <q-footer class="bg-white">
+                <q-footer class="bg-white full-width">
                   <q-btn
                     class="full-width text-grey-7 text-weight-bold bg-blue-2"
                     label="확인"
@@ -99,7 +99,7 @@
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
-      this.getLayout.title = "핀/생채보안";
+      this.getLayout.title = "핀 인증";
       this.getLayout.backbotton = true;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
