@@ -28,7 +28,7 @@
                 class="q-mr-md cursor-pointer"
                 @click="isPwd = !isPwd"
               />
-              <q-footer class="bg-white">
+              <q-footer class="bg-white full-width">
                 <q-btn
                   class="full-width text-grey-7 text-weight-bold bg-blue-2"
                   label="다음"
@@ -61,7 +61,7 @@
                 class="q-mr-md cursor-pointer"
                 @click="isPwd = !isPwd"
               />
-              <q-footer class="bg-white">
+              <q-footer class="bg-white full-width">
                 <q-btn
                   class="full-width text-grey-7 text-weight-bold bg-blue-2"
                   label="등록하기"
