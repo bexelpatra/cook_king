@@ -1,18 +1,17 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.BoardDto;
+import com.example.demo.dto.TestDto;
 import com.example.demo.dto.UsersDto;
-import com.example.demo.entity.UsersEntity;
-import com.example.demo.repository.UsersRepository;
+import com.example.demo.enums.PinKind;
 import com.example.demo.service.TestService;
+import com.example.demo.testing.UTILS;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -59,6 +58,15 @@ public class TestController {
         Map<String,Object> result = new HashMap<>();
         result.put("nong",nong);
         result.put("number",x);
+
         return new ResponseEntity(result, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/test3")
+    public ResponseEntity enumtest(){
+        Map<String,Object> result = new HashMap<>();
+
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
 }

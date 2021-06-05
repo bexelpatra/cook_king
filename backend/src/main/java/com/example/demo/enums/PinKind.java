@@ -1,6 +1,8 @@
 package com.example.demo.enums;
 
-public enum PinKind {
+import com.example.demo.testing.MyEnum;
+
+public enum PinKind implements MyEnum<PinKind,Integer> {
     NOT_USING(0,"사용안함"),
     PIN(1,"핀비밀번호"),
     BIO_FINGER_PRINT(2,"지문 인식"),
@@ -19,10 +21,19 @@ public enum PinKind {
     public int getValue() { return value; }
     public String getDesc() { return desc; }
 
-    public static PinKind byValue(int val){
+    @Override
+    public PinKind byValue(int val) {
         for (PinKind pinKind : values()) {
             if(pinKind.getValue() == val) return pinKind;
         }
-        return null;
+        return  null;
     }
+
+//    public static PinKind byValue(int val){
+//        for (PinKind pinKind : values()) {
+//            if(pinKind.getValue() == val) return pinKind;
+//        }
+//        return null;
+//    }
+
 }
