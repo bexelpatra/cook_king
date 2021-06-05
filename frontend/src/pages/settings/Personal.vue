@@ -53,7 +53,7 @@
           </span>
           <br>
           ● 비밀번호가 기억나지 나지 않으면<q-space/>
-          -> <span class="text-black">qwe2213@gmail.com</span> 으로 문의주세요.
+          -> <span class="text-black">cookkingofficial@gmail.com</span> 으로 문의주세요.
         </span>
       </div>
     </section>
