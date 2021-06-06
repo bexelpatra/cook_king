@@ -15,6 +15,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -59,9 +61,17 @@ public class SignInEmailService implements EmailService {
         String query = new Querying(EmailEntity.class)
                 .add("email","=",receiver)
                 .end(Querying.Sort.DESC,"id");
-        String x = String.format("select * from email as a %s ",query);
-//        boolean flag = emailRepository.getOneBy(x).map(emailEntity -> emailEntity.isCheck()).orElse(false);
-        List<EmailEntity> o = entityManager.createNativeQuery(x,EmailEntity.class).getResultList();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,-10);
+
+
+        List<EmailEntity> xx = entityManager.createNativeQuery(query,EmailEntity.class).getResultList();
+        for (EmailEntity emailEntity : xx) {
+            System.out.println(emailEntity.toString());
+        }
+//        List<EmailEntity> emailEntities = xx.stream().filter(emailEntity -> emailEntity.getRegDate().after(calendar.getTime())).collect(Collectors.toList());
+        boolean xxxx = xx.stream().anyMatch(emailEntity -> emailEntity.getRegDate().after(calendar.getTime()));
         return false;
     }
 }
