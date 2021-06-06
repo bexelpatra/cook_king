@@ -246,8 +246,8 @@
         if (linkSrc === "/Main") {
           this.$q.dialog(
             {
-              title: '<div class="text-h5 text-weight-bolder"><span class="text-orange-6">따봉</span> 레시피 종료</div>',
-              message: '<div class="q-mt-lg  text-subtitle1 text-weight-thin ">따봉을 종료 하시겠습니까?</div>',
+              title: '<div class="text-h5 text-weight-bolder"><span class="text-orange-6">모두의</span> 레시피 종료</div>',
+              message: '<div class="q-mt-lg  text-subtitle1 text-weight-thin ">모두의 레시피을 종료 하시겠습니까?</div>',
               html: true,
               ok: {
                 flat: true,
