@@ -2,13 +2,14 @@
   "name": "frontend",
   "version": "1.0.1",
   "description": "간편한 레시피 모음",
-  "productName": "따봉 레시피",
+  "productName": "모두의 레시피",
   "author": "a45hvn <sobfy01@gmail.com>",
   "private": true,
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@quasar/cli": "^1.2.0",
     "@quasar/extras": "^1.0.0",
     "@splidejs/splide": "^2.4.21",
     "@splidejs/vue-splide": "^0.3.5",

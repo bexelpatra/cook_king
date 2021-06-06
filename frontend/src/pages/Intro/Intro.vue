@@ -6,7 +6,7 @@
         <q-icon class="q-pb-xl row absolute-center text-white" style="font-size: 8rem; "
                 name="thumb_up">
         <span class="text-weight-bold text-h5">
-          <span class="text-purple">따봉</span>
+          <span class="text-purple">모두의 </span>
           <span class="text-weight-regular text-white">레시피</span>
         </span>
         </q-icon>
