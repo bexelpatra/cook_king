@@ -68,7 +68,7 @@ public class UserController {
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
         boolean b =  emailService.check(receiver);
-
+        httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
 }

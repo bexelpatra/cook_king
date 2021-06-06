@@ -87,4 +87,15 @@ public class EmailEntity {
     public int hashCode() {
         return Objects.hash(id, email, number, regDate);
     }
+
+    @Override
+    public String toString() {
+        return "EmailEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", number='" + number + '\'' +
+                ", regDate=" + regDate +
+                ", check=" + check +
+                '}';
+    }
 }
