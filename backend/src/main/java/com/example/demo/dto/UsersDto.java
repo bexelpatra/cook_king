@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.UsersEntity;
+import com.example.demo.enums.PinKind;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -16,10 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 public class UsersDto {
     private int id;
-    private String title;
-    private String content;
+    private String name;
+    private String token;
+    private String password;
     private Date regDate;
-
+    private String email;
+    private String pin;
+    private PinKind pinKind;
+    private String nickname;
+    private boolean autoLogIn;
 
 //    Entity에서는 @Builder 사용시 반드시 @NoargsConstructor를 사용해야 한다.
     // 아래 생성자는 @NoargsConstructor와 동일하다.
@@ -28,25 +34,32 @@ public class UsersDto {
 //    }
 
     @Builder
-    public UsersDto(int id, String title, String content, Date regDate) {
+    public UsersDto(int id, String name, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {
         this.id = id;
-        this.title = title;
-        this.content = content;
+        this.name = name;
+        this.token = token;
+        this.password = password;
         this.regDate = regDate;
+        this.email = email;
+        this.pin = pin;
+        this.pinKind = pinKind;
+        this.nickname = nickname;
+        this.autoLogIn = autoLogIn;
     }
+
 
     // ---------------------------------------------------------------------------
     // public 접근제어자, void, int ... 반환값의 타입, 메소드 이름, (parameter) 값
-    public void rVoid(){
-
-    }
-    public int publicInt(){
-
-        return 1;
-    }
-    private int privateInt(){
-        return 2;
-    }
+//    public void rVoid(){
+//
+//    }
+//    public int publicInt(){
+//
+//        return 1;
+//    }
+//    private int privateInt(){
+//        return 2;
+//    }
     // ---------------------------------------------------------------------------
 
     public static UsersDto toDto(UsersEntity usersEntity, ObjectMapper objectMapper){
@@ -92,5 +105,9 @@ public class UsersDto {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
 
         return objectMapper.convertValue(usersDto,UsersEntity.class);
+    }
+
+    public static void fix(UsersDto usersDto){
+        usersDto.setPassword(null);
     }
 }

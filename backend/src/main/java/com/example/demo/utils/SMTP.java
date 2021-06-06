@@ -11,7 +11,7 @@ import java.util.Properties;
 
 @Service
 public class SMTP {
-    public static void send(String receiver,String subject,String text){
+    public static boolean send(String receiver,String subject,String text){
         final String user = "coookkingofficial@gmail.com";
         final String pw = "dyfldhkd0$";
 
@@ -34,9 +34,10 @@ public class SMTP {
             mimeMessage.setText(text);
 
             Transport.send(mimeMessage);
-
+            return true;
         } catch (MessagingException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -46,7 +47,7 @@ public class SMTP {
      * @param subject 제목
      * @param text 내용
      */
-    public static void send(String[] receiver,String subject,String text){
+    public static boolean send(String[] receiver,String subject,String text){
         final String user = "coookkingofficial@gmail.com";
         final String pw = "dyfldhkd0$";
 
@@ -78,9 +79,10 @@ public class SMTP {
             mimeMessage.setText(text);
 
             Transport.send(mimeMessage);
-
+            return true;
         } catch (MessagingException e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
