@@ -1,6 +1,6 @@
 {
   "name": "org.cordova.quasar.app",
-  "displayName": "따봉 레시피",
+  "displayName": "모두의 레시피",
   "version": "1.0.1",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
