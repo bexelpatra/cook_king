@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ public class UsersEntity {
     private String pin;
     private PinKind pinKind;
     private String nickname;
+    private boolean autoLogIn;
 
     @Builder
     public UsersEntity(int id, String name, String token, String password, Date regDate) {
@@ -40,7 +42,6 @@ public class UsersEntity {
     public void setId(int id) {
         this.id = id;
     }
-
 
     @Basic
     @Column(name = "token")
@@ -71,6 +72,7 @@ public class UsersEntity {
     public void setRegDate(Date regDate) {
         this.regDate = regDate;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -124,8 +126,17 @@ public class UsersEntity {
     public String getNickname() {
         return nickname;
     }
+    public void setNickname(String nickname) { this.nickname = nickname; }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
+    @Basic
+    @Column(name = "name")
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
+    @Basic
+    @Column(name = "auto_log_in")
+    public boolean isAutoLogIn() { return autoLogIn; }
+
+    public void setAutoLogIn(boolean autoLogIn) { this.autoLogIn = autoLogIn; }
 }

@@ -1,19 +1,20 @@
-package com.example.demo.testing;
+package com.example.demo.utilities;
 
+import com.example.demo.testing.MyEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
-public abstract class UTILS {
+public abstract class Utils {
     static ObjectMapper objectMapper = new ObjectMapper();
-    public UTILS() {
+    static Random random=new Random();
+    public Utils() {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
     }
@@ -51,4 +52,23 @@ public abstract class UTILS {
         }
         return ts;
     }
+
+    public static String getNumber(int len){
+        if(len<=0) len = 1;
+        StringBuilder builder = new StringBuilder();
+        for(int i=0;i<len;i++){
+            builder.append(random.nextInt(9));
+        }
+        return builder.toString();
+    }
+
+    public static boolean isValidEmail(String email) {
+        boolean err = false;
+        String regex = "^[_a-z0-9-]+(.[_a-z0-9-]+)*@(?:\\w+\\.)+\\w+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        if(m.matches()) { err = true; }
+        return err;
+    }
+
 }
