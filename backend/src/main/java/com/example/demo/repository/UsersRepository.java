@@ -12,4 +12,5 @@ public interface UsersRepository extends JpaRepository<UsersEntity,Long> {
     UsersEntity findUsersEntityById(long id);
     Optional<UsersEntity> findUsersEntityByToken(String token);
     List<UsersEntity> findUsersEntitiesByIdGreaterThanEqual(long id);
+    Optional<UsersEntity> findUsersEntityByEmail(String email);
 }

@@ -8,20 +8,26 @@
 
         <q-card-section>
           <div class="flex full-width">
-            <q-input label="이메일" v-model="email" style ="width: 70%"></q-input>
+            <q-input label="이메일" v-model="email" style ="width: 70%" :disable="ec"></q-input>
              <q-btn
                flat
                style=" width: 30%;font-size: 0.9em;"
-               @click="duplicateCheck(email)">중복 확인</q-btn>
+               @click="emailCheck(email)">중복 확인</q-btn>
           </div>
-          <div v-if="checkDuplicate" class="flex full-width">
-            <q-input label="인증번호" v-model="email" style ="width: 70%"></q-input>
+          <div v-if="p1_duplicate" class="full-width">
             <q-btn
               flat
               style=" width: 30%;font-size: 0.9em;"
-              @click="emailCert(email)">인증하기</q-btn>
+              @click="sendCert" :disable="sendAgain">메일 발송</q-btn>
           </div>
-          <div v-if="checkEmail&&checkDuplicate">
+          <div v-if="p2_sendMail" class="flex full-width">
+            <q-input label="인증번호" v-model="cert" style ="width: 70%"></q-input>
+            <q-btn
+              flat
+              style=" width: 30%;font-size: 0.9em;"
+              @click="emailCert(cert)">인증하기</q-btn>
+          </div>
+          <div v-if="p1_duplicate&&p2_sendMail">
             <q-input label="비밀번호" v-model="password"></q-input>
             <q-input label="비밀번호 확인" v-model="password2"></q-input>
           </div>
@@ -58,12 +64,12 @@
     export default {
       name: "SignUp",
       computed :{
-        ...mapGetters(['getLayout'])
+        ...mapGetters(['getLayout']),
       },
       watch:{
-        // PW : (pw,pw2)=>{
-        //   this.getAnswer();
-        // }
+        PW : ()=>{
+          this.getAnswer(this.password,this.password2);
+        }
       },
       data(){
         return {
@@ -72,20 +78,51 @@
           checkDuplicate : false,
           checkEmail :false,
           checkPassword :false,
+
+          p1_duplicate : false,
+          p2_sendMail : false,
+          p3_cert : false,
+          p4_pwLength : false,
+          p5_samePw : false,
+          sendAgain : false,
           password :'',
           password2 : '',
+          inputModel : '',
+          ec : false,
+          cert :'',
 
+          ticktock :'',
+          clock :'',
         }
       },
       methods:{
         ...mapMutations([]),
-        ...mapActions([]),
+        ...mapActions(['duplicateCheck']),
         test(x){
           console.log(x.strSummary("123123",3))
         },
         // 기존에 저장된 메일이 있는지 확인
-        duplicateCheck(email){
-          this.checkDuplicate = !this.checkDuplicate;
+        emailCheck(email){
+          let self = this;
+          this.duplicateCheck({email:email,
+          onSuccess :(res) =>{
+            if(res.data.result == 1){
+              self.checkDuplicate = !self.checkDuplicate;
+              self.ec = true;
+              this.util.notify(res.data.desc,'info');
+            }else {
+              this.util.notify(res.data.desc,'info');
+            }
+
+          },
+          onFail : (error )=>{
+            this.util.notify(error,'warn');
+          }
+          })
+        },
+        // 인증메일 보내기
+        sendCert(){
+          this.sendAgain = false;
         },
         // 이메일 인증하기
         emailCert(){
@@ -104,8 +141,28 @@
             }else {
               this.checkPassword=false;
             }
-          }, 500);
-        }
+          }, 1000);
+        },
+        myTimer(){
+          clearInterval(this.ticktock)
+          let t = 60;
+          let m = '';
+          let sec = '';
+
+          this.ticktock = setInterval(()=>{
+            m = parseInt(t/60);
+            sec = t%60 < 10 ? '0'+t%60: t%60;
+            t--;
+            this.clock = m+":"+sec;
+            if(t<55){
+              this.sendAgain = true;
+            }
+            if(t<0){
+              this.clock = '시간 만료'
+              clearInterval(this.ticktock)
+            }
+          },1000)
+        },
       },
 
       beforeCreate() {},

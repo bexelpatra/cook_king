@@ -17,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class UsersDto {
     private int id;
-    private String name;
     private String token;
     private String password;
     private Date regDate;
@@ -34,9 +33,8 @@ public class UsersDto {
 //    }
 
     @Builder
-    public UsersDto(int id, String name, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {
+    public UsersDto(int id, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {
         this.id = id;
-        this.name = name;
         this.token = token;
         this.password = password;
         this.regDate = regDate;
@@ -107,7 +105,8 @@ public class UsersDto {
         return objectMapper.convertValue(usersDto,UsersEntity.class);
     }
 
-    public static void fix(UsersDto usersDto){
+    public static UsersDto fix(UsersDto usersDto){
         usersDto.setPassword(null);
+        return usersDto;
     }
 }

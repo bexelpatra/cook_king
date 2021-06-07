@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,4 +74,22 @@ public abstract class Utils {
         return err;
     }
 
+    public static String dateToStr(Date date){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(date);
+    }
+
+    public static String dateToStr(int field,int amount){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(field,amount);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return format.format(calendar.getTime());
+    }
+
+    public static Date getDate(int field,int amount){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(field,amount);
+        return calendar.getTime();
+    }
 }
