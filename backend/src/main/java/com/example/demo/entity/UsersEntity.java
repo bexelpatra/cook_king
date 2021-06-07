@@ -14,7 +14,6 @@ import java.util.Objects;
 @NoArgsConstructor
 public class UsersEntity {
     private int id;
-    private String name;
     private String token;
     private String password;
     private Date regDate;
@@ -25,16 +24,21 @@ public class UsersEntity {
     private boolean autoLogIn;
 
     @Builder
-    public UsersEntity(int id, String name, String token, String password, Date regDate) {
+    public UsersEntity(int id, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {
         this.id = id;
-        this.name = name;
         this.token = token;
         this.password = password;
         this.regDate = regDate;
+        this.email = email;
+        this.pin = pin;
+        this.pinKind = pinKind;
+        this.nickname = nickname;
+        this.autoLogIn = autoLogIn;
     }
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -73,22 +77,25 @@ public class UsersEntity {
         this.regDate = regDate;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UsersEntity that = (UsersEntity) o;
         return id == that.id &&
-                Objects.equals(name, that.name) &&
+                autoLogIn == that.autoLogIn &&
                 Objects.equals(token, that.token) &&
                 Objects.equals(password, that.password) &&
-                Objects.equals(regDate, that.regDate);
+                Objects.equals(regDate, that.regDate) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(pin, that.pin) &&
+                pinKind == that.pinKind &&
+                Objects.equals(nickname, that.nickname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, token, password, regDate);
+        return Objects.hash(id, token, password, regDate, email, pin, pinKind, nickname, autoLogIn);
     }
 
     @Basic
@@ -127,12 +134,6 @@ public class UsersEntity {
         return nickname;
     }
     public void setNickname(String nickname) { this.nickname = nickname; }
-
-    @Basic
-    @Column(name = "name")
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
 
     @Basic
     @Column(name = "auto_log_in")

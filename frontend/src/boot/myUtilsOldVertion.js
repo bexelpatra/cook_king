@@ -51,6 +51,6 @@ exports.strSummary = (str, len) =>{
   return str.substr(0,len)+"...";
 }
 
-exports.noti = (vue,message,color) =>{
-  vue.$q.notify({message : message,color:color});
-}
+// exports.noti = (vue,message,color) =>{
+//   vue.$q.notify({message : message,color:color});
+// }

@@ -2,9 +2,11 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.EmailEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -23,4 +25,11 @@ public interface EmailRepository extends JpaRepository<EmailEntity,Long> {
 
     @Query(value = "select * from email <@ql.where > :q </@ql.where>",nativeQuery = true)
     Optional<EmailEntity> getOneBy(@Param("q") String q);
+
+
+    @Modifying
+    @Transactional
+    @Query(value="delete from email where email = ?1 and reg_date < str_to_date(?2,'%Y-%m-%d %H:%i:%s')", nativeQuery=true)
+    void deleteEmail(@Param("email")String receiver,@Param("date")String now);
+
 }

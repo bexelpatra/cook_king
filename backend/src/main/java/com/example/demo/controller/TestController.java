@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +67,9 @@ public class TestController {
     @PostMapping(value = "/test3")
     public ResponseEntity enumtest(@RequestParam Map<String, String> map){
         Map<String,Object> result = new HashMap<>();
-
+        for(int i=0;i<3;i++){
+            System.out.println(Utils.dateToStr(Calendar.MINUTE,20));
+        }
         return new ResponseEntity(result, HttpStatus.OK);
     }
 

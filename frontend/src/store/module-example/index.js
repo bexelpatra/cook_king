@@ -9,5 +9,6 @@ export default {
   getters,
   mutations,
   actions,
+  actions2,
   state
 }
