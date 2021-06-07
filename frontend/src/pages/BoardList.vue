@@ -1,66 +1,70 @@
-<!--fixme 게시물 리스트-->
+<!--fixme 게시물 리스트
+수정 : q-input : borderless,dark 변경
+
+-->
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
-      <div class = "q-py-sm">
-        <div class="q-py-sm q-px-sm">
-          <span class="text-weight-bold" style="font-size: 2em">레시피</span>
-        </div>
+      <!-- 검색창   -->
+      <div class="flex" style="height: auto">
 
-        <!-- 검색창   -->
-        <q-card flat class="" style="border-radius: 10px; height: 4em" >
-          <div class="flex">
-        <!-- 검색 조건을 입력하는 부분 -->
-            <q-select
-              style="width: 22%; font-size: 0.9em"
-              v-model="searchOption"
-              :options="options"
-            />
-              <q-input
-                clearable
-                filled
-                class="q-py-lg-xs"
-                v-model="keyword"
-                style="width: 55%;font-size: 1em"
-                type="text"
-              >
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
+        <!-- 검색 조건을 입력하는 부분
+              select 에 label을 넣을지 확인 해볼 것-->
+        <q-select
+          dense
+          label="선택"
+          class="q-pl-md"
+          style="width: 28vw"
+          borderless
+          v-model="searchOption"
+          :options="options"
+        />
+        <q-input
+          dense
+          dark
+          borderless
+          v-model="keyword"
+          input-class="text-right text-black"
+          style="border-radius: 10px"
+          class="q-pr-sm q-mr-xs full-height col bg-grey-3">
+          <template v-slot:append>
+            <q-icon color="black" v-if="keyword === ''" name="search" />
+            <q-icon color="black" v-else name="clear" class="cursor-pointer" @click="keyword = ''" />
+          </template>
+        </q-input>
 
-            <q-btn
-              flat
-              label="검색"
-              class=""
-              size="1em"
-              style="width: 20%;"
-              dense
-              @click="searching()"
-            />
-          </div>
-        </q-card>
+        <q-btn
+          flat
+          dense
+          class="bg-grey-1"
+          style="border-radius: 3px"
+          label="검색"
+          size="1.1rem"
+          @click="searching()"
+        />
       </div>
+
     </section>
 
-    <section class="q-mt-md">
-<!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
-<!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
+    <section class="q-mt-sm">
+      <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
+      <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
       <div v-if="recipeList!=null">
-        <div v-for="recipe in recipeList"  >
-          <q-card class="flex" style="width: 100%;height:5em;" @click.prevent="pageMove('',recipe)">
-            <div class="q-pa-sm full-height" style="width: 20%;">
-              <img :src=recipe.src class="" height="55" width="55"/>
-            </div>
-            <div class="q-pa-sm full-height" style="width: 70%;">
-              <div class="text-weight-bold" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-              <div class="q-py-xs">{{strSummary(recipe.introduce,16)}}</div>
-            </div>
-          </q-card>
+        <div v-for="recipe in recipeList">
+          <q-btn dense flat class="full-width" >
+            <q-card flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
+              <div class="q-pa-sm full-height" style="width: 20%;">
+                <img :src=recipe.src height="55" width="55"/>
+              </div>
+              <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
+                <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
+                <div class="text-left">{{strSummary(recipe.introduce,16)}}</div>
+              </div>
+            </q-card>
+          </q-btn>
+          <q-separator class="bg-grey-4"/>
         </div>
-
-        <q-btn class="full-width" @click="ttest(tt)">
-<!--          <q-icon name ="add_circle_outline"></q-icon>-->
+        <q-btn flat class="full-width" @click="ttest(tt)">
           <span>더보기</span>
         </q-btn>
       </div>
@@ -137,6 +141,10 @@
       window.onpopstate = ()=>{}
     },
     beforeMount() {
+      this.getLayout.headerLayout = true;
+      this.getLayout.backbotton = false;
+      this.getLayout.title = "레시피"
+      this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
     },
     mounted() {},
