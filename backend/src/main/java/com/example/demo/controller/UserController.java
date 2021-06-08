@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * 로그인, 메일인증, 회원가입
+ */
 @RestController
 @RequestMapping(value = "user")
 @RequiredArgsConstructor

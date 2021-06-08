@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.ContentKind;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -10,11 +12,16 @@ public class ContentEntity {
     private String path;
     private String url;
     private String title;
-    private Integer order;
+    private int order;
     private String description;
+
+    private ContentKind contentKind;
+
+    private RecipesEntity recipesEntity;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -55,11 +62,11 @@ public class ContentEntity {
 
     @Basic
     @Column(name = "order")
-    public Integer getOrder() {
+    public int getOrder() {
         return order;
     }
 
-    public void setOrder(Integer order) {
+    public void setOrder(int order) {
         this.order = order;
     }
 
@@ -72,6 +79,17 @@ public class ContentEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Basic
+    @Column(name = "kind")
+    public ContentKind getContentKind() { return contentKind; }
+    public void setContentKind(ContentKind contentKind) { this.contentKind = contentKind; }
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "recipes_id")
+    public RecipesEntity getRecipesEntity() { return recipesEntity; }
+
+    public void setRecipesEntity(RecipesEntity recipesEntity) { this.recipesEntity = recipesEntity; }
 
     @Override
     public boolean equals(Object o) {

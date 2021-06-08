@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.RecipesDto;
 import com.example.demo.dto.TestDto;
 import com.example.demo.dto.UsersDto;
+import com.example.demo.entity.FirstCategoryEntity;
+import com.example.demo.entity.RecipesEntity;
+import com.example.demo.entity.UsersEntity;
 import com.example.demo.service.TestService;
 import com.example.demo.utilities.Querying;
 import com.example.demo.utilities.Utils;
@@ -12,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,6 +71,7 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
+    // calendar에 숫자 더하면 instance가 변해버리는가...
     @PostMapping(value = "/test3")
     public ResponseEntity enumtest(@RequestParam Map<String, String> map){
         Map<String,Object> result = new HashMap<>();
@@ -73,4 +81,56 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
+    @PostMapping(value = "/test4")
+    public ResponseEntity objectmapperTest(@RequestParam Map<String, String> map){
+        Map<String,Object> result = new HashMap<>();
+        RecipesEntity recipesEntity = new RecipesEntity();
+        FirstCategoryEntity firstCategoryEntity = new FirstCategoryEntity();
+        firstCategoryEntity.setName("얍얍얍");
+        recipesEntity.setFirstCategoryEntity(firstCategoryEntity);
+        Utils.test(RecipesDto.class,new RecipesEntity());
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+    @PostMapping(value = "/test5")
+    public ResponseEntity classLoader(@RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        RecipesEntity recipesEntity = new RecipesEntity();
+        Class aClass = new RecipesDto().getClass();
+        Class aClass1 = null;
+        Class aClass2 = null;
+        Class aClass3 = null;
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        try {
+            aClass = RecipesEntity.class;
+            aClass2 = classLoader.loadClass(RecipesEntity.class.getName());
+            aClass3 = classLoader.loadClass(RecipesEntity.class.getName().replace("entity","dto").replace("Entity","Dto"));
+            for (Method method : aClass2.getDeclaredMethods()) {
+                System.out.println(method.getName());
+                System.out.println(method.toGenericString());
+                Arrays.stream(method.getParameters()).forEach(parameter -> System.out.println(parameter.getName()));
+                if(method.getName().contains("get")){
+                    RecipesEntity recipesEntity1 =new RecipesEntity();
+                    recipesEntity1.setId(1);
+                    for (Field field : recipesEntity1.getClass().getDeclaredFields() ) {
+                        field.setAccessible(true);
+                        System.out.println(field.get(field));
+                    }
+                    System.out.println(method.invoke(aClass2.newInstance(),null));
+
+                }
+            };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        result.put("dd",aClass1);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+    @PostMapping(value = "/test6")
+    public ResponseEntity test6(@RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        UsersDto usersDto = new UsersDto();
+        usersDto.setEmail("ddd");
+
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
 }
