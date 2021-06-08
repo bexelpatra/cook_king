@@ -1,6 +1,6 @@
 <template>
   <q-page class="bg-white">
-    <!-- fixme 인기 레시피 -->
+    <!-- fixme 인기 레시피  텍스트 왼쪽 마진 줘야됨. -->
     <section>
       <div class="q-pa-md text-h5 text-grey-6 text-weight-bold">
         <span class="text-blue">인기 </span>레시피

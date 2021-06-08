@@ -25,6 +25,8 @@ const routes = [
       {path: '/signup', name: 'signup', component: () => import('pages/SignUp.vue')},
       //myUtil 샘플
       {path: '/test', name: 'test', component: () => import('pages/TEST.vue')},
+      //Login
+      {path: '/login', name: 'login', component: () => import('pages/Login.vue')},
 
       //fixme Settings
       //핀
