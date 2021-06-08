@@ -34,6 +34,7 @@ export const test123 = (state, args) => {
       args.onFail(error);
   });
 };
+
 export const duplicateCheck = (status,args) =>{
   axios.get(HOST+'user/mail-duplication'+addQuery({email:args.email}))
     .then(value => {
@@ -68,3 +69,5 @@ export const signIn = (status,args) =>{
     .then(value => args.onSuccess(value))
     .catch(reason => args.onFail(reason))
 }
+
+//===================================================================================================================

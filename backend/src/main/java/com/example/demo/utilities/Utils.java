@@ -1,20 +1,22 @@
 package com.example.demo.utilities;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import com.example.demo.testing.MyEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public abstract class Utils {
+public abstract class Utils<T> {
     static ObjectMapper objectMapper = new ObjectMapper();
     static Random random=new Random();
     public Utils() {
@@ -41,8 +43,63 @@ public abstract class Utils {
         return null;
     }
 
+    private static Optional<Class> findOpponent(Class[] classes,String entityName){
+        entityName = entityName.toLowerCase().substring(entityName.lastIndexOf(".")+1).replace("entity","");
 
+        String finalEntityName = entityName;
+        for (Class aClass : classes) {
+            aClass.getName().toLowerCase();
+        }
+        return Arrays.stream(classes).filter(aClass -> {
+            System.out.println(aClass.getName().toLowerCase());
+            return aClass.getName().toLowerCase().contains(finalEntityName+"dto");
+        }).findFirst();
+    }
+    private static<T,R> Optional<R> invokeGetter(Class<T> t,Field field){ // 부모 클래스, 필드의 클래스
+        Optional<Method> optional = Arrays.stream(t.getDeclaredMethods())
+                .filter(method -> method.getName().toLowerCase().contains(field.getName().toLowerCase()))
+                .findFirst();
+        Object o = null;
+        try {
+            if(optional.isPresent()){
+                o = (optional.get().invoke(t, null));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    // dto -> entity, entity -> dto converter
+    public static<F,T> T test(Class<T> to, F from){
+        Field[] fields=to.getDeclaredFields();
+        for (Field field : fields) {
+            // not recursive...
+            if(field.getName().endsWith("Entity")){
+                Class target = field.getType();
+                Optional<Class> opponent = findOpponent(to.getDeclaredClasses(),target.getName());
+                Object o = null;
+                Optional optional = null;
+                try {
+                    optional = invokeGetter(from.getClass(),field);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            Class aClass = field.getType();
 
+//            try {
+//                Method[] methods = aClass.getDeclaredMethods();
+//                for (Method method : methods) {
+//                    if(method.getName().contains("get")){
+//                        method.invoke(aClass,null);
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+        }
+        return objectMapper.convertValue(from,to);
+    }
     // dto -> entity, entity -> dto converter
     public static<F,T> T to(Class<T> to, F from){
         return objectMapper.convertValue(from,to);

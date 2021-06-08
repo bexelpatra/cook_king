@@ -1,14 +1,26 @@
 package com.example.demo.entity;
 
+import com.example.demo.dto.RecipesDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "recipes", schema = "mydb")
 public class RecipesEntity {
+//    public final Class convert = RecipesDto.class;
+
     private int id;
     private String title;
     private String stuffs;
+
+    private FirstCategoryEntity firstCategoryEntity;
+    private SecondCategoryEntity secondCategoryEntity;
+    private CuisineEntity cuisineEntity;
+    @JsonIgnore
+    private List<ContentEntity> contentEntities;
 
     @Id
     @Column(name = "id")
@@ -39,6 +51,22 @@ public class RecipesEntity {
     public void setStuffs(String stuffs) {
         this.stuffs = stuffs;
     }
+
+    @OneToOne
+    public FirstCategoryEntity getFirstCategoryEntity() { return firstCategoryEntity; }
+    public void setFirstCategoryEntity(FirstCategoryEntity firstCategoryEntity) { this.firstCategoryEntity = firstCategoryEntity; }
+
+    @OneToOne
+    public SecondCategoryEntity getSecondCategoryEntity() { return secondCategoryEntity; }
+
+    public void setSecondCategoryEntity(SecondCategoryEntity secondCategoryEntity) { this.secondCategoryEntity = secondCategoryEntity; }
+    @OneToOne
+    public CuisineEntity getCuisineEntity() { return cuisineEntity; }
+    public void setCuisineEntity(CuisineEntity cuisineEntity) { this.cuisineEntity = cuisineEntity; }
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "recipesEntity")
+    public List<ContentEntity> getContentEntities() { return contentEntities; }
+    public void setContentEntities(List<ContentEntity> contentEntities) { this.contentEntities = contentEntities; }
 
     @Override
     public boolean equals(Object o) {

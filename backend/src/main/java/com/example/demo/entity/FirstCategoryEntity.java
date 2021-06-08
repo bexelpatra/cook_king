@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.FirstCategoryKind;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
 public class FirstCategoryEntity {
     private int id;
     private String name;
+    private FirstCategoryKind kind;
 
     @Id
     @Column(name = "id")
@@ -28,6 +31,11 @@ public class FirstCategoryEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Basic
+    @Column(name = "kind")
+    public FirstCategoryKind getKind() { return kind; }
+    public void setKind(FirstCategoryKind kind) { this.kind = kind; }
 
     @Override
     public boolean equals(Object o) {

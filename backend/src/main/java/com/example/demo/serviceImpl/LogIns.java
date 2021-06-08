@@ -9,12 +9,14 @@ import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class LogIns implements LogIn {
     private final UserService userService;
+    private final List<LogIn> logIns;
     @Override
     public Optional<UsersDto> logIn(int type, String token, String mail, String pw) {
         Optional<UsersDto> usersDto = Optional.empty();
