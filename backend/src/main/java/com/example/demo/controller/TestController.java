@@ -133,4 +133,14 @@ public class TestController {
 
         return new ResponseEntity(result, HttpStatus.OK);
     }
+
+    @PostMapping(value = "/test7")
+    public ResponseEntity test7(@RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        UsersDto usersDto = new UsersDto();
+        UsersEntity usersEntity = (UsersEntity) Utils.to(usersDto);
+
+        result.put("user",usersEntity);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
 }

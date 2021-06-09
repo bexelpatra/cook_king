@@ -107,7 +107,6 @@ export async function fetchServer(state,args) {
     },
     body : JSON.stringify(args.body),
   };
-  console.log(requestInit)
   const response = await fetch(url,requestInit);
   const data = await response.json();
   if(response.ok){

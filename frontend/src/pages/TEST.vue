@@ -39,6 +39,7 @@
 
         <q-btn label="아싱크 앤 아웨이트" @click="asyncTestServer"/>
         <q-btn label="요거슨 페칭" @click="fetchingTest"/>
+        <q-btn label="test7" @click="test7"/>
         <div>{{nong.nong}}{{nong.number}}</div>
       </section>
     </q-page>
@@ -103,6 +104,10 @@
         .then(value => console.log(value))
         .catch(reason => console.log(reason))
 
+      },
+      test7(){
+        this.fetchServer({path : "test/test7",method:'post',body: {}})
+          .then(value => console.log(value))
       }
     },
 

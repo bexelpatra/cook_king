@@ -4,7 +4,7 @@
       <q-card flat>
         <q-card-section>
           <div class="row full-width">
-            <q-input class="col" label="이메일" v-model="email" :disable="ec"/>
+            <q-input class="col" label="이메일" v-model="email" />
             <q-btn
               flat
               dense
@@ -49,6 +49,7 @@
               label="비밀번호 확인"
               v-model="password2"
               filled :type="isPwd2 ? 'password' : 'text'">
+              <div>{{comment}}</div>
               <template v-slot:append>
                 <q-icon
                   :name="isPwd2 ? 'visibility_off' : 'visibility'"
@@ -83,8 +84,8 @@
 
 <script>
   import {mapGetters,mapActions,mapMutations,mapState} from 'vuex';
-  import {LocalStorage} from 'quasar';
-
+  import {LocalStorage, QInfiniteScroll as _} from 'quasar';
+  import {debounce} from 'lodash'
   import {myUtil} from "boot/myUtil";
 
   export default {
@@ -93,33 +94,34 @@
       ...mapGetters(['getLayout']),
     },
     watch:{
-      PW : ()=>{
-        this.getAnswer({pw :this.password,pw2:this.password2});
-      }
+
+      password2 : (a,b)=>{
+        console.log("들어왔으유")
+          _.debounce(()=>{
+            console.log("@@@@@@")
+            if(a == b){
+              this.checkPassword = true;
+              this.comment ='같음'
+            }else {
+              this.checkPassword=false;
+              this.comment ='다름'
+            }
+          }, 1000);
+        }
     },
     data(){
       return {
         util :new myUtil(this),
         email:'',
-        checkDuplicate : false,
-        checkEmail :false,
-        checkPassword :false,
-
-        comment : '',
-        p1_duplicate : false,
-        p2_sendMail : false,
-        p3_cert : false,
-        p4_pwLength : false,
-        p5_samePw : false,
-        sendAgain : false,
         password :'',
         password2 : '',
         inputModel : '',
-        ec : false,
+        emailCheckResult : false,
         cert :'',
         isPwd: true,
         isPwd2: true,
 
+        comment : '',
         ticktock :'',
         clock :'3:00',
       }
@@ -128,26 +130,11 @@
       ...mapMutations([]),
       ...mapActions(['duplicateCheck']),
       test(x){
-        console.log(x.strSummary("123123",3))
       },
       // 기존에 저장된 메일이 있는지 확인
       emailCheck(email){
         let self = this;
         this.p1_duplicate = !this.p1_duplicate;
-        // this.duplicateCheck({email:email,
-        // onSuccess :(res) =>{
-        //   if(res.data.result == 1){
-        //     self.checkDuplicate = !self.checkDuplicate;
-        //     self.ec = true;
-        //     this.util.notify(res.data.desc,'info');
-        //   }else {
-        //     this.util.notify(res.data.desc,'info');
-        //   }
-        // },
-        // onFail : (error )=>{
-        //   this.util.notify(error,'warn');
-        // }
-        // })
       },
       // 인증메일 보내기
       sendCert(){

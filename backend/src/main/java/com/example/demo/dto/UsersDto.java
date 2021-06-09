@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.enums.PinKind;
+import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
