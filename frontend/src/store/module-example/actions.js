@@ -7,6 +7,7 @@ export function someAction (/* context */) {
 }
 
 const addQuery = (param) => {
+  if(param == null) return '';
   let str = "?"
   str += Object.keys(param).map(key => {
     return key +"="+ param[key];
@@ -35,6 +36,11 @@ export const test123 = (state, args) => {
   });
 };
 
+export const asyncTest = (state, args) => {
+  let get = axios.get('http://localhost:8081/test/test123?nong=호로롤&number=1818');
+  console.log(get)
+  args.onSuccess(get);
+};
 export const duplicateCheck = (status,args) =>{
   axios.get(HOST+'user/mail-duplication'+addQuery({email:args.email}))
     .then(value => {
@@ -70,4 +76,51 @@ export const signIn = (status,args) =>{
     .catch(reason => args.onFail(reason))
 }
 
+export async function getMapping(state,args) {
+  const url = HOST +args.path + addQuery(args.param);
+  const requestInit = {
+    method : 'get',
+    headers : {
+      "Content-Type" : "application/json",
+      ...args.header
+    },
+  };
+  const response = await fetch(url,requestInit);
+  const data = await response.json();
+  if(response.ok){
+    return data;
+  }else{
+    throw Error(data);
+  }
+}
+export async function fetchServer(state,args) {
+  if(args.method == 'get' || args.method == null){
+    return getMapping(state,args);
+  }
+  let contentType = args.header == null|| args.header.content_type == null ? 'application/json' : args.header.content_type;
+  const url = HOST +args.path + addQuery(args.param);
+  const requestInit = {
+    method : args.method,
+    headers: {
+      'Content-Type': contentType,
+      ...args.header
+    },
+    body : JSON.stringify(args.body),
+  };
+  console.log(requestInit)
+  const response = await fetch(url,requestInit);
+  const data = await response.json();
+  if(response.ok){
+    return data;
+  }else{
+    throw Error(data);
+  }
+}
+export const requestMapping = (state, args) =>{
+  axios.get(HOST+'user/mail-certification'+addQuery({email:args.email, number : args.number}),)
+    .then(value => args.onSuccess(value))
+    .catch(reason => args.onFail(reason))
+
+}
 //===================================================================================================================
+

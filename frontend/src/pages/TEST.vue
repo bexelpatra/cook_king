@@ -36,6 +36,10 @@
 
         <q-btn label="서버연결" @click="nong123()"/>
         <div>{{nong.nong}}{{nong.number}}</div>
+
+        <q-btn label="아싱크 앤 아웨이트" @click="asyncTestServer"/>
+        <q-btn label="요거슨 페칭" @click="fetchingTest"/>
+        <div>{{nong.nong}}{{nong.number}}</div>
       </section>
     </q-page>
 </template>
@@ -65,7 +69,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['sample','test123']),
+      ...mapActions(['sample','test123','asyncTest','fetchServer']),
       sample2(){
         let self = this;
         this.sample({
@@ -91,6 +95,15 @@
           }
         })
       },
+      asyncTestServer(){
+        // this.asyncTest({name : 'name',onSuccess(),onFail()})
+      },
+      async fetchingTest(){
+        this.fetchServer({path : 'test/test2',method : 'post',body :{id : 1,email : 'anananan'},})
+        .then(value => console.log(value))
+        .catch(reason => console.log(reason))
+
+      }
     },
 
     beforeCreate() {},
