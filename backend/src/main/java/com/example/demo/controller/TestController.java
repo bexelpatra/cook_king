@@ -58,7 +58,7 @@ public class TestController {
     @PostMapping(value = {"/test2","/test2/"}) // get을 제외한 방식은 @RequestBody를 통해서 받는다.
     public ResponseEntity test2(@RequestBody UsersDto usersDto){
         Map<String,Object> result = new HashMap<>();
-
+        result.put("user",usersDto);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
