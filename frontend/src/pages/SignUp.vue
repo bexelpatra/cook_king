@@ -13,10 +13,12 @@
               @click="emailCheck(email)"/>
           </div>
 
-          <div v-if="true" class="q-my-md bg-grey-3" >
+          <div v-if="true" class="q-my-md">
             <q-btn
+              dense
+              size="lg"
               label="메일 발송"
-              class="full-width"
+              class="full-width signUp bg-blue text-white text-weight-bold"
               @click="sendCert" :disable="false"/>
           </div>
           <div v-if="true" class="row full-width">
@@ -63,19 +65,31 @@
 
         <q-card-actions>
           <q-btn
-            class="full-width signUp bg-grey-3"
-            style="height: 2.3em;"
-            label="계정 만들기"
+            dense
+            size="lg"
+            class="full-width signUp bg-blue text-white text-weight-bold"
+            label="가입 하기"
             @click="signUp()"
             :disable="false"
           />
-          <div>{{comment}}</div>
-          <div class="full-width text-center q-mt-sm">
-            <span>이미 계정이 있습니다. ->
-              <q-btn color="primary" label="로그인"/>
-            </span>
-          </div>
+<!--          <div>{{comment}}</div>-->
+<!--          <div class="full-width text-center q-mt-sm">-->
+<!--            <span>이미 계정이 있습니다. ->-->
+<!--              <q-btn color="primary" label="로그인"/>-->
+<!--            </span>-->
+<!--          </div>-->
         </q-card-actions>
+      </q-card>
+    </section>
+
+    <!-- fixme 이메일 이용약관   -->
+    <section class="q-pa-sm">
+      <div class="text-h6 q-mb-sm">이메일 이용약관</div>
+      <q-card class="q-pa-sm" style="font-size: 1.1rem">
+        <span>※ 모두의 레시피는 수집 목적으로 이메일을  <br>
+          <span class="q-ml-sm">이용 하지 않고 단순 이메일 인증으로 </span><br>
+          <span class="q-ml-sm">회원 가입 하게 되어 있습니다.</span>
+        </span>
       </q-card>
     </section>
   </q-page>

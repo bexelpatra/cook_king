@@ -61,6 +61,25 @@
         </q-card-section>
       </q-card>
     </section>
+
+    <!-- fixme 이메일 이용약관   -->
+    <section class="q-pa-sm">
+      <div class="text-h6 q-mb-sm">이메일 이용약관</div>
+      <q-card class="q-pa-sm" style="font-size: 1.1rem">
+        <span>※ 모두의 레시피는 수집 목적으로 이메일을  <br>
+          <span class="q-ml-sm">이용 하지 않고 단순 이메일 인증으로 </span><br>
+          <span class="q-ml-sm">회원 가입 하게 되어 있습니다.</span>
+        </span>
+      </q-card>
+    </section>
+
+    <q-footer class="backColor">
+      <q-btn class="full-width  text-weight-bold text-h5"
+             :disable="email == 0 || password == 0 || password2 == 0"
+             @click="">
+        <span class="q-ml-sm text-grey-2">비밀 변경</span>
+      </q-btn>
+    </q-footer>
   </q-page>
 </template>
 
