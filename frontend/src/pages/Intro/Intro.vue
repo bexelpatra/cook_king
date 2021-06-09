@@ -1,5 +1,5 @@
-<template class="fullscreen">
-  <q-layout >
+<template>
+  <q-layout>
     <section>
       <div class="absolute full-height">
         <img src="video/IntroGif.gif" class="full-width full-height"/>
@@ -34,7 +34,8 @@
       ...mapMutations([]),
       ...mapActions([]),
       gotoMain() {
-        this.$router.push('/Main');
+        // this.$router.push('/Main');
+        this.$router.push('/login');
       },
     },
 

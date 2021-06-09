@@ -1,3 +1,4 @@
+<!--fixme 비밀번호 찾기-->
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
@@ -9,17 +10,17 @@
               flat
               dense
               class="bg-grey-3"
-              label="중복확인"
+              label="이메일 확인"
               @click="emailCheck(email)"/>
           </div>
 
-          <div v-if="true" class="q-my-md bg-grey-3" >
+          <div v-if="p1_duplicate" class="q-my-md bg-grey-3" >
             <q-btn
               label="메일 발송"
               class="full-width"
-              @click="sendCert" :disable="false"/>
+              @click="sendCert" :disable="sendAgain"/>
           </div>
-          <div v-if="true" class="row full-width">
+          <div v-if="p2_sendMail" class="row full-width">
             <q-input class="col" label="인증번호" v-model="cert">
               <div class="q-ma-md">{{clock}}</div>
             </q-input>
@@ -30,9 +31,9 @@
               label="인증하기"
               @click="emailCert(cert)"/>
           </div>
-          <div v-if="true" class="q-mt-md">
-<!--            <q-input label="비밀번호" v-model="password"></q-input>-->
-<!--            <q-input label="비밀번호 확인" v-model="password2"></q-input>-->
+          <div v-if="p1_duplicate&&p2_sendMail" class="q-mt-md">
+            <!--            <q-input label="비밀번호" v-model="password"></q-input>-->
+            <!--            <q-input label="비밀번호 확인" v-model="password2"></q-input>-->
             <q-input v-model="password"
                      label="비밀번호"
                      filled :type="isPwd ? 'password' : 'text'">
@@ -58,24 +59,6 @@
             </q-input>
           </div>
         </q-card-section>
-
-        <q-separator  />
-
-        <q-card-actions>
-          <q-btn
-            class="full-width signUp bg-grey-3"
-            style="height: 2.3em;"
-            label="계정 만들기"
-            @click="signUp()"
-            :disable="false"
-          />
-          <div>{{comment}}</div>
-          <div class="full-width text-center q-mt-sm">
-            <span>이미 계정이 있습니다. ->
-              <q-btn color="primary" label="로그인"/>
-            </span>
-          </div>
-        </q-card-actions>
       </q-card>
     </section>
   </q-page>
@@ -88,7 +71,7 @@
   import {myUtil} from "boot/myUtil";
 
   export default {
-    name: "SignUp",
+    name: "FindPW",
     computed :{
       ...mapGetters(['getLayout']),
     },
@@ -152,17 +135,13 @@
       // 인증메일 보내기
       sendCert(){
         this.sendAgain = false;
+        this.p2_sendMail = true;
         this.myTimer();
       },
       // 이메일 인증하기
       emailCert(){
         // 타이머추가, 인증번호 입력받기
         this.checkEmail = !this.checkEmail;
-      },
-      // 회원가입하기
-      signUp(){
-        //1. 이메일인증 확인
-        //2. 비밀번호 확인(유효성 및 복잡성)
       },
       getAnswer(args){
         _.debounce(()=>{
@@ -205,7 +184,7 @@
     beforeMount() {
       this.getLayout.headerLayout = true;
       this.getLayout.backbotton = true;
-      this.getLayout.title = "회원가입"
+      this.getLayout.title = "비밀번호 찾기"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;

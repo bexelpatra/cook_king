@@ -55,7 +55,7 @@
   import {myUtil} from "boot/myUtil";
 
   export default {
-    name: 'Board',
+    name: 'Content',
     computed:{
       ...mapGetters(['getLayout'])
     },
@@ -82,8 +82,12 @@
       window.onpopstate = ()=>{}
     },
     beforeMount() {
-      this.getLayout.bottomFooter = true;
-      this.getLayout.headerLayout = false;
+      this.getLayout.headerLayout = true;
+      this.getLayout.backbotton = true;
+      this.getLayout.title = "레시피"
+      this.getLayout.bookmarkbtn = true;
+      this.getLayout.bottomFooter = false;
+      this.getLayout.addcontent = false;
     },
     mounted() {},
     beforeUpdate() {},

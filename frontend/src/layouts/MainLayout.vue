@@ -1,8 +1,7 @@
-<!--fixme q-Layout 에 view="LHh lpr lFf" 안적으면 footer가 안먹힘-->
 <template>
   <q-layout view="lHh lpr lFf">
-    <q-header v-if="headerLayout" class="bg-white text-black">
-      <q-toolbar>
+    <q-header ref="header" v-if="headerLayout" class="bg-white text-black">
+      <q-toolbar class="flex items-center">
         <!--fixme 뒤로가기 버튼-->
         <q-btn
           v-if="backbotton"
@@ -14,7 +13,7 @@
           @click="backBtn"
         />
 
-        <q-toolbar-title class="text-h5 text-weight-bold absolute-center">
+        <q-toolbar-title class="no-padding text-h5 text-weight-bold absolute-center">
           {{title}}
         </q-toolbar-title>
 
@@ -38,6 +37,15 @@
             @click="bookmark = true"
           />
         </section>
+
+        <q-btn
+          v-if="addcontent"
+          flat
+          dense
+          round
+          icon="edit"
+          @click="contentBtn"
+        />
 
       </q-toolbar>
     </q-header>
@@ -83,6 +91,7 @@
         backbotton: true,
         bookmark: true,
         bookmarkbtn: true,
+        addcontent: false,
       }
     },
     methods:{
@@ -99,9 +108,11 @@
       //즐찾
       mybookPage(){ this.$router.push('bookmark'); },
       //내정보
-      myinfoPage(){ this.$router.push('my'); },
+      myinfoPage(){ this.$router.push('myinfo'); },
       //뒤로가기
       backBtn(){ this.$router.back()},
+      //게시물작성
+      contentBtn(){ this.$router.push('')}
     },
     beforeCreate() {},
     created() {

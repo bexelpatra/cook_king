@@ -1,14 +1,27 @@
 <!--fixme 내 정보-->
 <template>
   <q-page class="bg-white">
-    <!--fixme security 보안-->
+    <!--fixme Mycontent 내 게시물-->
+    <section>
+      <q-btn
+        class="full-width items-start flex text-h6 text-grey-7"
+        style="height: 17vw"
+        icon="folder"
+        flat
+        label="내 게시물"
+        @click="myConTentPage"
+      />
+      <q-separator/>
+    </section>
+
+    <!--fixme security 핀/생체-->
     <section>
       <q-btn
         class="full-width items-start flex text-h6 text-grey-7"
         style="height: 17vw"
         icon="admin_panel_settings"
         flat
-        label="개인/보안"
+        label="핀/생체"
         @click="securitybtn"
       />
       <q-separator/>
@@ -35,6 +48,7 @@
       </div>
       <q-separator/>
     </section>
+
   </q-page>
 </template>
 
@@ -56,9 +70,14 @@
       ...mapMutations([]),
       ...mapActions([]),
 
-      /** Click 구간 */
+      /**======================================
+       * 클릭 이벤트
+       ========================================*/
       securitybtn(){
         this.$router.push('personer');
+      },
+      myConTentPage(){
+        this.$router.push('mycontent');
       }
     },
 
@@ -72,6 +91,7 @@
       this.getLayout.backbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
+      this.getLayout.addcontent = false;
     },
     mounted() {},
     beforeUpdate() {},

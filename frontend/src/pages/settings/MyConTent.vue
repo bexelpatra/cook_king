@@ -1,13 +1,13 @@
-<!--fixme 즐겨찾기-->
+<!--fixme 내 게시물-->
 <template>
   <q-page class="q-pa-md">
     <section class="flex justify-between">
-      <div v-for="index in 3" :key="index">
+      <div v-for="index in 6" :key="index">
         <q-btn flat dense>
           <q-card style="width: 42vw; height: 50vw">
             <img class="justify-between" src="https://cdn.quasar.dev/img/mountains.jpg">
             <div class="flex q-ml-sm">
-              <div class="text-h6">Card #{{ index }}</div>
+              <div class="text-h6">Card {{ index }}</div>
               <div class="text-subtitle2">by John Doe</div>
             </div>
           </q-card>
@@ -22,7 +22,7 @@
   import {LocalStorage} from 'quasar';
 
   export default {
-    name: 'Bookmark',
+    name: 'MyConTent',
     computed:{
       ...mapGetters(['getLayout'])
     },
@@ -34,6 +34,11 @@
     methods:{
       ...mapMutations([]),
       ...mapActions([]),
+
+      /**======================================
+       * 클릭 이벤트
+       ========================================*/
+
     },
 
     beforeCreate() {},
@@ -42,10 +47,10 @@
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
-      this.getLayout.backbotton = false;
-      this.getLayout.title = "즐겨찾기"
+      this.getLayout.backbotton = true;
+      this.getLayout.title = "내 게시물"
       this.getLayout.bookmarkbtn = false;
-      this.getLayout.bottomFooter = true;
+      this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
     },
     mounted() {},
