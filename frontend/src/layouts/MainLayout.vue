@@ -112,7 +112,7 @@
       //뒤로가기
       backBtn(){ this.$router.back()},
       //게시물작성
-      contentBtn(){ this.$router.push('')}
+      contentBtn(){ this.$router.push('addContent')}
     },
     beforeCreate() {},
     created() {

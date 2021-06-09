@@ -239,7 +239,7 @@
           return;
         }
         let linkSrc = window.location.href.split("#")[1];
-        if (linkSrc === "/Main") {
+        if (linkSrc === "/main") {
           this.$q.dialog(
             {
               title: '<div class="text-h5 text-weight-bolder"><span class="text-orange-6">모두의</span> 레시피 종료</div>',
