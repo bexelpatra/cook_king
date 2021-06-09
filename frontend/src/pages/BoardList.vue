@@ -146,6 +146,7 @@
       this.getLayout.title = "레시피"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
+      this.getLayout.addcontent = true;
     },
     mounted() {},
     beforeUpdate() {},

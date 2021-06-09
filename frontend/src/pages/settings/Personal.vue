@@ -108,6 +108,7 @@
       this.getLayout.backbotton = true;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
+      this.getLayout.addcontent = false;
     },
     mounted() {},
     beforeUpdate() {},

@@ -19,14 +19,19 @@ const routes = [
       {path: '/recipe', name: 'recipe', component: () => import('pages/Recipe.vue')},
       //즐겨찾기
       {path: '/bookmark', name: 'bookmark', component: () => import('pages/Bookmark.vue')},
-      //내 정보
-      {path: '/my', name: 'my', component: () => import('pages/MyInfo.vue')},
-      //회원가입
-      {path: '/signup', name: 'signup', component: () => import('pages/SignUp.vue')},
+
       //myUtil 샘플
       {path: '/test', name: 'test', component: () => import('pages/TEST.vue')},
+
+      //fixme User
       //Login
       {path: '/login', name: 'login', component: () => import('pages/Login.vue')},
+      //회원가입
+      {path: '/signup', name: 'signup', component: () => import('pages/SignUp.vue')},
+      //비밀번호 찾기
+      {path: '/findpw', name: 'findpw', component: () => import('pages/FindPW.vue')},
+      //내 정보
+      {path: '/myinfo', name: 'myinfo', component: () => import('pages/MyInfo.vue')},
 
       //fixme Settings
       //핀
@@ -35,6 +40,8 @@ const routes = [
       {path: '/pinregistration', name: 'pinregistration', component: () => import('pages/settings/PinRegistration.vue')},
       //핀/생체보안 설정
       {path: '/personer', name: 'personer', component: () => import('pages/settings/Personal.vue')},
+      //내 게시물
+      {path: '/mycontent', name: 'mycontent', component: () => import('pages/settings/MyConTent.vue')},
     ]
   },
 

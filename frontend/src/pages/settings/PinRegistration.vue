@@ -145,6 +145,7 @@
       this.getLayout.backbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
+      this.getLayout.addcontent = false;
     },
     mounted() {},
     beforeUpdate() {},
