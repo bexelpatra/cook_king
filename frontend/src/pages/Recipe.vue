@@ -34,6 +34,7 @@
       this.getLayout.title = '게시물작성';
       this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = true;
+      this.getLayout.addcontent = false;
     },
     mounted() {},
     beforeUpdate() {},

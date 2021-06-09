@@ -31,7 +31,7 @@
       </div>
     </section>
 
-    <q-skeleton class="skeletonBG" style="height: 3px"/>
+    <q-separator style="height: 3px"/>
 
     <!-- fixme 한식 레시피 -->
     <section class="q-mb-sm">
@@ -62,7 +62,7 @@
       </div>
     </section>
 
-    <q-skeleton class="skeletonBG2" style="height: 3px"/>
+    <q-separator style="height: 3px"/>
 
     <!-- fixme 양식 레시피-->
     <section class="q-mb-sm">
@@ -93,7 +93,7 @@
       </div>
     </section>
 
-    <q-skeleton class="skeletonBG" style="height: 3px"/>
+    <q-separator style="height: 3px"/>
 
     <!-- fixme 일식 레시피-->
     <section class="q-mb-sm">
@@ -124,7 +124,7 @@
       </div>
     </section>
 
-    <q-skeleton class="skeletonBG2" style="height: 3px"/>
+    <q-separator style="height: 3px"/>
 
     <!-- fixme 중식 레시피-->
     <section class="q-mb-sm">
@@ -294,6 +294,7 @@
     beforeMount() {
       this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = false;
+      this.getLayout.addcontent = false;
       document.addEventListener("deviceready", this.Device, false);
     },
     mounted() {},
