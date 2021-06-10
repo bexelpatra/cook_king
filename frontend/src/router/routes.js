@@ -13,9 +13,11 @@ const routes = [
       {path: '/main', name: 'main', component: () => import('pages/Main.vue')},
       //게시물
       {path: '/content', name: 'content', component: () => import('pages/Content.vue')},
+      //게시물 작성
+      {path: '/addcontent', name: 'addcontent', component: () => import('pages/AddContent.vue')},
       //레시피 리스트
       {path: '/boardlist', name: 'boardlist', component: () => import('pages/BoardList.vue')},
-      //레시피 작성
+      //레시피
       {path: '/recipe', name: 'recipe', component: () => import('pages/Recipe.vue')},
       //즐겨찾기
       {path: '/bookmark', name: 'bookmark', component: () => import('pages/Bookmark.vue')},
