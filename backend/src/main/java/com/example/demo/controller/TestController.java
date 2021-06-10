@@ -7,7 +7,9 @@ import com.example.demo.entity.FirstCategoryEntity;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.service.TestService;
+import com.example.demo.utilities.MyMail;
 import com.example.demo.utilities.Querying;
+import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -132,5 +134,55 @@ public class TestController {
         usersDto.setEmail("ddd");
 
         return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/test7")
+    public ResponseEntity test7(@RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        UsersDto usersDto = new UsersDto();
+        UsersEntity usersEntity = (UsersEntity) Utils.to(usersDto);
+
+        result.put("user",usersEntity);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+    @GetMapping(value = "/test8/{path}")
+    public ResponseEntity pathvar(@PathVariable("path") String path){
+        Map<String,Object> result = new HashMap<>();
+
+        System.out.println(path);
+        result.put("path",path);
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/test9/")
+    public ResponseEntity deleteDB(@RequestParam("email")String email,@RequestParam("type")int type){
+        Map<String,Object> result = new HashMap<>();
+        switch (type){
+            case 0:
+                testService.test1(email);
+                break;
+            case 1:
+                testService.test2(email);
+                break;
+            case 2:
+                SMTP.send(email,"야야야야양","rkfkfk");
+                break;
+            case 3:
+                SMTP.send(email,"야야야야양","rkfkfk");
+                break;
+            case 4:
+                SMTP.send(email,"야야야야양","rkfkfk");
+                break;
+        }
+
+        return new ResponseEntity(result, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/test10")
+    public ResponseEntity sample22(@RequestParam("param") String param, @RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        return new ResponseEntity(result,httpStatus);
     }
 }

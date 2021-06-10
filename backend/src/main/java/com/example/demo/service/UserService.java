@@ -11,4 +11,5 @@ public interface UserService {
     Optional<UsersEntity> logInByEmailAndPassword(String email,String pw);
     Optional<UsersEntity> findUsersEntityByEmail(String email);
     Optional<UsersEntity> signUp(UsersDto usersDto);
+
 }

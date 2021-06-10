@@ -1,5 +1,6 @@
 package com.example.demo.serviceImpl;
 
+import com.example.demo.dto.RecipesDto;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.repository.RecipeRepository;
@@ -29,4 +30,5 @@ public class RecipeServiceImpl implements RecipeService {
                 firstCategoryKind,
                 PageRequest.of(0,20, Sort.by(Sort.Direction.DESC,"id")));
     }
+
 }

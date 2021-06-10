@@ -87,12 +87,14 @@ export async function getMapping(state,args) {
   };
   const response = await fetch(url,requestInit);
   const data = await response.json();
+  Object.assign(data,{status:response.status});
   if(response.ok){
     return data;
   }else{
     throw Error(data);
   }
 }
+// {path : , method : , body : , param : ,}
 export async function fetchServer(state,args) {
   if(args.method == 'get' || args.method == null){
     return getMapping(state,args);
@@ -107,9 +109,11 @@ export async function fetchServer(state,args) {
     },
     body : JSON.stringify(args.body),
   };
-  console.log(requestInit)
+  console.log(url);
+  console.log(requestInit);
   const response = await fetch(url,requestInit);
   const data = await response.json();
+  Object.assign(data,{status:response.status});
   if(response.ok){
     return data;
   }else{
