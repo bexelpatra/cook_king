@@ -19,7 +19,7 @@
 
     <q-separator style="height: 3px"/>
 
-    <!--fixme 대분류 중분류 소분류-->
+    <!--fixme 대분류 중분류 소분류 -->
     <section class="row">
       <q-select
         label="대분류"
@@ -49,7 +49,7 @@
 
     <q-separator style="height: 3px"/>
 
-    <!--fixme 타이틀-->
+    <!--fixme 타이틀 -->
     <section class="q-px-md q-py-sm bg-white">
       <div class="q-mb-xs text-h6 text-weight-bold">타이틀</div>
       <q-input
@@ -61,7 +61,7 @@
       />
     </section>
 
-    <!--fixme 한줄 설명-->
+    <!--fixme 한줄 설명 -->
     <section class="q-px-md q-py-sm bg-white">
       <div class="q-mb-xs text-h6 text-weight-bold">한줄 설명</div>
       <q-input
@@ -76,9 +76,9 @@
     <!--fixme 재료 -->
     <section class="q-px-md q-py-sm bg-white">
       <div class="q-mb-xs text-h6 text-weight-bold">재료/용량</div>
-      <div class="row q-gutter-x-sm">
+      <div class="row q-gutter-x-sm q-mt-sm" v-for="row in rows">
         <q-input
-          v-model="ingredients"
+          v-model="row.name"
           class="col"
           dense
           standout
@@ -86,19 +86,25 @@
           style="border-radius: 30px"
         />
         <q-input
-          v-model="capacity"
+          v-model="row.jab"
           class="col"
           dense
           standout
           outlined
           style="border-radius: 30px"
+        />
+        <q-btn
+          dense
+          label="삭제"
+          class="text-weight-thin text-white bg-blue"
+          @click="removeRow(row)"
         />
       </div>
       <div class="flex flex-center q-mb-md">
         <q-btn
           class="q-mt-lg"
           icon="add"
-          @click=""
+          @click="addRow"
           size="md"
           color="grey-7"
           text-color="white"
@@ -108,46 +114,55 @@
 
     <q-separator style="height: 3px"/>
 
-    <!--fixme 레시피 내용    -->
+    <!--fixme 레시피 내용 -->
     <section class="q-pa-sm bg-white">
       <div class="q-my-xs text-h6 text-weight-bold">레시피</div>
       <div v-for="index in 1" :key="index">
-        <q-card>
-<!--          <img src="https://cdn.quasar.dev/img/mountains.jpg">-->
-          <div class="full-width" style="height: 50vw">
-            <q-input
-              dense
-              style="width: 40vw; z-index: 1"
-              class=" absolute-top-right bg-white"
-              outlined
-              filled
-              @input="fileSelect"
-              type="file"
-            />
-            <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
-              <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
-            </div>
-          </div>
-          <div class="q-mx-sm q-pb-sm text-left">
-            <div class="q-my-sm text-h5 text-grey-7">{{ index }}.</div>
-            <q-input
-              v-model="contenttest"
-              filled
-              class="bg-grey-3"
-              label="내용을 적어주세요."
-              type="textarea"
-            />
-          </div>
-        </q-card>
-      </div>
-    </section>
+        <div v-for="add in adds">
+          <q-btn
+            dense
+            flat
+            class="q-pr-sm full-width flex justify-end items-end"
+            label="삭제"
+            icon="close"
+            @click="rcRemoveRow(add)"
+          />
+          <q-card class="q-my-sm">
 
-    <section class="bg-white">
-      <div class="q-pt-sm q-pb-md flex flex-center">
+            <div v-model="add.img" class="full-width" style="height: 50vw">
+              <q-input
+                dense
+                style="width: 40vw; z-index: 1"
+                class=" absolute-top-right bg-white"
+                outlined
+                filled
+                @input="fileSelect"
+                type="file"
+              />
+              <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
+                <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
+              </div>
+            </div>
+
+            <div class="q-mx-sm q-pb-sm text-left">
+              <div class="q-my-sm text-h5 text-grey-7">{{ index ++}}.</div>
+              <q-input
+                v-model="contenttest"
+                filled
+                class="bg-grey-3"
+                label="내용을 적어주세요."
+                type="textarea"
+              />
+            </div>
+          </q-card>
+
+          <q-separator class="full-width" style="height: 3px"/>
+        </div>
+      </div>
+      <div class="q-pt-md q-pb-md flex flex-center">
         <q-btn
-          class=""
           icon="add"
-          @click=""
+          @click="rcRow"
           size="md"
           color="grey-7"
           text-color="white"
@@ -155,6 +170,11 @@
           label="추가하기"/>
       </div>
     </section>
+
+    <!--fixme 등록하기 버튼 -->
+    <q-footer>
+      <q-btn dense class="full-width text-h6">등록하기</q-btn>
+    </q-footer>
   </q-page>
 </template>
 
@@ -185,6 +205,8 @@
         capacity: '',
 
         contenttest: '',
+        rows:[{}],
+        adds:[{}],
 
 
       }
@@ -273,10 +295,13 @@
         console.log(this.imageName);
       },
 
-      /** 행 추가 */
-      add(){
+      /** 재료 행 추가, 제거 */
+      addRow(){this.rows.push({name:"",jab:""})},
+      removeRow(row){this.rows.splice(row, 1);},
 
-      }
+      /** 레시피 행 추가, 제거 */
+      rcRow(){this.adds.push({img:""})},
+      rcRemoveRow(add){this.adds.splice(add, 1);},
     },
 
     beforeCreate() {},
