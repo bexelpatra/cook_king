@@ -6,4 +6,6 @@ public interface EmailService {
     String sendCertMail(String receiver);
     boolean certificate(String receiver, String number);
     boolean check(String receiver);
+
+
 }

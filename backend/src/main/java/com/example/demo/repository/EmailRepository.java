@@ -20,12 +20,9 @@ public interface EmailRepository extends JpaRepository<EmailEntity,Long> {
 
     Optional<EmailEntity> findTopByEmailAndRegDateIsAfterOrderByRegDateDesc(String email, Date date);
 
+    List<EmailEntity> findAllByEmail(String email);
     @Query(value = "select * from email :q",nativeQuery = true)
     List<EmailEntity> getListBy(@Param("q") String q);
-
-    @Query(value = "select * from email <@ql.where > :q </@ql.where>",nativeQuery = true)
-    Optional<EmailEntity> getOneBy(@Param("q") String q);
-
 
     @Modifying
     @Transactional

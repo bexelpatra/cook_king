@@ -30,9 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UsersEntity> findUsersEntityByEmail(String email) {
-        if(!Utils.isValidEmail(email)) return Optional.empty();
-        Optional<UsersEntity> usersEntity =usersRepository.findUsersEntityByEmail(email);
-        return usersEntity;
+        return usersRepository.findUsersEntityByEmail(email);
     }
 
     @Override

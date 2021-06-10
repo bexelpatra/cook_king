@@ -29,6 +29,7 @@ public class UserController {
 
     private final LogIn logIn;
 
+    // 메일 중복 확인
     @GetMapping(value = "/mail-duplication")
     public ResponseEntity checkDuplicate(@RequestParam("email")String email){
         Map<String,Object> result = new HashMap<>();
@@ -43,7 +44,7 @@ public class UserController {
             result.put("desc","이미 등록된 메일입니다.");
             result.put("result",0);
         }else {
-            result.put("desc","사용가능한 이메일일비낟.");
+            result.put("desc","사용가능한 이메일입니다.");
             result.put("result",1);
         }
         return new ResponseEntity(result,httpStatus);
@@ -70,7 +71,7 @@ public class UserController {
             status = HttpStatus.OK;
         }else {
             result.put("desc","사용자 정보를 조회하지 못했습니다.");
-            status = HttpStatus.NOT_IMPLEMENTED;
+            status = HttpStatus.ACCEPTED;
         }
         // 결과 출력
         return new ResponseEntity(result,status);
@@ -92,7 +93,7 @@ public class UserController {
         }else {
             desc.append("전송 샐패 ");
             desc.append("["+response+"]");
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            httpStatus = HttpStatus.ACCEPTED;
         }
         result.put("desc",desc.toString());
         return new ResponseEntity(result,httpStatus);
@@ -110,7 +111,7 @@ public class UserController {
             httpStatus = HttpStatus.OK;
             result.put("desc","이메일 인증 성공");
         }else{
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            httpStatus = HttpStatus.ACCEPTED;
             result.put("desc","이메일 인증 실패");
         }
 
@@ -127,7 +128,7 @@ public class UserController {
             usersEntity = userService.signUp(usersDto);
         }catch (Exception e){
             result.put("desc","회원 가입 실패 [이미 등록되었습니다]");
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            httpStatus = HttpStatus.ACCEPTED;
             return new ResponseEntity(result,httpStatus);
         }
         if(usersEntity.isPresent()){
@@ -136,7 +137,7 @@ public class UserController {
             httpStatus = HttpStatus.OK;
         }else{
             result.put("desc","회원 가입 실패 [입력값이 잘못되었습니다]");
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            httpStatus = HttpStatus.ACCEPTED;
         }
 
         return new ResponseEntity(result,httpStatus);

@@ -22,23 +22,26 @@ public class SignInEmailService implements EmailService {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private final EmailRepository emailRepository;
     private final EntityManager entityManager;
+    private final int certEXP = 1;
+    private final int singUpEXP = 10;
     @Override
     public String sendCertMail(String receiver) {
 
         String number = Utils.getNumber(6);
-        if(Utils.isValidEmail(receiver)) return "이메일 주소가 잘못되었습니다.";
+        if(!Utils.isValidEmail(receiver)) return "이메일 주소가 잘못되었습니다.";
         if(alreadyHasCertMail(receiver)) return "이미 메일이 발송되었습니다.";
 
         boolean flag = SMTP.send(receiver,
                 "[모두의 레시피] 인증번호 발송",
-                String.format("안녕하세요 [모두의 레시피]입니다.<br>인증번호 : %s <br> 위 6자리 번호를 입력해주세요. <br> 유효기간 : %tF"
+                String.format("안녕하세요 [모두의 레시피]입니다. \n 인증번호 : %s \n 위 6자리 번호를 입력해주세요. \n 유효기간 : %s"
                         ,number
-                        ,Utils.getDate(Calendar.MINUTE,3)));
+                        ,Utils.dateToStr(Utils.getDate(Calendar.MINUTE, certEXP))));
 
         emailRepository.save(EmailEntity.builder()
                 .email(receiver)
                 .number(number)
                 .regDate(new Date())
+                .check(false)
                 .build());
 
         return flag ? null:"이메일 발송에 실패했습니다.";
@@ -72,7 +75,7 @@ public class SignInEmailService implements EmailService {
      */
     @Override
     public boolean check(String receiver) {
-        boolean hasChecked = emailRepository.findTopByEmailAndRegDateIsAfterOrderByRegDateDesc(receiver,Utils.getDate(Calendar.MINUTE,-10))
+        boolean hasChecked = emailRepository.findTopByEmailAndRegDateIsAfterOrderByRegDateDesc(receiver,Utils.getDate(Calendar.MINUTE,-singUpEXP))
                 .filter(emailEntity -> emailEntity.isCheck())
                 .isPresent();
 //        String query = new Querying(EmailEntity.class)
@@ -85,7 +88,7 @@ public class SignInEmailService implements EmailService {
     }
 
     public boolean alreadyHasCertMail(String receiver){
-        if(emailRepository.findTopByEmailAndRegDateIsAfterOrderByRegDateDesc(receiver, Utils.getDate(Calendar.MINUTE,-1)).isPresent()){
+        if(emailRepository.findTopByEmailAndRegDateIsAfterOrderByRegDateDesc(receiver, Utils.getDate(Calendar.MINUTE,-certEXP)).isPresent()){
             return true;
         }else {
             emailRepository.deleteEmail(receiver,Utils.dateToStr(new Date()));

@@ -3,23 +3,25 @@
     <section>
       <q-card flat>
         <q-card-section>
+
           <div class="row full-width">
-            <q-input class="col" label="이메일" v-model="email" />
+            <q-input class="col" label="이메일" v-model="emailTemp" />
             <q-btn
               flat
               dense
               class="bg-grey-3"
               label="중복확인"
-              @click="emailCheck(email)"/>
+              @click="emailCheck(emailTemp)" :disable="mailCheck"/>
           </div>
 
-          <div v-if="true" class="q-my-md bg-grey-3" >
+          <div v-if="emailCheckResult" class="q-my-md bg-grey-3" >
             <q-btn
               label="메일 발송"
               class="full-width"
-              @click="sendCert" :disable="false"/>
+              @click="sendCert" :disable="!sendEmail"/>
           </div>
-          <div v-if="true" class="row full-width">
+
+          <div v-if="sendCertResult" class="row full-width">
             <q-input class="col" label="인증번호" v-model="cert">
               <div class="q-ma-md">{{clock}}</div>
             </q-input>
@@ -30,12 +32,12 @@
               label="인증하기"
               @click="emailCert(cert)"/>
           </div>
-          <div v-if="true" class="q-mt-md">
-<!--            <q-input label="비밀번호" v-model="password"></q-input>-->
-<!--            <q-input label="비밀번호 확인" v-model="password2"></q-input>-->
+
+          <div v-if="emailCertResult" class="q-mt-md">
             <q-input v-model="password"
                      label="비밀번호"
-                     filled :type="isPwd ? 'password' : 'text'">
+                     filled
+                     :type="isPwd ? 'password' : 'text'">
               <template v-slot:append>
                 <q-icon
                   :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -48,8 +50,8 @@
               class="q-mt-sm"
               label="비밀번호 확인"
               v-model="password2"
-              filled :type="isPwd2 ? 'password' : 'text'">
-              <div>{{comment}}</div>
+              filled
+              :type="isPwd2 ? 'password' : 'text'">
               <template v-slot:append>
                 <q-icon
                   :name="isPwd2 ? 'visibility_off' : 'visibility'"
@@ -57,6 +59,7 @@
                   @click="isPwd2 = !isPwd2"/>
               </template>
             </q-input>
+
           </div>
         </q-card-section>
 
@@ -70,12 +73,12 @@
             @click="signUp()"
             :disable="false"
           />
-          <div>{{comment}}</div>
           <div class="full-width text-center q-mt-sm">
             <span>이미 계정이 있습니다. ->
               <q-btn color="primary" label="로그인"/>
             </span>
           </div>
+
         </q-card-actions>
       </q-card>
     </section>
@@ -84,7 +87,7 @@
 
 <script>
   import {mapGetters,mapActions,mapMutations,mapState} from 'vuex';
-  import {LocalStorage, QInfiniteScroll as _} from 'quasar';
+  import {LocalStorage} from 'quasar';
   import {debounce} from 'lodash'
   import {myUtil} from "boot/myUtil";
 
@@ -94,78 +97,129 @@
       ...mapGetters(['getLayout']),
     },
     watch:{
-
-      password2 : (a,b)=>{
-        console.log("들어왔으유")
-          _.debounce(()=>{
-            console.log("@@@@@@")
-            if(a == b){
-              this.checkPassword = true;
-              this.comment ='같음'
-            }else {
-              this.checkPassword=false;
-              this.comment ='다름'
-            }
-          }, 1000);
+      password2 : function(val){
+        this.passwordCheck();
+      },
+      emailCertResult : function(flag){
+        if(flag){
+          this.finalEmail = this.emailTemp;
+          this.sendCertResult = false;
+          this.emailCheckResult = false;
+          this.mailCheck = true;
         }
+
+      }
     },
     data(){
       return {
         util :new myUtil(this),
-        email:'',
+        emailTemp:'',
+        finalEmail : '',
         password :'',
         password2 : '',
         inputModel : '',
         emailCheckResult : false,
         cert :'',
+        mailCheck : false,
+        sendEmail : true,
         isPwd: true,
         isPwd2: true,
+        isSamePw:false,
+        sendCertResult : false,
+        emailCertResult : false,
 
-        comment : '',
         ticktock :'',
-        clock :'3:00',
+        clock :'1:00',
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['duplicateCheck']),
+      ...mapActions(['duplicateCheck','fetchServer']),
       test(x){
       },
+      passwordCheck:_.debounce(function(){
+        if(this.password === this.password2){
+          console.log("동일합니다.")
+        }else{
+          console.log("비밀번호가 다릅니다.")
+        }
+      }, 1000),
+
       // 기존에 저장된 메일이 있는지 확인
-      emailCheck(email){
+      emailCheck(emailTemp) {
         let self = this;
-        this.p1_duplicate = !this.p1_duplicate;
+
+        this.fetchServer({path: 'user/mail-duplication', param: {email: emailTemp}})
+          .then(success => {
+            let color = '';
+            if (success.result == 1) {
+              color = 'info';
+              this.emailCheckResult = true;
+            } else {
+              color = 'warning'
+              this.emailCheckResult = false;
+            }
+            this.util.notify(success.desc, color);
+          })
+          .catch(fail => {
+            console.log(fail)
+          })
       },
       // 인증메일 보내기
-      sendCert(){
-        this.sendAgain = false;
+      async sendCert(){
+        let desc = '';
+        let color = '';
+
+        await this.fetchServer({path : 'user/mail-certification'
+          ,method:'post'
+          ,param :{email : this.emailTemp}
+          ,body:{}})
+        .then(success =>{
+          console.log(success)
+          desc = success.desc;
+          color = 'info'
+          this.sendCertResult = true;
+        })
+        .catch(fail =>{
+          console.log(fail)
+          desc = '알수 없는 에러'
+          color = 'warning'
+        })
+
+        this.util.notify(desc,color);
         this.myTimer();
       },
       // 이메일 인증하기
-      emailCert(){
+      async emailCert(){
+        let desc = '';
+        let color = '';
         // 타이머추가, 인증번호 입력받기
-        this.checkEmail = !this.checkEmail;
+        await this.fetchServer({path : 'user/mail-certification'
+          ,method:'get'
+          ,param :{email : this.emailTemp,number : this.cert}
+          ,body:{}})
+          .then(success =>{
+            console.log(success)
+            desc = success.desc;
+            color = success.status == 200 ? 'info' : 'warning';
+            this.emailCertResult = true;
+          })
+          .catch(fail =>{
+            console.log(fail)
+            desc = '알수 없는 에러'
+            color = 'warning'
+          })
+        this.util.notify(desc,color);
       },
       // 회원가입하기
       signUp(){
         //1. 이메일인증 확인
         //2. 비밀번호 확인(유효성 및 복잡성)
       },
-      getAnswer(args){
-        _.debounce(()=>{
-          console.log("@@@@@@")
-          if(args.pw == args.pw2){
-            this.checkPassword = true;
-            this.comment ='같음'
-          }else {
-            this.checkPassword=false;
-            this.comment ='다름'
-          }
-        }, 1000);
-      },
       myTimer(){
+        this.sendEmail = false;
         clearInterval(this.ticktock)
-        let t = 179;
+        let t = 59;
         let m = '';
         let sec = '';
         this.ticktock = setInterval(()=>{
@@ -173,9 +227,8 @@
           sec = t%60 < 10 ? '0'+t%60: t%60;
           t--;
           this.clock = m+":"+sec;
-
-          if(t<55){
-            this.sendAgain = true;
+          if(t<57){
+            this.sendEmail = true;
           }
           if(t<0){
             this.clock = '시간 만료'
@@ -183,11 +236,13 @@
           }
         },1000)
       },
+
     },
 
     beforeCreate() {},
     created() {
       window.onpopstate = ()=>{}
+
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
