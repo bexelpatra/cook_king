@@ -34,8 +34,7 @@
       ...mapMutations([]),
       ...mapActions([]),
       gotoMain() {
-        // this.$router.push('/Main');
-        this.$router.push('/login');
+        this.$router.push('/Main');
       },
     },
 

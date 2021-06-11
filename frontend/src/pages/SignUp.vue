@@ -91,8 +91,8 @@
     <section class="q-pa-sm">
       <div class="text-h6 q-mb-sm">이메일 이용약관</div>
       <q-card class="q-pa-sm" style="font-size: 1.1rem">
-        <span>※ 모두의 레시피는 수집 목적으로 이메일을  <br>
-          <span class="q-ml-sm">이용 하지 않고 단순 이메일 인증으로 </span><br>
+        <span>※ 모두의 레시피는 수집 목적으로 이메일을
+          <span class="q-ml-sm">이용 하지 않고 단순 이메일 인증으로 </span>
           <span class="q-ml-sm">회원 가입 하게 되어 있습니다.</span>
         </span>
       </q-card>
