@@ -5,6 +5,7 @@ import com.example.demo.entity.RecipesEntity;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
+import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,4 +32,8 @@ public class RecipeServiceImpl implements RecipeService {
                 PageRequest.of(0,20, Sort.by(Sort.Direction.DESC,"id")));
     }
 
+    @Override
+    public RecipesEntity save(RecipesDto recipesDto) {
+        return recipeRepository.save(Utils.to(recipesDto));
+    }
 }

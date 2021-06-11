@@ -117,47 +117,46 @@
     <!--fixme 레시피 내용 -->
     <section class="q-pa-sm bg-white">
       <div class="q-my-xs text-h6 text-weight-bold">레시피</div>
-      <div v-for="index in 1" :key="index">
-        <div v-for="add in adds">
-          <q-btn
-            dense
-            flat
-            class="q-pr-sm full-width flex justify-end items-end"
-            label="삭제"
-            icon="close"
-            @click="rcRemoveRow(add)"
-          />
-          <q-card class="q-my-sm">
+      <div v-for="(add,index) in adds" :key="index">
+        <q-btn
+          dense
+          flat
+          class="q-pr-sm full-width flex justify-end items-end"
+          label="삭제"
+          icon="close"
+          @click="rcRemoveRow(add)"
+        />
+        <q-card class="q-my-sm">
 
-            <div v-model="add.img" class="full-width" style="height: 50vw">
-              <q-input
-                dense
-                style="width: 40vw; z-index: 1"
-                class=" absolute-top-right bg-white"
-                outlined
-                filled
-                @input="fileSelect"
-                type="file"
-              />
-              <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
-                <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
-              </div>
+          <div v-model="add.img" class="full-width" style="height: 50vw">
+            <q-input
+              dense
+              style="width: 40vw; z-index: 1"
+              class=" absolute-top-right bg-white"
+              outlined
+              filled
+              @input="fileSelect"
+              v-model="ttest"
+              type="file"
+            />
+            <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
+              <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
             </div>
+          </div>
 
-            <div class="q-mx-sm q-pb-sm text-left">
-              <div class="q-my-sm text-h5 text-grey-7">{{ index ++}}.</div>
-              <q-input
-                v-model="contenttest"
-                filled
-                class="bg-grey-3"
-                label="내용을 적어주세요."
-                type="textarea"
-              />
-            </div>
-          </q-card>
+          <div class="q-mx-sm q-pb-sm text-left">
+            <div class="q-my-sm text-h5 text-grey-7">{{ index ++}}.</div>
+            <q-input
+              v-model="contenttest"
+              filled
+              class="bg-grey-3"
+              label="내용을 적어주세요."
+              type="textarea"
+            />
+          </div>
+        </q-card>
 
-          <q-separator class="full-width" style="height: 3px"/>
-        </div>
+        <q-separator class="full-width" style="height: 3px"/>
       </div>
       <div class="q-pt-md q-pb-md flex flex-center">
         <q-btn
@@ -188,6 +187,9 @@
     computed:{
       ...mapGetters(['getLayout'])
     },
+    watch:{
+
+    },
     data(){
       return{
         imageName: [],
@@ -207,7 +209,7 @@
         contenttest: '',
         rows:[{}],
         adds:[{}],
-
+        ttest :'',
 
       }
     },

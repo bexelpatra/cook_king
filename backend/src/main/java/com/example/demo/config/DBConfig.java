@@ -13,6 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -46,5 +49,16 @@ public class DBConfig {
     public PlatformTransactionManager platformTransactionManager(@Qualifier("entityManager")EntityManagerFactory entityManagerFactory){
         return new JpaTransactionManager(entityManagerFactory);
     }
+
+//    @Bean
+//    public MultipartResolver multipartResolver(){
+//        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+//        commonsMultipartResolver.setMaxUploadSize((long) 524e+5);
+//
+//        return commonsMultipartResolver;
+//    }
+//    public MultipartResolver multipartResolver() {
+//        return new StandardServletMultipartResolver();
+//    }
 
 }

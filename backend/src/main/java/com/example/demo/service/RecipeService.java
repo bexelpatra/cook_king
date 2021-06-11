@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface RecipeService {
     List<RecipesEntity> getRecipeByFirstCategory(FirstCategoryKind firstCategoryKind,int page);
+
+    RecipesEntity save(RecipesDto recipesDto);
 }

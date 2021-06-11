@@ -22,6 +22,8 @@ public class RecipesDto {
     @JsonIgnore
     private List<ContentDto> contentDtos;
 
+    // transient
+
     public RecipesDto setFirstCategoryDto(FirstCategoryDto firstCategoryDto) {
         this.firstCategoryDto = firstCategoryDto;
         return this;

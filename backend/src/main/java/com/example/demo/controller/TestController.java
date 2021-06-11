@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.RecipesDto;
-import com.example.demo.dto.TestDto;
-import com.example.demo.dto.UsersDto;
+import com.example.demo.dto.*;
 import com.example.demo.entity.FirstCategoryEntity;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
@@ -12,18 +10,18 @@ import com.example.demo.utilities.Querying;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javassist.bytecode.analysis.MultiType;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Test;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "test")
@@ -181,7 +179,49 @@ public class TestController {
     @PostMapping(value = "/test10")
     public ResponseEntity sample22(@RequestParam("param") String param, @RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
-        HttpStatus httpStatus = null;
+        HttpStatus httpStatus = HttpStatus.OK;
+        result.put("param",param);
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/file1")
+    public ResponseEntity file1(MultipartFile multipartFile){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/file2")
+    public ResponseEntity file2(@RequestParam TestDto2 testDto2){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/file3")
+    public ResponseEntity file3(TestDto2 testDto){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/file4")
+    public ResponseEntity file4(Wrapper testDto2s){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/file5")
+    public ResponseEntity file5(@RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/file6")
+    public ResponseEntity file6(@RequestBody MultipartFile multipartFile){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
 
         return new ResponseEntity(result,httpStatus);
     }
