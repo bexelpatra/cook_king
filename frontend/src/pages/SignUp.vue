@@ -77,11 +77,11 @@
             @click="signUp()"
             :disable="false"
           />
-          <div class="full-width text-center q-mt-sm">
-            <span>이미 계정이 있습니다. ->
-              <q-btn color="primary" label="로그인"/>
-            </span>
-          </div>
+<!--          <div class="full-width text-center q-mt-sm">-->
+<!--            <span>이미 계정이 있습니다. ->-->
+<!--              <q-btn color="primary" label="로그인"/>-->
+<!--            </span>-->
+<!--          </div>-->
 
         </q-card-actions>
       </q-card>
