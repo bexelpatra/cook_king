@@ -40,7 +40,23 @@
         <q-btn label="아싱크 앤 아웨이트" @click="asyncTestServer"/>
         <q-btn label="요거슨 페칭" @click="fetchingTest"/>
         <q-btn label="test7" @click="test7"/>
-        <div>{{nong.nong}}{{nong.number}}</div>
+        <q-btn label="test8" @click="test8"/>
+
+        <div>
+          <q-btn label="test9" @click="test9"/>
+          <q-btn label="test10" @click="test10"/>
+          <div v-for="n in 3">
+            <q-input
+              dense
+              style="width: 40vw; z-index: 1"
+              outlined
+              filled
+              v-model="form.imgs[n]"
+              @change="addImg"
+              type="file"
+            />
+          </div>
+        </div>
       </section>
     </q-page>
 </template>
@@ -66,6 +82,10 @@
         query :{},
         xx :{},
         nong: {},
+        img :'',
+        form :{
+          imgs:[]
+        }
       }
     },
     methods:{
@@ -83,6 +103,10 @@
           }
         }
         )
+      },
+      addImg(e){
+        console.log(e.target.results)
+        console.log(e.target.result)
       },
       nong123(){
         let self = this;
@@ -108,7 +132,59 @@
       test7(){
         this.fetchServer({path : "test/test7",method:'post',body: {}})
           .then(value => console.log(value))
-      }
+      },
+       async test8(){
+        let param ='info';
+
+         await this.fetchServer({path : "test/test10",method:'post',param:{param :'warning'},body :{}})
+        .then(value => param = value.param );
+
+        this.util.notify("나와라 얖",param)
+         setTimeout(function () {
+          console.log('타임아웃안쪽에',param);
+          console.log(param);
+        },1000)
+
+         console.log('타임아웃바깥',param);
+
+      },
+      test9(){
+        console.log(this.img);
+        console.log(this.img[0]);
+        let form = new FormData();
+
+        // form.append("files",new Blob(this.img))
+        form.append("multipart",this.img[0])
+        // this.fetchServer({path : 'test/file1',method :'post',body :{files : this.img[0]}})
+        // this.fetchServer({path : 'test/file2',method :'post',body :{files : new Blob(this.img).arrayBuffer()}})
+        // this.fetchServer({path : 'test/file2',method :'post',body :{files : filestr}})
+        // this.fetchServer({path : 'test/file3',method :'post',body : form })
+        // this.fetchServer({path : 'test/file3',method :'post',body :form,header :{"Content-Type":"multipart/form-data"}})
+        // this.fetchServer({path : 'test/file1',method :'post',body :{multipartFile : this.img[0]}})
+        let init = {
+          body : form,
+          headers :{ "Content-Type":"multipart/form-data"}
+        };
+        fetch("http://localhost:8081/test/file2",init)
+      },
+      test10 () {
+        let form = new FormData();
+        this.form.imgs.forEach((value, index) => {
+          console.log(value)
+          form.append("multipartFile",value[0])
+          form.append("name",index)
+        })
+
+        let init = {
+          body : form,
+          // headers :{ "Content-Type":"multipart/form-data"},
+          // headers :{ "Content-Type":"application/json"},
+          method : 'post'
+        };
+
+        fetch("http://localhost:8081/test/file3",init)
+        // fetch("http://localhost:8081/test/file3",init)
+      },
     },
 
     beforeCreate() {},

@@ -112,8 +112,19 @@
       ...mapGetters(['getLayout']),
     },
     watch:{
-      password2 : function(val){
+      password2 : function(){
         this.passwordCheck();
+      },
+      emailTemp :function (a,b){
+        console.log(a,b)
+        console.log(this);
+      },
+      // emailTemp : (a,b)=>{
+      //   console.log(a,b)
+      //   console.log(this);
+      // },
+      password : (val) =>{
+
       },
       emailCertResult : function(flag){
         if(flag){
