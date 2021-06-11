@@ -92,6 +92,9 @@
         bookmark: true,
         bookmarkbtn: true,
         addcontent: false,
+
+        to : '',
+        from : '',
       }
     },
     methods:{
@@ -112,7 +115,11 @@
       //뒤로가기
       backBtn(){ this.$router.back()},
       //게시물작성
-      contentBtn(){ this.$router.push('addContent')}
+      contentBtn(to,from){
+        // this.$router.push('addContent');
+        // this.$router.push('login');
+        this.$router.push({path : '/login', query:{to : to, from : from}})
+      }
     },
     beforeCreate() {},
     created() {
