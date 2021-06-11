@@ -55,6 +55,7 @@ public abstract class Utils<T> {
             return aClass.getName().toLowerCase().contains(finalEntityName+"dto");
         }).findFirst();
     }
+
     private static<T,R> Optional<R> invokeGetter(Class<T> t,Field field){ // 부모 클래스, 필드의 클래스
         Optional<Method> optional = Arrays.stream(t.getDeclaredMethods())
                 .filter(method -> method.getName().toLowerCase().contains(field.getName().toLowerCase()))
@@ -69,7 +70,8 @@ public abstract class Utils<T> {
         }
         return null;
     }
-    // dto -> entity, entity -> dto converter
+
+    // reflection testing
     public static<F,T> T test(Class<T> to, F from){
         Field[] fields=to.getDeclaredFields();
         for (Field field : fields) {
@@ -100,19 +102,55 @@ public abstract class Utils<T> {
         }
         return objectMapper.convertValue(from,to);
     }
-    // dto -> entity, entity -> dto converter
+    // todo ================================================================================================
+    // todo converter
+    // todo ================================================================================================
+
+    // basic converter
     public static<F,T> T to(Class<T> to, F from){
+        if(from == null) return null;
         return objectMapper.convertValue(from,to);
     }
+    // type reference converter : only possible dto object or entity object;
+    public static<F,T> T to(F from){
+        if(from == null) return null;
+        Class to = null;
+        Class to2 = null;
+        String className = from.getClass().getName();
+        className =className.substring(className.lastIndexOf(".")+1).toLowerCase();
+        try {
+            if(className.contains("entity")){
+                 to2 = from.getClass().getClassLoader().loadClass(from.getClass().getName().replace("Entity","Dto").replace("entity","dto"));
+                to = ClassLoader.getSystemClassLoader().loadClass(from.getClass().getName().replace("Entity","Dto").replace("entity","dto"));
+            }else if(className.contains("dto")) {
+                 to2 = from.getClass().getClassLoader().loadClass(from.getClass().getName().replace("Dto","Entity").replace("dto","entity"));
+                to = ClassLoader.getSystemClassLoader().loadClass(from.getClass().getName().replace("Dto","Entity").replace("dto","entity"));
+            }else {
+                return null;
+            }
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+        if(objectMapper.convertValue(from,to2).equals(objectMapper.convertValue(from,to))){
+            System.out.println("smae");
+        }
+        return (T)objectMapper.convertValue(from,to2);
+    }
+
+    // convert List
     public static<F,T> List<T> to(Class<T> to, List<F> froms){
         List<T> ts = new ArrayList<>();
+        if(froms.size() == 0) return ts;
         for (F f : froms) {
             T convertValue =objectMapper.convertValue(f,to);
-            ts.add(convertValue);
+            if(convertValue!=null){
+                ts.add(convertValue);
+            }
         }
         return ts;
     }
 
+    // make random int
     public static String getNumber(int len){
         if(len<=0) len = 1;
         StringBuilder builder = new StringBuilder();

@@ -1,143 +1,48 @@
-<!--<template>-->
-<!--    <q-page>-->
-<!--      <section>-->
-<!--        <div>마이유틸사용 예시입니다.</div>-->
-<!--        <div>콤마찍기</div>-->
-<!--        <q-input v-model = 'number' label="숫자입력"/>-->
-<!--        <div>{{util.comma(number)}}</div>-->
-
-<!--        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>-->
-
-<!--        <div>문자열 줄이기</div>-->
-<!--        <div class="flex">-->
-<!--          <q-input v-model = 'str' label="문자입력"/>-->
-<!--          <q-input v-model = 'len' label="길이입력"/>-->
-<!--        </div>-->
-<!--        <div>{{len == 0 ? '길이를 입력하세요':util.strSummary(str,len)}}</div>-->
-
-<!--        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>-->
-
-<!--        <div>안내 메시지</div>-->
-<!--        <q-input v-model = 'message' label="공지 입력"/>-->
-<!--        <q-btn label="노티" @click="util.notify(message,'info'),message=''"/>-->
-
-<!--        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>-->
-
-<!--        <div>페이지 이동</div>-->
-<!--        <q-input v-model = 'to' label="이동할 페이지"/>-->
-<!--        <q-btn label="이동" @click="util.goTo(to),message=''"/>-->
-
-<!--        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>-->
-
-<!--        <q-btn label="서버연결" @click="sample2()"/>-->
-<!--        <div>{{xx}}</div>-->
-
-<!--        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>-->
-
-<!--        <q-btn label="서버연결" @click="nong123()"/>-->
-<!--        <div>{{nong.nong}}{{nong.number}}</div>-->
-
-<!--        <q-btn label="아싱크 앤 아웨이트" @click="asyncTestServer"/>-->
-<!--        <q-btn label="요거슨 페칭" @click="fetchingTest"/>-->
-<!--        <div>{{nong.nong}}{{nong.number}}</div>-->
-<!--      </section>-->
-<!--    </q-page>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--  import {mapGetters,mapActions,mapMutations,mapState} from 'vuex';-->
-<!--  import {LocalStorage} from 'quasar';-->
-<!--  import {myUtil} from "boot/myUtil";-->
-
-<!--  export default {-->
-<!--    name: "TEST",-->
-<!--    computed :{-->
-<!--      ...mapGetters(['getLayout'])-->
-<!--    },-->
-<!--    data(){-->
-<!--      return {-->
-<!--        util :new myUtil(this),-->
-<!--        number : '',-->
-<!--        str:'',-->
-<!--        len:0,-->
-<!--        message:'',-->
-<!--        to:'',-->
-<!--        query :{},-->
-<!--        xx :{},-->
-<!--        nong: {},-->
-<!--      }-->
-<!--    },-->
-<!--    methods:{-->
-<!--      ...mapMutations([]),-->
-<!--      ...mapActions(['sample','test123','asyncTest','fetchServer']),-->
-<!--      sample2(){-->
-<!--        let self = this;-->
-<!--        this.sample({-->
-<!--          onSuccess :(res) =>{-->
-<!--            console.log(res)-->
-<!--            self.xx = res.data;-->
-<!--          },-->
-<!--          onFail :(error) =>{-->
-
-<!--          }-->
-<!--        }-->
-<!--        )-->
-<!--      },-->
-<!--      nong123(){-->
-<!--        let self = this;-->
-<!--        this.test123({-->
-<!--          onSuccess : (res) =>{-->
-<!--            console.log(res);-->
-<!--            self.nong = res.data;-->
-<!--          },-->
-<!--          onFail :(error) =>{-->
-
-<!--          }-->
-<!--        })-->
-<!--      },-->
-<!--      asyncTestServer(){-->
-<!--        // this.asyncTest({name : 'name',onSuccess(),onFail()})-->
-<!--      },-->
-<!--      async fetchingTest(){-->
-<!--        this.fetchServer({path : 'test/test2',method : 'post',body :{id : 1,email : 'anananan'},})-->
-<!--        .then(value => console.log(value))-->
-<!--        .catch(reason => console.log(reason))-->
-
-<!--      }-->
-<!--    },-->
-
-<!--    beforeCreate() {},-->
-<!--    created() {-->
-<!--      window.onpopstate = ()=>{}-->
-<!--    },-->
-<!--    beforeMount() {-->
-<!--      this.getLayout.bottomFooter = true;-->
-<!--    },-->
-<!--    mounted() {},-->
-<!--    beforeUpdate() {},-->
-<!--    updated() {},-->
-<!--    beforeDestroy() {},-->
-<!--    destroyed() {}-->
-<!--  }-->
-<!--</script>-->
-
-
-<!-- MY 개인 테슽 -->
 <template>
-  <q-page>
-    <section>
-      <div>
-        <div v-for="row in rows">
-          <q-input type="text" v-model="row.name"/>
-          <q-input type="text" v-model="row.job"/>
-          <q-btn @click="removeRow(row)">Remove</q-btn>
+    <q-page>
+      <section>
+        <div>마이유틸사용 예시입니다.</div>
+        <div>콤마찍기</div>
+        <q-input v-model = 'number' label="숫자입력"/>
+        <div>{{util.comma(number)}}</div>
+
+        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
+
+        <div>문자열 줄이기</div>
+        <div class="flex">
+          <q-input v-model = 'str' label="문자입력"/>
+          <q-input v-model = 'len' label="길이입력"/>
         </div>
-      </div>
-      <div>
-        <q-btn class="bg-blue text-white" @click="addRow">Add row</q-btn>
-      </div>
-    </section>
-  </q-page>
+        <div>{{len == 0 ? '길이를 입력하세요':util.strSummary(str,len)}}</div>
+
+        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
+
+        <div>안내 메시지</div>
+        <q-input v-model = 'message' label="공지 입력"/>
+        <q-btn label="노티" @click="util.notify(message,'info'),message=''"/>
+
+        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
+
+        <div>페이지 이동</div>
+        <q-input v-model = 'to' label="이동할 페이지"/>
+        <q-btn label="이동" @click="util.goTo(to),message=''"/>
+
+        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
+
+        <q-btn label="서버연결" @click="sample2()"/>
+        <div>{{xx}}</div>
+
+        <q-space class="q-my-md" style="border-bottom: 2px solid green"/>
+
+        <q-btn label="서버연결" @click="nong123()"/>
+        <div>{{nong.nong}}{{nong.number}}</div>
+
+        <q-btn label="아싱크 앤 아웨이트" @click="asyncTestServer"/>
+        <q-btn label="요거슨 페칭" @click="fetchingTest"/>
+        <q-btn label="test7" @click="test7"/>
+        <div>{{nong.nong}}{{nong.number}}</div>
+      </section>
+    </q-page>
 </template>
 
 <script>
@@ -152,21 +57,58 @@
     },
     data(){
       return {
-        rows: [{}]
+        util :new myUtil(this),
+        number : '',
+        str:'',
+        len:0,
+        message:'',
+        to:'',
+        query :{},
+        xx :{},
+        nong: {},
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['sample','test123','asyncTest','fetchServer']),
+      sample2(){
+        let self = this;
+        this.sample({
+          onSuccess :(res) =>{
+            console.log(res)
+            self.xx = res.data;
+          },
+          onFail :(error) =>{
 
-      addRow(){
-        this.rows.push({name:"",job:""});
+          }
+        }
+        )
       },
-      removeRow(row){
-        //console.log(row);
-        this.rows.splice(row, 1);
-      }
+      nong123(){
+        let self = this;
+        this.test123({
+          onSuccess : (res) =>{
+            console.log(res);
+            self.nong = res.data;
+          },
+          onFail :(error) =>{
 
+          }
+        })
+      },
+      asyncTestServer(){
+        // this.asyncTest({name : 'name',onSuccess(),onFail()})
+      },
+      async fetchingTest(){
+        this.fetchServer({path : 'test/test2',method : 'post',body :{id : 1,email : 'anananan'},})
+        .then(value => console.log(value))
+        .catch(reason => console.log(reason))
+
+      },
+      test7(){
+        this.fetchServer({path : "test/test7",method:'post',body: {}})
+          .then(value => console.log(value))
+      }
     },
 
     beforeCreate() {},
@@ -174,7 +116,7 @@
       window.onpopstate = ()=>{}
     },
     beforeMount() {
-
+      this.getLayout.bottomFooter = true;
     },
     mounted() {},
     beforeUpdate() {},

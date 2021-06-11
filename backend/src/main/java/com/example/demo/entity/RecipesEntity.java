@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
-import com.example.demo.dto.RecipesDto;
+import com.example.demo.dto.*;
+import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -81,5 +82,14 @@ public class RecipesEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, stuffs);
+    }
+
+    public RecipesDto to(){
+        return Utils.to(RecipesDto.class,this)
+                .setContentDtos(Utils.to(ContentDto.class,this.contentEntities))
+                .setFirstCategoryDto(Utils.to(FirstCategoryDto.class,this.firstCategoryEntity))
+                .setSecondCategoryDto(Utils.to(SecondCategoryDto.class,this.secondCategoryEntity))
+                .setCuisineDto(Utils.to(CuisineDto.class,this.cuisineEntity))
+                ;
     }
 }

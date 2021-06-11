@@ -32,7 +32,6 @@ public class EmailEntity {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -48,7 +47,7 @@ public class EmailEntity {
     }
 
     @Basic
-    @Column(name = "number")
+    @Column(name = "numbers")
     public String getNumber() {
         return number;
     }
@@ -68,7 +67,7 @@ public class EmailEntity {
     }
 
     @Basic
-    @Column(name = "check")
+    @Column(name = "checks")
     public boolean isCheck() { return check; }
     public void setCheck(boolean check) { this.check = check; }
 
