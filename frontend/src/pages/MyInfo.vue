@@ -44,7 +44,8 @@
       <div class="row">
         <q-icon class="q-ma-md items-start text-h4 text-grey-7 "
                 name="phonelink_setup"/>
-        <div class="q-my-md text-grey-6 text-h6">AppVersion V.{{ appVersion }}</div>
+        <div class="q-my-md text-grey-6 text-h6">AppVersion V. 1.0.1</div>
+<!--        <div class="q-my-md text-grey-6 text-h6">AppVersion V.{{ appVersion }}</div>-->
       </div>
       <q-separator/>
     </section>
