@@ -85,15 +85,11 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
-      document.addEventListener("deviceready", this.Device, false);
     },
     mounted() {},
     beforeUpdate() {},
     updated() {},
-    beforeDestroy() {
-      document.removeEventListener("backbutton", this.exitBtn);
-      document.removeEventListener("deviceready", this.Device);
-    },
+    beforeDestroy() {},
     destroyed() {}
   }
 </script>
