@@ -17,15 +17,15 @@ import java.util.List;
 @Data // getter, setter
 @NoArgsConstructor
 public class UsersDto {
-    private int id;
-    private String token;
-    private String password;
-    private Date regDate;
-    private String email;
-    private String pin;
-    private PinKind pinKind;
-    private String nickname;
-    private boolean autoLogIn;
+    private int id =0;
+    private String token = null;
+    private String password = null;
+    private Date regDate = null;
+    private String email = null;
+    private String pin = null;
+    private PinKind pinKind =null;
+    private String nickname = null;
+    private boolean autoLogIn = true;
 
 //    Entity에서는 @Builder 사용시 반드시 @NoargsConstructor를 사용해야 한다.
     // 아래 생성자는 @NoargsConstructor와 동일하다.

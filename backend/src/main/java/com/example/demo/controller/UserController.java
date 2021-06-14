@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -105,8 +104,13 @@ public class UserController {
                                              @RequestParam(value = "number")String number){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
-        boolean b =  emailService.certificate(receiver,number);
 
+        if(userService.findUsersEntityByEmail(receiver).isPresent()){
+            result.put("desc","이미 등록된 메일입니다.");
+            result.put("result",0);
+            return new ResponseEntity(result, HttpStatus.ACCEPTED);
+        }
+        boolean b =  emailService.certificate(receiver,number);
         if(b){
             httpStatus = HttpStatus.OK;
             result.put("desc","이메일 인증 성공");
@@ -118,11 +122,10 @@ public class UserController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/user")
+    @PostMapping(value = "/users")
     public ResponseEntity signUp(@RequestBody UsersDto usersDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
-        
         Optional<UsersEntity> usersEntity = null;
         try {
             usersEntity = userService.signUp(usersDto);
