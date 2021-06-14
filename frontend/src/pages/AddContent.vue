@@ -22,7 +22,7 @@
     <!--fixme 대분류 중분류 소분류 -->
     <section class="row">
       <q-select
-        label="1차 분류"
+        label="대분류"
         class="q-px-md col"
         borderless
         v-model="oneselect"
@@ -30,7 +30,7 @@
       />
       <span style="border: solid 1px rgba(128,128,128,0.37)"/>
       <q-select
-        label="2차 분류"
+        label="중분류"
         class="q-px-md col"
         borderless
         v-model="twoselect"
@@ -78,7 +78,7 @@
       <div class="q-mb-xs text-h6 text-weight-bold">재료/용량</div>
       <div class="row q-gutter-x-sm q-mt-sm" v-for="row in rows">
         <q-input
-          v-model="row.foodname"
+          v-model="row.name"
           class="col"
           dense
           standout
@@ -86,7 +86,7 @@
           style="border-radius: 30px"
         />
         <q-input
-          v-model="row.Volume"
+          v-model="row.jab"
           class="col"
           dense
           standout
@@ -128,26 +128,26 @@
         />
         <q-card class="q-my-sm">
 
-          <div v-model="add.img" class="full-width" style="height: 50vw">
+          <div class="full-width" style="height: 50vw">
             <q-input
               dense
               style="width: 40vw; z-index: 1"
               class=" absolute-top-right bg-white"
               outlined
               filled
-              @input="fileSelect"
-              v-model="ttest"
+              @input="createImg(add)"
+              v-model="add.file"
               type="file"
             />
-            <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
-              <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
+            <div v-if="add != null && add.dataUrl!=undefined" class="full-width">
+              <q-img style="height: 50vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"></q-img>
             </div>
           </div>
 
           <div class="q-mx-sm q-pb-sm text-left">
-            <div class="q-my-sm text-h5 text-grey-7">{{ index ++}}.</div>
+            <div class="q-my-sm text-h5 text-grey-7">{{ index+1 }}.</div>
             <q-input
-              v-model="contenttest"
+              v-model="add.text"
               filled
               class="bg-grey-3"
               label="내용을 적어주세요."
@@ -172,8 +172,9 @@
 
     <!--fixme 등록하기 버튼 -->
     <q-footer>
-      <q-btn dense class="full-width text-h6" @click="Add">등록하기</q-btn>
+      <q-btn dense class="full-width text-h6">등록하기</q-btn>
     </q-footer>
+    <q-btn @click="server"></q-btn>
   </q-page>
 </template>
 
@@ -208,24 +209,29 @@
 
         contenttest: '',
         rows:[{}],
-        adds:[{}],
+        adds:[{dataUrl : '',name :'',index :'',order :0,text :'',file :null}],
         ttest :'',
-
+        order : 1,
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['updateImage']),
 
       /**======================================
        * 이미지
        =======================================*/
+      createImg(add){
+        let dataUrl = window.URL.createObjectURL(new Blob(add.file));
+        add.dataUrl = dataUrl;
+        console.log(add.dataUrl)
+      },
       createImage(index, file) {
         let self = this;
 
         let reader = new FileReader();
         let formData = new FormData();
-        formData.append('file', file);
+        // formData.append('file', file);
         reader.onload = (e) => {
           const image = new Image();
           image.className = "img-item"; // 스타일 적용을 위해
@@ -234,16 +240,23 @@
             // 이미지가 로드가 되면! 리사이즈 함수가 실행되도록 합니다.
             let re = this.resizeImage(image, 512);
             let form = new FormData();
-            form.append('file', this.dataURLtoBlob(re), "entLicense.jpeg");
-            this.imageName.push({
+            // form.append('file', this.dataURLtoBlob(re), "entLicense.jpeg");
+            this.imageName[index] = ({
               id: index,
-              name: form.get('file').name,
+              // name: form.get('file').name,
               dataUrl: re,
               highlight: 1,
               default: 1
             });
+            // this.imageName.push({
+            //   id: index,
+            //   // name: form.get('file').name,
+            //   dataUrl: re,
+            //   highlight: 1,
+            //   default: 1
+            // });
             this.entLicense = form;
-            console.log("name : ", form.get('file').name)
+            // console.log("name : ", form.get('file').name)
           };
         };
         reader.readAsDataURL(file);
@@ -290,69 +303,54 @@
         let self = this;
         this.imageName = [];
         //todo : ftp에저장, 성공여부에따라 signUp api 호출
-
         files.forEach((data, index) => {
           this.createImage(index, data);
         });
         console.log(this.imageName);
       },
 
+      fileChoose(index,file){
+        this.createImage2(index,file);
+      },
+      createImage2(index, file) {
+        let self = this;
+        let reader = new FileReader();
+        const image = new Image();
+        image.className = "img-item"; // 스타일 적용을 위해
+        image.src = new Blob(file);
+          // 이미지가 로드가 되면! 리사이즈 함수가 실행되도록 합니다.
+        let re = this.resizeImage(image, 512);
+        console.log(re)
+        console.log(image.src)
+        this.add[index]={
+          id: index,
+          dataUrl: new Blob(image.src),
+          highlight: 1,
+          default: 1
+        };
+        // reader.readAsDataURL(re);
+      },
       /** 재료 행 추가, 제거 */
-      addRow(){this.rows.push({foodname:"",Volume:""})},
+      addRow(){this.rows.push({name:"",jab:""})},
       removeRow(row){this.rows.splice(row, 1);},
 
       /** 레시피 행 추가, 제거 */
-      rcRow(){this.adds.push({img:""})},
+      rcRow(){this.adds.push({order :this.order++, img:""})},
       rcRemoveRow(add){this.adds.splice(add, 1);},
 
-      /** 등록하기  */
-      Add(){
-        if (this.imageName == null || this.imageName == undefined || this.imageName == ""){
-          this.$q.notify({
-            message : "이미지가 없습니다.",
-            type : "negative"
-          })
-          return;
-        } else if (this.oneselect == null || this.oneselect == undefined || this.oneselect == ""){
-          this.$q.notify({
-            message : "1차 분류를 선택해주세요.",
-            type : "negative"
-          })
-          return;
-        } else if (this.twoselect == null || this.twoselect == undefined || this.twoselect == "") {
-          this.$q.notify({
-            message: "2차 분류를 선택해주세요.",
-            type: "negative"
-          })
-          return;
-        } else if (this.title == null || this.title == undefined || this.title == ""){
-          this.$q.notify({
-            message : "타이틀을 적어주세요.",
-            type : 'negative'
-          })
-          return;
-        } else if (this.description == null || this.description == undefined || this.description == ""){
-          this.$q.notify({
-            message : "한줄 설명을 적어주세요.",
-            type : "negative"
-          })
-          return;
-        } else if (this.rows){
-          if (this.rows[0].foodname == null || this.rows[0].foodname == undefined || this.rows[0].foodname == ""){
-            this.$q.notify({
-              message : "재료를 적어주세요.",
-              type : "negative"
-            })
-            return;
-          } else if (this.rows[0].Volume == null || this.rows[0].Volume == undefined || this.rows[0].Volume == ""){
-            this.$q.notify({
-              message : "용량을 적어주세요.",
-              type : "negative"
-            })
-            return;
-          }
-        }
+      server(){
+        let form = new FormData();
+        this.adds.sort((a, b) => a.order-b.order);
+        this.adds.forEach((add, index) => {
+          form.append("file",add.file[0])
+          form.append("index",index)
+          form.append("text",add.text)
+        })
+        form.append("title","요리의 제목");
+        form.append("stuff","얖얖얖");
+        this.updateImage({path : 'recipe/recipe',method :'post',body :form})
       }
+
     },
 
     beforeCreate() {},

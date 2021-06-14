@@ -11,10 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class TestDto2 {
 
     @JsonAlias({"imgs","files"})
-    private MultipartFile[] multipartFile;
+    private MultipartFile[] file;
 
     private String[] name;
     private Integer[] index;
+    private String[] text;
 
 
 }

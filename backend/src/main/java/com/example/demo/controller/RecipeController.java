@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.RecipesDto;
+import com.example.demo.dto.TestDto2;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.service.RecipeService;
@@ -38,7 +39,7 @@ public class RecipeController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/recipe")
+    @PostMapping(value = "/recipe2")
     public ResponseEntity postRecipe(@RequestParam("token") String token,
                                      @RequestBody RecipesDto recipesDto){
         Map<String,Object> result = new HashMap<>();
@@ -50,6 +51,16 @@ public class RecipeController {
         };
         //2. recipesDto -> entity변환후 저장
         recipeService.save(recipesDto);
+
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @PostMapping(value = "/recipe")
+    public ResponseEntity postRecipe2(RecipesDto recipesDto,TestDto2 testDto2){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        // 1. token 검증
 
         return new ResponseEntity(result,httpStatus);
     }
