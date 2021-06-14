@@ -99,14 +99,35 @@ export async function fetchServer(state,args) {
   if(args.method == 'get' || args.method == null){
     return getMapping(state,args);
   }
-  console.log(args.body.get("multipart"));
   let contentType = args.header == null|| args.header.Content_Type == null ? 'application/json' : args.header.Content_Type;
   let body = contentType.endsWith('json') ?JSON.stringify(args.body) : args.body;
   const url = HOST +args.path + addQuery(args.param);
   const requestInit = {
     method : args.method,
     headers: {
-      // 'Content-Type': contentType,
+      'Content-Type': contentType,
+      ...args.header
+    },
+    body : body,
+  };
+  console.log(url);
+  console.log(requestInit);
+  const response = await fetch(url,requestInit);
+  const data = await response.json();
+  Object.assign(data,{status:response.status});
+  if(response.ok){
+    return data;
+  }else{
+    throw Error(data);
+  }
+}
+
+export async function updateImage(state,args) {
+
+  const url = HOST +args.path + addQuery(args.param);
+  const requestInit = {
+    method : args.method,
+    headers: {
       ...args.header
     },
     body : args.body,
