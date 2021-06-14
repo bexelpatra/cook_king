@@ -136,7 +136,23 @@ public abstract class Utils<T> {
         }
         return (T)objectMapper.convertValue(from,to2);
     }
-
+    private static<T> Class opponentClass(Class<T> from){
+        Class objectClass = null;
+        String className = from.getClass().getName();
+        className =className.substring(className.lastIndexOf(".")+1).toLowerCase();
+        try {
+            if(className.contains("entity")){
+                objectClass = from.getClass().getClassLoader().loadClass(from.getClass().getName().replace("Entity","Dto").replace("entity","dto"));
+            }else if(className.contains("dto")) {
+                objectClass = from.getClass().getClassLoader().loadClass(from.getClass().getName().replace("Dto","Entity").replace("dto","entity"));
+            }else {
+                return null;
+            }
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+        return objectClass;
+    }
     // convert List
     public static<F,T> List<T> to(Class<T> to, List<F> froms){
         List<T> ts = new ArrayList<>();

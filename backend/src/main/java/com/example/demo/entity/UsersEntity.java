@@ -77,6 +77,7 @@ public class UsersEntity {
         this.regDate = regDate;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
