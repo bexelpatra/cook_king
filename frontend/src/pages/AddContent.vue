@@ -22,7 +22,7 @@
     <!--fixme 대분류 중분류 소분류 -->
     <section class="row">
       <q-select
-        label="대분류"
+        label="1차 분류"
         class="q-px-md col"
         borderless
         v-model="oneselect"
@@ -30,7 +30,7 @@
       />
       <span style="border: solid 1px rgba(128,128,128,0.37)"/>
       <q-select
-        label="중분류"
+        label="2차 분류"
         class="q-px-md col"
         borderless
         v-model="twoselect"
@@ -78,7 +78,7 @@
       <div class="q-mb-xs text-h6 text-weight-bold">재료/용량</div>
       <div class="row q-gutter-x-sm q-mt-sm" v-for="row in rows">
         <q-input
-          v-model="row.name"
+          v-model="row.foodname"
           class="col"
           dense
           standout
@@ -86,7 +86,7 @@
           style="border-radius: 30px"
         />
         <q-input
-          v-model="row.jab"
+          v-model="row.Volume"
           class="col"
           dense
           standout
@@ -172,7 +172,7 @@
 
     <!--fixme 등록하기 버튼 -->
     <q-footer>
-      <q-btn dense class="full-width text-h6">등록하기</q-btn>
+      <q-btn dense class="full-width text-h6" @click="Add">등록하기</q-btn>
     </q-footer>
   </q-page>
 </template>
@@ -298,12 +298,61 @@
       },
 
       /** 재료 행 추가, 제거 */
-      addRow(){this.rows.push({name:"",jab:""})},
+      addRow(){this.rows.push({foodname:"",Volume:""})},
       removeRow(row){this.rows.splice(row, 1);},
 
       /** 레시피 행 추가, 제거 */
       rcRow(){this.adds.push({img:""})},
       rcRemoveRow(add){this.adds.splice(add, 1);},
+
+      /** 등록하기  */
+      Add(){
+        if (this.imageName == null || this.imageName == undefined || this.imageName == ""){
+          this.$q.notify({
+            message : "이미지가 없습니다.",
+            type : "negative"
+          })
+          return;
+        } else if (this.oneselect == null || this.oneselect == undefined || this.oneselect == ""){
+          this.$q.notify({
+            message : "1차 분류를 선택해주세요.",
+            type : "negative"
+          })
+          return;
+        } else if (this.twoselect == null || this.twoselect == undefined || this.twoselect == "") {
+          this.$q.notify({
+            message: "2차 분류를 선택해주세요.",
+            type: "negative"
+          })
+          return;
+        } else if (this.title == null || this.title == undefined || this.title == ""){
+          this.$q.notify({
+            message : "타이틀을 적어주세요.",
+            type : 'negative'
+          })
+          return;
+        } else if (this.description == null || this.description == undefined || this.description == ""){
+          this.$q.notify({
+            message : "한줄 설명을 적어주세요.",
+            type : "negative"
+          })
+          return;
+        } else if (this.rows){
+          if (this.rows[0].foodname == null || this.rows[0].foodname == undefined || this.rows[0].foodname == ""){
+            this.$q.notify({
+              message : "재료를 적어주세요.",
+              type : "negative"
+            })
+            return;
+          } else if (this.rows[0].Volume == null || this.rows[0].Volume == undefined || this.rows[0].Volume == ""){
+            this.$q.notify({
+              message : "용량을 적어주세요.",
+              type : "negative"
+            })
+            return;
+          }
+        }
+      }
     },
 
     beforeCreate() {},
