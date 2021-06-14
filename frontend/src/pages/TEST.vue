@@ -57,6 +57,13 @@
             />
           </div>
         </div>
+<!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
+        <q-input type="file" v-model="file" @change="onChangeImages"/>
+        <q-img :src="imageUrl"
+               :ratio="3/4"
+        ></q-img>
+
+
       </section>
     </q-page>
 </template>
@@ -73,6 +80,8 @@
     },
     data(){
       return {
+        file : null,
+        imageUrl: '',
         util :new myUtil(this),
         number : '',
         str:'',
@@ -91,6 +100,46 @@
     methods:{
       ...mapMutations([]),
       ...mapActions(['sample','test123','asyncTest','fetchServer']),
+      // onClickImageUpload() {
+      //   this.$refs.imageInput.click();
+      // },
+      onChangeImages(e) {
+        // const file = e.target.files[0];
+        const file = this.file
+
+        // this.imageUrl = window.URL.createObjectURL(file);
+        this.imageUrl = window.URL.createObjectURL(new Blob(file))
+        console.log(this.imageUrl)
+      },
+      resizeImage(orgImage, reSize) {
+        // 최대 기준을 1280으로 잡음.
+        let canvas = document.createElement("canvas");
+        let max_size = reSize;
+        // let width = orgImage.width;
+        let width = 120;
+        // let height = orgImage.height;
+        let height = 120;
+
+        if (width > height) {
+          // 가로가 길 경우
+          if (width > max_size) {
+            height *= max_size / width;
+            width = max_size;
+          }
+        } else {
+          // 세로가 길 경우
+          if (height > max_size) {
+            width *= max_size / height;
+            height = max_size;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").getImageData(orgImage, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg");
+        // const dataUrl = window.URL.createObjectURL(canvas);
+        return dataUrl;
+      },
       sample2(){
         let self = this;
         this.sample({

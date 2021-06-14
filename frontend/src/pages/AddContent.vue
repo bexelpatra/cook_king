@@ -128,26 +128,26 @@
         />
         <q-card class="q-my-sm">
 
-          <div v-model="add.img" class="full-width" style="height: 50vw">
+          <div class="full-width" style="height: 50vw">
             <q-input
               dense
               style="width: 40vw; z-index: 1"
               class=" absolute-top-right bg-white"
               outlined
               filled
-              @input="fileSelect"
-              v-model="ttest"
+              @input="createImg(add)"
+              v-model="add.file"
               type="file"
             />
-            <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
-              <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
+            <div v-if="add != null && add.dataUrl!=undefined" class="full-width">
+              <q-img style="height: 50vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"></q-img>
             </div>
           </div>
 
           <div class="q-mx-sm q-pb-sm text-left">
-            <div class="q-my-sm text-h5 text-grey-7">{{ index ++}}.</div>
+            <div class="q-my-sm text-h5 text-grey-7">{{ index+1 }}.</div>
             <q-input
-              v-model="contenttest"
+              v-model="add.text"
               filled
               class="bg-grey-3"
               label="내용을 적어주세요."
@@ -174,6 +174,7 @@
     <q-footer>
       <q-btn dense class="full-width text-h6">등록하기</q-btn>
     </q-footer>
+    <q-btn @click="server"></q-btn>
   </q-page>
 </template>
 
@@ -208,24 +209,29 @@
 
         contenttest: '',
         rows:[{}],
-        adds:[{}],
+        adds:[{dataUrl : '',name :'',index :'',order :0,text :'',file :null}],
         ttest :'',
-
+        order : 1,
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['updateImage']),
 
       /**======================================
        * 이미지
        =======================================*/
+      createImg(add){
+        let dataUrl = window.URL.createObjectURL(new Blob(add.file));
+        add.dataUrl = dataUrl;
+        console.log(add.dataUrl)
+      },
       createImage(index, file) {
         let self = this;
 
         let reader = new FileReader();
         let formData = new FormData();
-        formData.append('file', file);
+        // formData.append('file', file);
         reader.onload = (e) => {
           const image = new Image();
           image.className = "img-item"; // 스타일 적용을 위해
@@ -234,16 +240,23 @@
             // 이미지가 로드가 되면! 리사이즈 함수가 실행되도록 합니다.
             let re = this.resizeImage(image, 512);
             let form = new FormData();
-            form.append('file', this.dataURLtoBlob(re), "entLicense.jpeg");
-            this.imageName.push({
+            // form.append('file', this.dataURLtoBlob(re), "entLicense.jpeg");
+            this.imageName[index] = ({
               id: index,
-              name: form.get('file').name,
+              // name: form.get('file').name,
               dataUrl: re,
               highlight: 1,
               default: 1
             });
+            // this.imageName.push({
+            //   id: index,
+            //   // name: form.get('file').name,
+            //   dataUrl: re,
+            //   highlight: 1,
+            //   default: 1
+            // });
             this.entLicense = form;
-            console.log("name : ", form.get('file').name)
+            // console.log("name : ", form.get('file').name)
           };
         };
         reader.readAsDataURL(file);
@@ -290,20 +303,54 @@
         let self = this;
         this.imageName = [];
         //todo : ftp에저장, 성공여부에따라 signUp api 호출
-
         files.forEach((data, index) => {
           this.createImage(index, data);
         });
         console.log(this.imageName);
       },
 
+      fileChoose(index,file){
+        this.createImage2(index,file);
+      },
+      createImage2(index, file) {
+        let self = this;
+        let reader = new FileReader();
+        const image = new Image();
+        image.className = "img-item"; // 스타일 적용을 위해
+        image.src = new Blob(file);
+          // 이미지가 로드가 되면! 리사이즈 함수가 실행되도록 합니다.
+        let re = this.resizeImage(image, 512);
+        console.log(re)
+        console.log(image.src)
+        this.add[index]={
+          id: index,
+          dataUrl: new Blob(image.src),
+          highlight: 1,
+          default: 1
+        };
+        // reader.readAsDataURL(re);
+      },
       /** 재료 행 추가, 제거 */
       addRow(){this.rows.push({name:"",jab:""})},
       removeRow(row){this.rows.splice(row, 1);},
 
       /** 레시피 행 추가, 제거 */
-      rcRow(){this.adds.push({img:""})},
+      rcRow(){this.adds.push({order :this.order++, img:""})},
       rcRemoveRow(add){this.adds.splice(add, 1);},
+
+      server(){
+        let form = new FormData();
+        this.adds.sort((a, b) => a.order-b.order);
+        this.adds.forEach((add, index) => {
+          form.append("file",add.file[0])
+          form.append("index",index)
+          form.append("text",add.text)
+        })
+        form.append("title","요리의 제목");
+        form.append("stuff","얖얖얖");
+        this.updateImage({path : 'recipe/recipe',method :'post',body :form})
+      }
+
     },
 
     beforeCreate() {},
