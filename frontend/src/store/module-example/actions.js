@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const HOST = "http://localhost:8081/"; // ngrok주소를 사용할때는 https로 사용합니다.
-// const HOST = "https://00ce877b277b.ngrok.io/"; //ngrok http {{port}}
+// const HOST = "http://localhost:8081/"; // ngrok주소를 사용할때는 https로 사용합니다.
+const HOST = "https://c2df660b5950.ngrok.io/"; //ngrok http {{port}}
                                             // ex) ngrok http 8080
 export function someAction (/* context */) {
 }
@@ -127,9 +127,9 @@ export async function updateImage(state,args) {
   const url = HOST +args.path + addQuery(args.param);
   const requestInit = {
     method : args.method,
-    headers: {
-      ...args.header
-    },
+    // headers: {
+    //   ...args.header
+    // },
     body : args.body,
   };
   console.log(url);
