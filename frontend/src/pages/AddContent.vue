@@ -20,7 +20,7 @@
 
     <q-separator style="height: 3px"/>
 
-    <!--fixme 대분류 중분류 소분류 -->
+    <!--fixme 1차분류 2차분류 -->
     <section class="row">
       <q-select
         label="1차 분류"
@@ -190,7 +190,7 @@
         titleImage:[{dataUrl : '',order :0,text :'타이툴',file :null, kind : 2}],
         thumb :null,
 
-        //대분류 중분류 소분류
+        //1차 2차 분류
         oneselect: '',
         options1: [{val: 0, label: '한식'},{val: 1, label: '일식'},{val: 2, label: '중식'},{val: 3, label: '양식'}],
         twoselect:'',

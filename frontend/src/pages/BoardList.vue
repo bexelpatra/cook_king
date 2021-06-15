@@ -3,26 +3,71 @@
   <q-page class="bg-white q-pa-sm">
     <section>
       <!-- 검색창   -->
-      <div class="flex" style="height: auto">
-
-        <!-- 검색 조건을 입력하는 부분-->
+      <div class="flex q-gutter-y-sm">
+        <!-- 1차 분류 -->
         <q-select
+          class="full-width"
+          filled
           dense
-          label="선택"
-          class="q-pl-md"
-          style="width: 28vw"
-          borderless
-          v-model="searchOption"
-          :options="options"
-        />
+          v-model="oneselect"
+          :options="options1"
+          label="1차 분류"
+          multiple
+          emit-value
+          map-options
+        >
+          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+            <q-item
+              v-bind="itemProps"
+              v-on="itemEvents"
+            >
+              <q-item-section>
+                <q-item-label v-html="opt.label" ></q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-checkbox :value="selected" @input="toggleOption"></q-checkbox>
+
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+
+        <!-- 2차 분류 -->
+        <q-select
+          class="full-width"
+          filled
+          dense
+          v-model="twoselect"
+          :options="options2"
+          label="2차 분류"
+          multiple
+          emit-value
+          map-options
+        >
+          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+            <q-item
+              v-bind="itemProps"
+              v-on="itemEvents"
+            >
+              <q-item-section>
+                <q-item-label v-html="opt.label" ></q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-checkbox :value="selected" @input="toggleOption"></q-checkbox>
+
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+      </div>
+
+      <div class="q-mt-sm row">
         <q-input
-          dense
           dark
           borderless
           v-model="keyword"
           input-class="text-right text-black"
-          style="border-radius: 10px"
-          class="q-pr-sm q-mr-xs full-height col bg-grey-3">
+          class="q-pr-sm q-mr-xs col bg-grey-3 text-h6">
           <template v-slot:append>
             <q-icon color="black" v-if="keyword === ''" name="search" />
             <q-icon color="black" v-else name="clear" class="cursor-pointer" @click="keyword = ''" />
@@ -32,14 +77,13 @@
         <q-btn
           flat
           dense
-          class="bg-grey-1"
+          class="bg-grey-1 text-weight-bold"
           style="border-radius: 3px"
           label="검색"
-          size="1.1rem"
+          size="0.9rem"
           @click="searching()"
         />
       </div>
-
     </section>
 
     <section class="q-mt-sm">
@@ -97,8 +141,12 @@
           src : 'imgs/2.png',
         }
         ],
-        searchOption:'',
-        options : [{value : 1, label : '이름'},{value : 2, label : '재료'},{value : 3, label : '키워드'}],
+        //1차 2차 분류
+        oneselect: [],
+        options1: [{val: 0, label: '한식'},{val: 1, label: '일식'},{val: 2, label: '중식'},{val: 3, label: '양식'}],
+        twoselect: [],
+        options2: [{val: 0, label: '기타'},{val: 1, label: '볶음'},{val: 2, label: '튀김'},{val: 3, label: '구이'},{val: 4, label: '찜'},{val: 5, label: '국물'},],
+
         tt : 0,
         ttt : 0,
       }
@@ -126,11 +174,31 @@
       pageMove : (to,query) =>{
         // myUtil.pageMove(this,to,query);
       },
-      // 키워드로 검색하기
-      searching : args =>{
-        this.searchOption.label;
-      }
+      // 카테고리 체크 외 키워드로 검색하기
+      searching(){
+        if (this.oneselect == null || this.oneselect == ''){
+          this.$q.notify({
+            message: "1차 분류를 선택 해주세요.",
+            type : "negative"
+          })
+          return;
+        } else if (this.twoselect == null || this.twoselect == ''){
+          this.$q.notify({
+            message : "2차 분류를 선택 해주세요.",
+            type : "negative"
+          })
+          return;
+        } this.searchOption.label;
+      },
+      // searching1 : args =>{
+      // this.searchOption.label;
+      // }
     },
+
+    /**=======================================
+     * sever 통신구간
+     =========================================*/
+
 
     beforeCreate() {},
     created() {
