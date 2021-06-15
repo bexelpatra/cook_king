@@ -5,6 +5,7 @@ import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,15 +17,18 @@ public class RecipesEntity {
     private int id;
     private String title;
     private String stuffs;
-
+    private String description;
     private FirstCategoryEntity firstCategoryEntity;
     private SecondCategoryEntity secondCategoryEntity;
     private CuisineEntity cuisineEntity;
     @JsonIgnore
     private List<ContentEntity> contentEntities;
+    @JsonIgnore
+    private UsersEntity usersEntity;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -53,21 +57,42 @@ public class RecipesEntity {
         this.stuffs = stuffs;
     }
 
-    @OneToOne
+    @Basic
+    @Column(name = "description")
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "first_category_id")
     public FirstCategoryEntity getFirstCategoryEntity() { return firstCategoryEntity; }
     public void setFirstCategoryEntity(FirstCategoryEntity firstCategoryEntity) { this.firstCategoryEntity = firstCategoryEntity; }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "second_category_id")
     public SecondCategoryEntity getSecondCategoryEntity() { return secondCategoryEntity; }
-
     public void setSecondCategoryEntity(SecondCategoryEntity secondCategoryEntity) { this.secondCategoryEntity = secondCategoryEntity; }
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "cuisine_id")
     public CuisineEntity getCuisineEntity() { return cuisineEntity; }
     public void setCuisineEntity(CuisineEntity cuisineEntity) { this.cuisineEntity = cuisineEntity; }
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "recipesEntity")
     public List<ContentEntity> getContentEntities() { return contentEntities; }
     public void setContentEntities(List<ContentEntity> contentEntities) { this.contentEntities = contentEntities; }
+
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
+    public UsersEntity getUsersEntity() {
+        return usersEntity;
+    }
+
+    public void setUsersEntity(UsersEntity usersEntity) {
+        this.usersEntity = usersEntity;
+    }
+
+
+
 
     @Override
     public boolean equals(Object o) {
@@ -86,10 +111,10 @@ public class RecipesEntity {
 
     public RecipesDto to(){
         return Utils.to(RecipesDto.class,this)
-                .setContentDtos(Utils.to(ContentDto.class,this.contentEntities))
                 .setFirstCategoryDto(Utils.to(FirstCategoryDto.class,this.firstCategoryEntity))
                 .setSecondCategoryDto(Utils.to(SecondCategoryDto.class,this.secondCategoryEntity))
-                .setCuisineDto(Utils.to(CuisineDto.class,this.cuisineEntity))
+                .setDescriptions(Arrays.asList(this.description.split("#")))
+                .setUsersDto(UsersDto.fix(Utils.to(UsersDto.class,this.getUsersEntity())))
                 ;
     }
 }

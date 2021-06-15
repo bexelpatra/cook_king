@@ -25,4 +25,12 @@ public enum SecondCategoryKind {
         }
         return null;
     }
+    public static SecondCategoryKind[] byValue(int[] values){
+        int len = values.length;
+        SecondCategoryKind[] secondCategoryKinds = new SecondCategoryKind[len];
+        for(int i=0; i<len;i++){
+            secondCategoryKinds[i] = byValue(values[i]);
+        }
+        return secondCategoryKinds;
+    }
 }

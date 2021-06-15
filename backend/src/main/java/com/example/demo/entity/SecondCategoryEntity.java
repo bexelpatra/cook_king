@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.SecondCategoryKind;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -8,9 +10,11 @@ import java.util.Objects;
 public class SecondCategoryEntity {
     private int id;
     private String name;
+    private SecondCategoryKind kind;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -28,6 +32,11 @@ public class SecondCategoryEntity {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Basic
+    @Column(name = "kind")
+    public SecondCategoryKind getKind() { return kind; }
+    public void setKind(SecondCategoryKind kind) { this.kind = kind; }
 
     @Override
     public boolean equals(Object o) {

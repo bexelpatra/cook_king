@@ -225,4 +225,13 @@ public class TestController {
 
         return new ResponseEntity(result,httpStatus);
     }
+
+    @PostMapping(value = "/test11")
+    public ResponseEntity test11(@RequestParam(value = "s")int[] s){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        result.put("s",s);
+
+        return new ResponseEntity(result,httpStatus);
+    }
 }

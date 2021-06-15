@@ -1,14 +1,21 @@
 package com.example.demo.utilities;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
+import com.example.demo.dto.ContentDto;
+import com.example.demo.dto.MultiFileDto;
+import com.example.demo.entity.ContentEntity;
+import com.example.demo.entity.UsersEntity;
+import com.example.demo.enums.ContentKind;
 import com.example.demo.testing.MyEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,9 +27,10 @@ public abstract class Utils<T> {
     static ObjectMapper objectMapper = new ObjectMapper();
     static Random random=new Random();
     public Utils() {
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+
     }
+    private static final String localPath ="D:/coook";
+    private static final String urlPath ="";
 
     // 제네릭 메소드 연습차원으로 만들어본 내용들
     public static  <T extends MyEnum> int getValue(T t){
@@ -109,11 +117,15 @@ public abstract class Utils<T> {
     // basic converter
     public static<F,T> T to(Class<T> to, F from){
         if(from == null) return null;
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
         return objectMapper.convertValue(from,to);
     }
     // type reference converter : only possible dto object or entity object;
     public static<F,T> T to(F from){
         if(from == null) return null;
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
         Class to = null;
         Class to2 = null;
         String className = from.getClass().getName();
@@ -132,7 +144,7 @@ public abstract class Utils<T> {
             return null;
         }
         if(objectMapper.convertValue(from,to2).equals(objectMapper.convertValue(from,to))){
-            System.out.println("smae");
+            System.out.println("same");
         }
         return (T)objectMapper.convertValue(from,to2);
     }
@@ -157,6 +169,8 @@ public abstract class Utils<T> {
     public static<F,T> List<T> to(Class<T> to, List<F> froms){
         List<T> ts = new ArrayList<>();
         if(froms.size() == 0) return ts;
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
         for (F f : froms) {
             T convertValue =objectMapper.convertValue(f,to);
             if(convertValue!=null){
@@ -202,5 +216,44 @@ public abstract class Utils<T> {
         Calendar calendar = Calendar.getInstance();
         calendar.add(field,amount);
         return calendar.getTime();
+    }
+
+    public static List<ContentDto> multiFileConverter(MultiFileDto multiFileDto){
+        int a = 0;
+        MultipartFile[] files = multiFileDto.getFile();
+        String[] texts = multiFileDto.getText();
+        Integer[] orders = multiFileDto.getOrder();
+        Integer[] kinds = multiFileDto.getKind();
+        List<ContentDto> contentDtos = new ArrayList<>();
+
+        for(int i=0; i<files.length;i++){
+            contentDtos.add(ContentDto.builder()
+                    .description(texts[i])
+                    .order(orders[i] == null ? a++:orders[i] )
+                    .contentKind(ContentKind.byValue(kinds[i]) == null? ContentKind.IMAGE: ContentKind.byValue(kinds[i]))
+                    .build());
+        }
+
+        a=0;
+        return contentDtos;
+    }
+
+    public static void saveImage(MultipartFile multipartFile, UsersEntity UsersEntity, int recipeId, int order) throws Exception{
+
+        String savePath = String.format("%s/%d/%d/",localPath,UsersEntity.getId(),recipeId);
+        String fileName = String.format("%d.png",order);
+        File file = new File(savePath);
+        if(!file.exists())file.mkdirs();
+
+        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s.png",savePath,fileName));
+        fileOutputStream.write(multipartFile.getBytes());
+        fileOutputStream.close();
+    }
+    public static void saveImage(MultipartFile[] multipartFile, UsersEntity UsersEntity, int recipeId) throws Exception{
+        int count = 1;
+        for (MultipartFile file : multipartFile) {
+            saveImage(file,UsersEntity,recipeId,count++);
+        }
+        count = 0;
     }
 }

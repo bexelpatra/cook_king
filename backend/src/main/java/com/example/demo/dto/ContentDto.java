@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ContentDto {
     private int id;
     private String path;
+    private String name;
     private String url;
     private String title;
     private int order;
