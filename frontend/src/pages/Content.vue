@@ -1,38 +1,68 @@
 <!--fixme 레시피 게시물-->
 <template>
   <q-page class="bg-white">
-    <section style="">
+    <!-- fixme 해더 버튼 -->
+    <section>
+      <q-btn
+        dense
+        flat
+        icon="arrow_back"
+        class="z-top q-ma-sm absolute-top-left"
+        @click="backBtn"
+      />
+      <q-btn
+        v-if="bookmark"
+        flat
+        dense
+        round
+        icon="favorite_border"
+        @click="bookmark = false"
+        class="z-top q-ma-sm absolute-top-right"
+      />
+      <q-btn
+        v-if="!bookmark"
+        flat
+        dense
+        round
+        icon="favorite"
+        @click="bookmark = true"
+        class="z-top q-ma-sm absolute-top-right"
+      />
+    </section>
+    <!-- fixme 콘텐츠 -->
+    <section>
       <q-card flat class="full-width">
-        <!-- 메인사진과 요리이름       -->
-        <q-card-section class="no-padding bg-grey-5">
+        <!-- 메인사진과 요리이름 -->
+        <div>
           <img :src="recipe.src" class="full-width" :height="y">
-          <div class="text-h4 text-weight-bold" style="position: absolute; top: 5.2em; left: 0.3em">{{recipe.name}}</div>
-        </q-card-section>
-        <!-- 간단 설명 및 소개 + 태그들       -->
-        <q-card-section class="">
-          <div class="text-h5">{{recipe.intro}}</div>
-          <div class="text-h7">잡솨바</div>
-        </q-card-section>
+          <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.name}}</div>
+        </div>
+        <!-- 간단 설명 및 소개 + 태그들 -->
+        <div class="q-px-md">
+          <div class="text-grey-7" style="font-size: 1rem">"{{recipe.intro}}"</div>
+        </div>
 
-        <!-- 재료        -->
-        <q-card-section class="no-padding">
-          <div class="text-h5 q-px-sm">재료</div>
-          <!--todo 반복문 돌리면서 재료를 뽑아와야한ㄷ.-->
-          <div class="full-width flex" style="position: relative; height: 1.7em;">
-            <div class="q-px-sm ingredient bg-white" style="left: 0;">
+        <q-separator class="q-my-sm"/>
+
+        <!-- 재료 -->
+        <section>
+          <div class="q-pa-sm text-h5 text-weight-bold">재료</div>
+          <!--todo 반복문 돌리면서 재료를 뽑아와야한다.-->
+          <div class="q-mx-sm flex" style="position: relative; height: 1.7em;">
+            <div class="absolute-center full-width text-grey-7" style="border: dotted 1px grey"/>
+            <span class="q-px-sm ingredient bg-white" style="left: 0;">
               야야
-            </div>
-            <span>{{util.dot(x)}}</span>
-            <div class="q-px-sm ingredient bg-white" style="right: 0;">
+            </span>
+            <span class="q-px-sm ingredient bg-white" style="right: 0;">
               dddd
-            </div>
+            </span>
           </div>
-        </q-card-section>
+        </section>
 
-        <!-- 컨텐츠 이미지 뿌리기        -->
+        <!-- 컨텐츠 이미지 뿌리기 -->
         <q-card-section>
           <div class="flex full-width">
-<!--            todo 반복문 돌림녀서 뽑아낸다. -->
+            <!-- todo 반복문 돌림녀서 뽑아낸다. -->
             <div>
               <div class="relative-position">
                 <div class="absolute-top-left"><q-badge>1</q-badge></div>
@@ -61,6 +91,8 @@
     },
     data(){
       return{
+        bookmark : true,
+
         util : new myUtil(this),
         x : window.innerWidth,
         y : window.innerHeight*0.33,
@@ -75,6 +107,12 @@
     methods:{
       ...mapMutations([]),
       ...mapActions([]),
+
+      /**=================================
+       *  클릭 이벤트
+       ===================================*/
+      backBtn(){ this.$router.back()},
+
     },
 
     beforeCreate() {},
@@ -82,10 +120,10 @@
       window.onpopstate = ()=>{}
     },
     beforeMount() {
-      this.getLayout.headerLayout = true;
-      this.getLayout.backbotton = true;
+      this.getLayout.headerLayout = false;
+      this.getLayout.backbotton = false;
       this.getLayout.title = "레시피"
-      this.getLayout.bookmarkbtn = true;
+      this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
     },

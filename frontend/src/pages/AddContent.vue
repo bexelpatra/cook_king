@@ -9,11 +9,12 @@
         class=" absolute-top-right bg-white"
         outlined
         filled
-        @input="fileSelect"
+        v-model="thumb"
+        @input="createTitleImg(thumb)"
         type="file"
       />
-      <div v-if="imageName[0] != null && imageName[0].dataUrl!=undefined" class="full-width">
-        <q-img style="height: 50vw;" :src="imageName[0] != null && imageName[0].dataUrl == undefined ? '': imageName[0].dataUrl"></q-img>
+      <div v-if="titleImage != null && titleImage.dataUrl!=undefined" class="full-width">
+        <q-img style="height: 50vw;" :src="titleImage != null && titleImage.dataUrl == undefined ? '': titleImage.dataUrl"></q-img>
       </div>
     </section>
 
@@ -22,7 +23,7 @@
     <!--fixme 대분류 중분류 소분류 -->
     <section class="row">
       <q-select
-        label="대분류"
+        label="1차 분류"
         class="q-px-md col"
         borderless
         v-model="oneselect"
@@ -30,21 +31,12 @@
       />
       <span style="border: solid 1px rgba(128,128,128,0.37)"/>
       <q-select
-        label="중분류"
+        label="2차 분류"
         class="q-px-md col"
         borderless
         v-model="twoselect"
         :options="options2"
       />
-      <!--      <q-select-->
-      <!--        dense-->
-      <!--        label="소분류"-->
-      <!--        class="q-pl-md col"-->
-      <!--        style="width: 28vw"-->
-      <!--        borderless-->
-      <!--        v-model="Threeselect"-->
-      <!--        :options="options3"-->
-      <!--      />-->
     </section>
 
     <q-separator style="height: 3px"/>
@@ -78,7 +70,7 @@
       <div class="q-mb-xs text-h6 text-weight-bold">재료/용량</div>
       <div class="row q-gutter-x-sm q-mt-sm" v-for="row in rows">
         <q-input
-          v-model="row.name"
+          v-model="row.foodname"
           class="col"
           dense
           standout
@@ -86,7 +78,7 @@
           style="border-radius: 30px"
         />
         <q-input
-          v-model="row.jab"
+          v-model="row.volume"
           class="col"
           dense
           standout
@@ -169,12 +161,11 @@
           label="추가하기"/>
       </div>
     </section>
-
+<!--    <q-btn @click="test1">얖얖ㅇ퍄</q-btn>-->
     <!--fixme 등록하기 버튼 -->
     <q-footer>
-      <q-btn dense class="full-width text-h6">등록하기</q-btn>
+      <q-btn dense class="full-width text-h6" @click="recipeChack">등록하기</q-btn>
     </q-footer>
-    <q-btn @click="server"></q-btn>
   </q-page>
 </template>
 
@@ -193,24 +184,27 @@
     },
     data(){
       return{
-        imageName: [],
+
+        util : new myUtil(this),
+        //타이틀 이미지
+        titleImage:[{dataUrl : '',order :0,text :'타이툴',file :null, kind : 2}],
+        thumb :null,
+
         //대분류 중분류 소분류
         oneselect: '',
-        options1: [{val: 1, label: '한식'},{val: 2, label: '양식'},{val: 3, label: '일식'},{val: 4, label: '중식'}],
+        options1: [{val: 0, label: '한식'},{val: 1, label: '일식'},{val: 2, label: '중식'},{val: 3, label: '양식'}],
         twoselect:'',
-        options2: [{val: 1, label: '찌개'},{val: 2, label: '볶음'},,{val: 3, label: '찜'},,{val: 4, label: '구이'}],
-        // threeselect: '',
-        // options3: [{}],
+        options2: [{val: 0, label: '기타'},{val: 1, label: '볶음'},{val: 2, label: '튀김'},{val: 3, label: '구이'},{val: 4, label: '찜'},{val: 5, label: '국물'},],
 
+        //text input
         title: '',
         description: '',
-        ingredients: '',
-        capacity: '',
 
-        contenttest: '',
+        // 재료/용량
         rows:[{}],
-        adds:[{dataUrl : '',name :'',index :'',order :0,text :'',file :null}],
-        ttest :'',
+
+        //레시피 섹션
+        adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
         order : 1,
       }
     },
@@ -219,137 +213,147 @@
       ...mapActions(['updateImage']),
 
       /**======================================
-       * 이미지
+       * 이미지  Kind : 0번 = 레시피 이미지 , 2번 = 타이틀이미지
        =======================================*/
+      createTitleImg(file){
+        let dataUrl = window.URL.createObjectURL(new Blob(file));
+        this.titleImage.dataUrl = dataUrl;
+        this.titleImage.file = file;
+        this.titleImage.order = 0;
+        this.titleImage.kind = 2;
+
+      },
       createImg(add){
         let dataUrl = window.URL.createObjectURL(new Blob(add.file));
         add.dataUrl = dataUrl;
-        console.log(add.dataUrl)
-      },
-      createImage(index, file) {
-        let self = this;
-
-        let reader = new FileReader();
-        let formData = new FormData();
-        // formData.append('file', file);
-        reader.onload = (e) => {
-          const image = new Image();
-          image.className = "img-item"; // 스타일 적용을 위해
-          image.src = e.target.result;
-          image.onload = imageEvent => {
-            // 이미지가 로드가 되면! 리사이즈 함수가 실행되도록 합니다.
-            let re = this.resizeImage(image, 512);
-            let form = new FormData();
-            // form.append('file', this.dataURLtoBlob(re), "entLicense.jpeg");
-            this.imageName[index] = ({
-              id: index,
-              // name: form.get('file').name,
-              dataUrl: re,
-              highlight: 1,
-              default: 1
-            });
-            // this.imageName.push({
-            //   id: index,
-            //   // name: form.get('file').name,
-            //   dataUrl: re,
-            //   highlight: 1,
-            //   default: 1
-            // });
-            this.entLicense = form;
-            // console.log("name : ", form.get('file').name)
-          };
-        };
-        reader.readAsDataURL(file);
-      },
-      resizeImage(orgImage, reSize) {
-        // 최대 기준을 1280으로 잡음.
-        let canvas = document.createElement("canvas");
-        let max_size = reSize;
-        let width = orgImage.width;
-        let height = orgImage.height;
-
-        if (width > height) {
-          // 가로가 길 경우
-          if (width > max_size) {
-            height *= max_size / width;
-            width = max_size;
-          }
-        } else {
-          // 세로가 길 경우
-          if (height > max_size) {
-            width *= max_size / height;
-            height = max_size;
-          }
-        }
-        canvas.width = width;
-        canvas.height = height;
-        canvas.getContext("2d").drawImage(orgImage, 0, 0, width, height);
-        const dataUrl = canvas.toDataURL("image/jpeg");
-        return dataUrl;
+        add.kind = 0;
       },
 
-      /** DATA_URL 정보를 Blob File로 변환 **/
-      dataURLtoBlob(dataurl) {
-        let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length,
-          u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
+      /**======================================
+       * 클릭 이벤트
+       =======================================*/
 
-        return new Blob([u8arr], {type: mime});
-      },
-
-      fileSelect(files) {
-        let self = this;
-        this.imageName = [];
-        //todo : ftp에저장, 성공여부에따라 signUp api 호출
-        files.forEach((data, index) => {
-          this.createImage(index, data);
-        });
-        console.log(this.imageName);
-      },
-
-      fileChoose(index,file){
-        this.createImage2(index,file);
-      },
-      createImage2(index, file) {
-        let self = this;
-        let reader = new FileReader();
-        const image = new Image();
-        image.className = "img-item"; // 스타일 적용을 위해
-        image.src = new Blob(file);
-          // 이미지가 로드가 되면! 리사이즈 함수가 실행되도록 합니다.
-        let re = this.resizeImage(image, 512);
-        console.log(re)
-        console.log(image.src)
-        this.add[index]={
-          id: index,
-          dataUrl: new Blob(image.src),
-          highlight: 1,
-          default: 1
-        };
-        // reader.readAsDataURL(re);
-      },
       /** 재료 행 추가, 제거 */
-      addRow(){this.rows.push({name:"",jab:""})},
+      addRow(){this.rows.push({foodname:"",volume:""})},
       removeRow(row){this.rows.splice(row, 1);},
 
       /** 레시피 행 추가, 제거 */
-      rcRow(){this.adds.push({order :this.order++, img:""})},
+      rcRow(){this.adds.push({order :this.order++, img:"",kind : 0})},
       rcRemoveRow(add){this.adds.splice(add, 1);},
+
+      /** 등록하기  */
+      recipeChack(){
+        if (this.thumb == null || this.thumb == undefined || this.thumb == ""){
+          this.$q.notify({
+            message : "타이틀 이미지가 없습니다.",
+            type : "negative"
+          })
+          return;
+        } else if (this.oneselect == null || this.oneselect == undefined || this.oneselect == ""){
+          this.$q.notify({
+            message : "1차 분류를 선택해주세요.",
+            type : "negative"
+          })
+          return;
+        } else if (this.twoselect == null || this.twoselect == undefined || this.twoselect == "") {
+          this.$q.notify({
+            message: "2차 분류를 선택해주세요.",
+            type: "negative"
+          })
+          return;
+        } else if (this.title == null || this.title == undefined || this.title == ""){
+          this.$q.notify({
+            message : "타이틀을 적어주세요.",
+            type : 'negative'
+          })
+          return;
+        } else if (this.description == null || this.description == undefined || this.description == ""){
+          this.$q.notify({
+            message : "한줄 설명을 적어주세요.",
+            type : "negative"
+          })
+          return;
+        } else if (this.rows.filter(value =>( value.foodname == null||value.foodname == ''||value.volume == null || value.volume=='' || value.volume == undefined)).length>0){
+          this.$q.notify({
+            message : "재료/용량을 적어주세요.",
+            type : "negative"
+          })
+          return;
+        } else if (this.adds.filter(value => ( value.file == null || value.file == '' || value.text == null || value.text == '' || value.text == undefined)).length>0){
+          this.$q.notify({
+            message : "사진 또는 내용을 입력해주세요.",
+            type : "negative"
+          })
+          return;
+        }
+        this.server();
+      },
+
+      /**=======================================
+       * sever 통신구간
+       =========================================*/
 
       server(){
         let form = new FormData();
+        //타이틀이미지
         this.adds.sort((a, b) => a.order-b.order);
+        form.append("file",this.titleImage.file[0])
+        form.append("order",this.titleImage.order)
+        form.append("text",this.titleImage.text)
+        form.append("kind",this.titleImage.kind)
+        //카테고리 1차 분류
+        form.append("firstCategory",this.oneselect.val)
+        //카테고리 2차 분류
+        form.append("secondCategory",this.twoselect.val)
+        //타이틀 제목
+        form.append("title",this.title);
+        //한줄 설명
+        form.append("description",this.description);
+        //재료  str을 이용하여 String으로 변경 (한줄 출력)
+        let str = '';
+        for (let row of this.rows) {
+          str +=row.foodname +':' + row.volume+"#"
+        }
+        str = str.substring(0,str.length-1);
+        form.append("stuffs",str)
+        //레시피 이미지
         this.adds.forEach((add, index) => {
           form.append("file",add.file[0])
-          form.append("index",index)
+          form.append("order",index)
           form.append("text",add.text)
+          form.append("kind",add.kind)
         })
-        form.append("title","요리의 제목");
-        form.append("stuff","얖얖얖");
-        this.updateImage({path : 'recipe/recipe',method :'post',body :form})
-      }
+
+        // 서버 통신 url
+        this.updateImage({path : 'recipe/recipe',method :'post',param :{token :"test"},body :form})
+          // then value 200 성공 코드
+        .then(value =>{
+          if(value.status==200){
+            this.$q.notify('성공적으로 등록 되었습니다.','info')
+            this.util.goTo('main',{})
+          }
+        })
+          //catch 실패 코드 200외 전부 처리
+        .catch(reason => {
+
+        })
+
+      },
+      // test1(){
+      //   let str = '';
+      //   for (let row of this.rows) {
+      //     str +=row.foodname +':' + row.volume+"#"
+      //   }
+      //   str = str.substring(0,str.length-1);
+      //   console.log(str)
+      //   let str2 = str.split("#");
+      //   console.log(str2)
+      //   for (let string of str2) {
+      //     let x = string.split(":")
+      //     console.log(x[0])
+      //     console.log(x[1])
+      //   }
+      // }
 
     },
 
