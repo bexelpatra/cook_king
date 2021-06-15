@@ -1,15 +1,19 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.ContentKind;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "content", schema = "mydb")
+@NoArgsConstructor
 public class ContentEntity {
     private int id;
     private String path;
+    private String name;
     private String url;
     private String title;
     private int order;
@@ -18,6 +22,19 @@ public class ContentEntity {
     private ContentKind contentKind;
 
     private RecipesEntity recipesEntity;
+
+    @Builder
+    public ContentEntity(int id, String path, String url, String title, int order, String description, ContentKind contentKind, RecipesEntity recipesEntity,String name) {
+        this.id = id;
+        this.path = path;
+        this.url = url;
+        this.title = title;
+        this.order = order;
+        this.description = description;
+        this.contentKind = contentKind;
+        this.recipesEntity = recipesEntity;
+        this.name= name;
+    }
 
     @Id
     @Column(name = "id")
@@ -41,7 +58,12 @@ public class ContentEntity {
     }
 
     @Basic
-    @Column(name = "url")
+    @Column(name = "name")
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    @Basic
+    @Column(name = "urls")
     public String getUrl() {
         return url;
     }
@@ -61,7 +83,7 @@ public class ContentEntity {
     }
 
     @Basic
-    @Column(name = "order")
+    @Column(name = "orders")
     public int getOrder() {
         return order;
     }

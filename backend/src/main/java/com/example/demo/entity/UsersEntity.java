@@ -1,12 +1,14 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.PinKind;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,6 +24,9 @@ public class UsersEntity {
     private PinKind pinKind;
     private String nickname;
     private boolean autoLogIn;
+
+    @JsonIgnore
+    private List<RecipesEntity> recipesEntities;
 
     @Builder
     public UsersEntity(int id, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {
@@ -77,6 +82,9 @@ public class UsersEntity {
         this.regDate = regDate;
     }
 
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "usersEntity")
+    public List<RecipesEntity> getRecipesEntities() { return recipesEntities; }
+    public void setRecipesEntities(List<RecipesEntity> recipesEntities) { this.recipesEntities = recipesEntities; }
 
     @Override
     public boolean equals(Object o) {
