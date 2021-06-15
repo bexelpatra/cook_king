@@ -1,15 +1,11 @@
-<!--fixme 게시물 리스트
-수정 : q-input : borderless,dark 변경
-
--->
+<!--fixme 게시물 리스트-->
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
       <!-- 검색창   -->
       <div class="flex" style="height: auto">
 
-        <!-- 검색 조건을 입력하는 부분
-              select 에 label을 넣을지 확인 해볼 것-->
+        <!-- 검색 조건을 입력하는 부분-->
         <q-select
           dense
           label="선택"
