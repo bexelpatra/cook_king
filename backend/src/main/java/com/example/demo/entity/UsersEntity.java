@@ -27,6 +27,8 @@ public class UsersEntity {
 
     @JsonIgnore
     private List<RecipesEntity> recipesEntities;
+    @JsonIgnore
+    private List<RecipesEntity> usersFavoriteRecipes;
 
     @Builder
     public UsersEntity(int id, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {
@@ -81,10 +83,6 @@ public class UsersEntity {
     public void setRegDate(Date regDate) {
         this.regDate = regDate;
     }
-
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "usersEntity")
-    public List<RecipesEntity> getRecipesEntities() { return recipesEntities; }
-    public void setRecipesEntities(List<RecipesEntity> recipesEntities) { this.recipesEntities = recipesEntities; }
 
     @Override
     public boolean equals(Object o) {
@@ -149,4 +147,17 @@ public class UsersEntity {
     public boolean isAutoLogIn() { return autoLogIn; }
 
     public void setAutoLogIn(boolean autoLogIn) { this.autoLogIn = autoLogIn; }
+
+    @OneToMany(mappedBy = "usersEntity",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    public List<RecipesEntity> getRecipesEntities() { return recipesEntities; }
+    public void setRecipesEntities(List<RecipesEntity> recipesEntities) { this.recipesEntities = recipesEntities; }
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(name = "users_favorite_recipes" ,
+            joinColumns = {@JoinColumn(name = "users_id")},
+            inverseJoinColumns = {@JoinColumn(name = "recipes_id")}
+    )
+    public List<RecipesEntity> getUsersFavoriteRecipes() { return usersFavoriteRecipes; }
+    public void setUsersFavoriteRecipes(List<RecipesEntity> usersFavoriteRecipes) { this.usersFavoriteRecipes = usersFavoriteRecipes; }
+
 }

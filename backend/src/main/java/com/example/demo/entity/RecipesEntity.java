@@ -25,6 +25,8 @@ public class RecipesEntity {
     private List<ContentEntity> contentEntities;
     @JsonIgnore
     private UsersEntity usersEntity;
+    @JsonIgnore
+    private List<UsersEntity> likeUsersEntities;
 
     @Id
     @Column(name = "id")
@@ -83,16 +85,12 @@ public class RecipesEntity {
 
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
-    public UsersEntity getUsersEntity() {
-        return usersEntity;
-    }
+    public UsersEntity getUsersEntity() { return usersEntity; }
+    public void setUsersEntity(UsersEntity usersEntity) { this.usersEntity = usersEntity; }
 
-    public void setUsersEntity(UsersEntity usersEntity) {
-        this.usersEntity = usersEntity;
-    }
-
-
-
+    @ManyToMany(mappedBy = "usersFavoriteRecipes")
+    public List<UsersEntity> getLikeUsersEntities() { return likeUsersEntities; }
+    public void setLikeUsersEntities(List<UsersEntity> likeUsersEntities) { this.likeUsersEntities = likeUsersEntities; }
 
     @Override
     public boolean equals(Object o) {
