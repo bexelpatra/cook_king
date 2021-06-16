@@ -30,6 +30,7 @@ public enum SecondCategoryKind {
         SecondCategoryKind[] secondCategoryKinds = new SecondCategoryKind[len];
         for(int i=0; i<len;i++){
             secondCategoryKinds[i] = byValue(values[i]);
+            if(byValue(values[i]) == null) return null;
         }
         return secondCategoryKinds;
     }

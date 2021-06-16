@@ -51,6 +51,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public List<RecipesEntity> getRecipeByCategoriesAndKeyword(FirstCategoryKind[] firstCategoryKind, SecondCategoryKind[] secondCategoryKind,String keyword, int page) {
+        if(page <= 0) page = maxInt;
+        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryEntityInAndSecondCategoryEntityInAndTitleContainingOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,keyword,PageRequest.of(0,20));
+    }
+    @Override
     public RecipesEntity save(RecipesDto recipesDto) {
         return recipeRepository.save(Utils.to(recipesDto));
     }

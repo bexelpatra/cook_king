@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.UsersDto;
+import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.service.EmailService;
 import com.example.demo.service.LogIn;
+import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
     private final EmailService emailService;
+    private final RecipeService recipeService;
 
     private final LogIn logIn;
 
@@ -76,6 +79,18 @@ public class UserController {
         return new ResponseEntity(result,status);
     }
 
+    @GetMapping(value = "/user/{token}")
+    public ResponseEntity myInfo(@PathVariable("token")String token){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
+        UsersDto usersDto = UsersDto.fix(Utils.to(usersEntity));
+
+        result.put("user",usersDto);
+        result.put("desc","성공적으로 조회했습니다.");
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
     // 메일 인증번호 발송하기
     @PostMapping(value = {"/mail-certification"})
     public ResponseEntity mailCertification(@RequestParam(value = "email")String receiver){
@@ -140,6 +155,31 @@ public class UserController {
             httpStatus = HttpStatus.OK;
         }else{
             result.put("desc","회원 가입 실패 [입력값이 잘못되었습니다]");
+            httpStatus = HttpStatus.ACCEPTED;
+        }
+
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @PatchMapping(value = "/favorite-recipe")
+    public ResponseEntity addFavoriteRecipe(@RequestParam("token")String token,@RequestParam("recipeId")int recipeId){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        int addResult = 0;
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
+        addResult = userService.addFavoriteRecipe(usersEntity.getId(),recipeId);
+
+        if(addResult==1){
+            result.put("desc","즐겨찾기 추가 완료");
+            httpStatus = HttpStatus.OK;
+        }else if(addResult == 2){
+            result.put("desc","즐겨찾기 삭제 완료.");
+            httpStatus = HttpStatus.OK;
+        }else if(addResult == 3){
+            result.put("desc","요리를 찾지 못했습니다.");
+            httpStatus = HttpStatus.ACCEPTED;
+        }else {
+            result.put("desc","실패 : 알수없는 오류");
             httpStatus = HttpStatus.ACCEPTED;
         }
 

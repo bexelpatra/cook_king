@@ -6,6 +6,7 @@ import com.example.demo.dto.TestDto2;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.enums.FirstCategoryKind;
+import com.example.demo.enums.SecondCategoryKind;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.Utils;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +38,29 @@ public class RecipeController {
     @GetMapping(value = "/recipes")
     public ResponseEntity getRecipesByCategory(@RequestParam(value = "firstCategory") int[] fKind,
                                                @RequestParam(value = "secondCategory") int[] sKind,
+                                               @RequestParam(value = "keyword") String keyword,
                                                @RequestParam(name = "page",defaultValue = "-1")int page){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
+        // 1. parameter 검증하기
+        FirstCategoryKind[] firstCategoryKinds = FirstCategoryKind.byValue(fKind);
+        SecondCategoryKind[] secondCategoryKinds = SecondCategoryKind.byValue(sKind);
+        if(firstCategoryKinds ==null) {
+            result.put("desc","1차 분류가 잘못되었습니다.");
+            httpStatus = HttpStatus.ACCEPTED;
+            return new ResponseEntity(result,httpStatus);
+        }
+        if(secondCategoryKinds == null){
+            result.put("desc","2차 분류가 잘못되었습니다.");
+            httpStatus = HttpStatus.ACCEPTED;
+            return new ResponseEntity(result,httpStatus);
+        }
 
+        List<RecipesDto> recipesDtoList = new ArrayList<>();
+        recipeService.getRecipeByCategoriesAndKeyword(firstCategoryKinds,secondCategoryKinds,keyword,page).stream().forEach(recipesEntity -> recipesDtoList.add(recipesEntity.to()));
 
         result.put("desc","성공적으로 조회했습니다.");
+        result.put("recipes",recipesDtoList);
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
@@ -93,6 +112,13 @@ public class RecipeController {
             result.put("desc","이미지 저장 실패");
             httpStatus = HttpStatus.ACCEPTED;
         }
+
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    public ResponseEntity mailRecipes(@RequestParam("fKind")int fkind,@RequestParam("page")int page){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
 
         return new ResponseEntity(result,httpStatus);
     }
