@@ -57,13 +57,13 @@
             />
           </div>
         <q-btn @click="test11" label="왜 안보이냐 싯팔"/>
+        <q-btn @click="test12" label="test12"/>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
         <q-input type="file" v-model="file" @change="onChangeImages"/>
         <q-img :src="imageUrl"
                :ratio="3/4"
         ></q-img>
-
       </section>
     </q-page>
 </template>
@@ -238,6 +238,10 @@
         // array를 parameter로 넘기기
           this.fetchServer({path : 'test/test11',param:{s:[12,3,4,6]},method : 'post'})
             .then(value => console.log(value))
+      },
+      test12(){
+        this.fetchServer({path : 'test/test16',param:{s : "얖얖얖",},method : 'post'})
+        .then(value => console.log(value))
       }
     },
 

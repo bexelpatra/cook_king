@@ -2,72 +2,27 @@
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
-      <!-- fixme 1,2차 분류 -->
-      <div class="flex q-gutter-y-sm">
-        <!-- 1차 분류 -->
+      <!-- 검색창   -->
+      <div class="flex" style="height: auto">
+
+        <!-- 검색 조건을 입력하는 부분-->
         <q-select
-          class="full-width"
-          filled
           dense
-          v-model="oneselect"
-          :options="options1"
-          label="1차 분류"
-          multiple
-          emit-value
-          map-options
-        >
-          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-            <q-item
-              v-bind="itemProps"
-              v-on="itemEvents"
-            >
-              <q-item-section>
-                <q-item-label v-html="opt.label" ></q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-checkbox :value="selected" @input="toggleOption"></q-checkbox>
-
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-
-        <!-- 2차 분류 -->
-        <q-select
-          class="full-width"
-          filled
-          dense
-          v-model="twoselect"
-          :options="options2"
-          label="2차 분류"
-          multiple
-          emit-value
-          map-options
-        >
-          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-            <q-item
-              v-bind="itemProps"
-              v-on="itemEvents"
-            >
-              <q-item-section>
-                <q-item-label v-html="opt.label"/>
-              </q-item-section>
-              <q-item-section side>
-                <q-checkbox :value="selected" @input="toggleOption"/>
-              </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
-      </div>
-
-      <!-- fixme 검색창 -->
-      <div class="q-mt-sm row">
+          label="선택"
+          class="q-pl-md"
+          style="width: 28vw"
+          borderless
+          v-model="searchOption"
+          :options="options"
+        />
         <q-input
+          dense
           dark
           borderless
           v-model="keyword"
           input-class="text-right text-black"
-          class="q-pr-sm q-mr-xs col bg-grey-3 text-h6">
+          style="border-radius: 10px"
+          class="q-pr-sm q-mr-xs full-height col bg-grey-3">
           <template v-slot:append>
             <q-icon color="black" v-if="keyword === ''" name="search" />
             <q-icon color="black" v-else name="clear" class="cursor-pointer" @click="keyword = ''" />
@@ -77,41 +32,44 @@
         <q-btn
           flat
           dense
-          class="bg-grey-1 text-weight-bold"
+          class="bg-grey-1"
           style="border-radius: 3px"
           label="검색"
-          size="0.9rem"
+          size="1.1rem"
           @click="searching()"
         />
       </div>
 
-      <!-- fixme 게시물 -->
-      <section class="q-mt-sm">
-        <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
-        <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
-        <div v-if="recipeList!=null">
-          <div v-for="recipe in recipeList">
-            <q-btn dense flat class="full-width" >
-              <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
-                <div class="q-pa-sm full-height" style="width: 20%;">
-                  <img :src=recipe.src height="55" width="55"/>
-                </div>
-                <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
-                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-                  <div class="text-left">{{strSummary(recipe.introduce,16)}}</div>
-                </div>
-              </q-card>
-            </q-btn>
-            <q-separator class="bg-grey-4"/>
-          </div>
+    </section>
 
-          <q-btn flat class="full-width" @click="">
-            <span>더보기</span>
+    <section class="q-mt-sm">
+      <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
+      <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
+      <div v-if="recipeList!=null">
+        <div v-for="recipe in recipeList">
+          <q-btn dense flat class="full-width" >
+            <q-card flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
+              <div class="q-pa-sm full-height" style="width: 20%;">
+                <img :src=recipe.src height="55" width="55"/>
+              </div>
+              <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
+                <div class="text-weight-bold text-left" style="font-size: 1.2em">{{this.util.strSummary(recipe.name,20)}}</div>
+                <div class="text-left">{{this.util.strSummary(recipe.description,16)}}</div>
+              </div>
+            </q-card>
           </q-btn>
+          <q-separator class="bg-grey-4"/>
         </div>
-
-      </section>
-
+        <q-btn flat class="full-width" @click="ttest(tt)">
+          <span>더보기</span>
+        </q-btn>
+      </div>
+      <div v-else>
+        <q-card>
+          <q-card-section>
+          </q-card-section>
+        </q-card>
+      </div>
     </section>
   </q-page>
 </template>
@@ -119,71 +77,49 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
-  import * as myUtil from 'boot/myUtilsOldVertion';
-
+  import {myUtil} from "boot/myUtil";
   export default {
     name: 'BoardList',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout',])
     },
     data(){
       return{
+        util : myUtil(this),
         keyword : '',
-        recipeList : [{
-          name : '워워우어워워',
-          introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-          src : 'imgs/1.png',
-        },{
-          name : 'ds',
-          introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-          src : 'imgs/2.png',
-        }
-        ],
-        //1차 2차 분류
-        oneselect: [],
-        options1: [{val: 0, label: '한식'},{val: 1, label: '일식'},{val: 2, label: '중식'},{val: 3, label: '양식'}],
-        twoselect: [],
-        options2: [{val: 0, label: '기타'},{val: 1, label: '볶음'},{val: 2, label: '튀김'},{val: 3, label: '구이'},{val: 4, label: '찜'},{val: 5, label: '국물'},],
-
+        recipeList : [{}],
+        searchOption:'',
+        options : [{value : 1, label : '이름'},{value : 2, label : '재료'},{value : 3, label : '키워드'}],
         tt : 0,
         ttt : 0,
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
-
+      ...mapActions(['fetchServer']),
       // 문자길이 줄이기
-      strSummary : (string, num)=>{
-        return myUtil.strSummary(string,num);
+      stringSummary : (string, num)=>{
+        return this.util.strSummary(string,num);
       },
-      // 카테고리 체크 외 키워드로 검색하기
-      searching(){
-        if (this.oneselect == null || this.oneselect == ''){
-          this.$q.notify({
-            message: "1차 분류를 선택 해주세요.",
-            type : "negative"
-          })
-          return;
-        } else if (this.twoselect == null || this.twoselect == ''){
-          this.$q.notify({
-            message : "2차 분류를 선택 해주세요.",
-            type : "negative"
-          })
-          return;
-        } this.searchOption.label;
+      // 페이지 이동
+      pageMove : (to,query) =>{
+        // myUtil.pageMove(this,to,query);
       },
-
-      contentPage(recipe){
-        this.$router.push({path:'content',query : {recipe : recipe}});
-        // this.util.goTo('/content',{recipe : recipe})
+      // 키워드로 검색하기
+      searching : args =>{
+        this.searchOption.label;
       },
-
-      /**=======================================
-       * sever 통신구간
-       =========================================*/
+      getRecipes(){
+        this.fetchServer({path :'/recipe/recipes',param:{firstCategory:[0,1,2,3],secondCategory:[0,1,2,3,4,5],keyword : ''}})
+        .then(value => {
+          this.recipeList = value.recipes
+          console.log(this.recipeList)
+        })
+        .catch(error => console.log(error))
+      }
 
     },
+
     beforeCreate() {},
     created() {
       window.onpopstate = ()=>{}
@@ -195,6 +131,7 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
       this.getLayout.addcontent = true;
+      this.getRecipes();
     },
     mounted() {},
     beforeUpdate() {},

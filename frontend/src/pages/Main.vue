@@ -245,7 +245,7 @@
        * Boot import
        ====================================*/
       //fixme 문자길이 줄이기
-      strSummary : (string, num)=>{
+      stringSummary : (string, num)=>{
         return myUtil.strSummary(string,num);
       },
 

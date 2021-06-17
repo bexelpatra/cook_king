@@ -18,18 +18,18 @@ public enum FirstCategoryKind {
     public int getValue() { return value; }
     public String getDesc() { return desc; }
 
-    public static FirstCategoryKind byValue(int val){
+    public static FirstCategoryKind of(int val){
         for (FirstCategoryKind value : values()) {
             if(value.getValue()== val) return value;
         }
         return null;
     }
 
-    public static FirstCategoryKind[] byValue(int[] values){
+    public static FirstCategoryKind[] of(int[] values){
         FirstCategoryKind[] firstCategoryKinds = new FirstCategoryKind[values.length];
         for(int i=0;i<values.length;i++){
-            firstCategoryKinds[i] = byValue(values[i]);
-            if(byValue(values[i])==null) return null;
+            firstCategoryKinds[i] = of(values[i]);
+            if(of(values[i])==null) return null;
         }
 
         return firstCategoryKinds;

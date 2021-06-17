@@ -1,8 +1,12 @@
 package com.example.demo.entity;
 
 import com.example.demo.dto.*;
+import com.example.demo.enums.FirstCategoryKind;
+import com.example.demo.enums.SecondCategoryKind;
 import com.example.demo.utilities.Utils;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -11,15 +15,19 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "recipes", schema = "mydb")
+@JsonAutoDetect
 public class RecipesEntity {
-//    public final Class convert = RecipesDto.class;
 
     private int id;
     private String title;
     private String stuffs;
-    private String description;
+    private String description="";
     private FirstCategoryEntity firstCategoryEntity;
     private SecondCategoryEntity secondCategoryEntity;
+
+    private FirstCategoryKind firstCategoryKind;
+    private SecondCategoryKind secondCategoryKind;
+
     private CuisineEntity cuisineEntity;
     @JsonIgnore
     private List<ContentEntity> contentEntities;
@@ -64,12 +72,24 @@ public class RecipesEntity {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @Basic
+//    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "first_category")
+    public FirstCategoryKind getFirstCategoryKind() { return firstCategoryKind; }
+    public void setFirstCategoryKind(FirstCategoryKind firstCategoryKind) { this.firstCategoryKind = firstCategoryKind; }
+
+    @Basic
+//    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "second_category")
+    public SecondCategoryKind getSecondCategoryKind() { return secondCategoryKind; }
+    public void setSecondCategoryKind(SecondCategoryKind secondCategoryKind) { this.secondCategoryKind = secondCategoryKind; }
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "first_category_id")
     public FirstCategoryEntity getFirstCategoryEntity() { return firstCategoryEntity; }
     public void setFirstCategoryEntity(FirstCategoryEntity firstCategoryEntity) { this.firstCategoryEntity = firstCategoryEntity; }
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "second_category_id")
     public SecondCategoryEntity getSecondCategoryEntity() { return secondCategoryEntity; }
     public void setSecondCategoryEntity(SecondCategoryEntity secondCategoryEntity) { this.secondCategoryEntity = secondCategoryEntity; }
@@ -109,10 +129,20 @@ public class RecipesEntity {
 
     public RecipesDto to(){
         return Utils.to(RecipesDto.class,this)
-                .setFirstCategoryDto(Utils.to(FirstCategoryDto.class,this.firstCategoryEntity))
-                .setSecondCategoryDto(Utils.to(SecondCategoryDto.class,this.secondCategoryEntity))
                 .setDescriptions(Arrays.asList(this.description.split("#")))
                 .setUsersDto(UsersDto.fix(Utils.to(UsersDto.class,this.getUsersEntity())))
+                ;
+    }
+    public RecipesDto toWithContents(){
+        UsersDto usersDto = Utils.to(UsersDto.class,this.getUsersEntity());
+        UsersDto.fix(usersDto);
+        String des = this.getDescription() == null ? this.description ="": this.getDescription();
+        List<ContentDto> contentDtos = Utils.to(ContentDto.class,this.getContentEntities());
+        return Utils.to(RecipesDto.class,this)
+                .setDescriptions(Arrays.asList(des.split("#")))
+//                .setUsersDto(UsersDto.fix(Utils.to(UsersDto.class,this.getUsersEntity())))
+                .setUsersDto(usersDto)
+                .setContentDtos(contentDtos)
                 ;
     }
 }
