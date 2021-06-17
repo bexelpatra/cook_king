@@ -8,20 +8,20 @@
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
           <splide
-            :slides="serveslides"
+            :slides="koreaList"
             class="no-padding q-mb-xs"
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(main,index) in mainList" :key="index">
+            <splide-slide v-for="(recipe,index) in koreaList" :key="index">
               <div
                 class="q-ml-xs q-mr-md  text-white"
                 style="height: 130px;border-radius: 5px 5px;"
               >
-                <img class="full-width" :src="main.src" style="height: 32vw;"/>
+                <img class="full-width" src="imgs/224/2.png" style="height: 32vw;"/>
               </div>
               <div class="q-mx-xs text-h6">
-                {{main.name}}
+                {{recipe.title}}
               </div>
             </splide-slide>
           </splide>
@@ -39,20 +39,20 @@
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
           <splide
-            :slides="serveslides"
+            :slides="westernList"
             class="no-padding q-mb-xs"
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(main,index) in mainList" :key="index">
+            <splide-slide v-for="(recipe,index) in westernList" :key="index">
               <div
                 class="q-ml-xs q-mr-md  text-white"
                 style="height: 130px;border-radius: 5px 5px;"
               >
-                <img class="full-width" :src="main.src" style="height: 32vw;"/>
+                <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
               </div>
               <div class="q-mx-xs text-h6">
-                {{main.name}}
+                {{recipe.name}}
               </div>
             </splide-slide>
           </splide>
@@ -70,20 +70,20 @@
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
           <splide
-            :slides="serveslides"
+            :slides="japanList"
             class="no-padding q-mb-xs"
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(main,index) in mainList" :key="index">
+            <splide-slide v-for="(recipe,index) in japanList" :key="index">
               <div
                 class="q-ml-xs q-mr-md  text-white"
                 style="height: 130px;border-radius: 5px 5px;"
               >
-                <img class="full-width" :src="main.src" style="height: 32vw;"/>
+                <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
               </div>
               <div class="q-mx-xs text-h6">
-                {{main.name}}
+                {{recipe.name}}
               </div>
             </splide-slide>
           </splide>
@@ -101,20 +101,20 @@
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
           <splide
-            :slides="serveslides"
+            :slides="chinaList"
             class="no-padding q-mb-xs"
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(main,index) in mainList" :key="index">
+            <splide-slide v-for="(recipe,index) in chinaList" :key="index">
               <div
                 class="q-ml-xs q-mr-md  text-white"
                 style="height: 130px;border-radius: 5px 5px;"
               >
-                <img class="full-width" :src="main.src" style="height: 32vw;"/>
+                <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
               </div>
               <div class="q-mx-xs text-h6">
-                {{main.name}}
+                {{recipe.name}}
               </div>
             </splide-slide>
           </splide>
@@ -257,40 +257,42 @@
       stringSummary : (string, num)=>{
         return this.util.strSummary(string,num);
       },
+      // fixme 요리 상세보기
+      getContent(recipe){
+        this.util.goTo('/content',{recipe:recipe})
+      },
+      // fixme 카테고리별 요리 가져오기
       getRecipes(){
         let self = this;
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:0,page : this.koreaPage}})
         .then(value => {
-          console.log(value)
-          self.koreaList = value.recipes;
-          self.koreaPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+          value.recipes.forEach(recipe =>{this.koreaList.push(recipe); console.log(recipe)})
+          self.koreaPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
+
         })
         .catch(reason => {
           console.log(reason)
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:1,page : this.koreaPage}})
         .then(value => {
-          console.log(value)
-          self.japanList = value.recipes;
-          self.japanPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+          value.recipes.forEach(recipe =>{this.japanList.push(recipe); console.log(recipe)})
+          self.japanPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {
           console.log(reason)
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:2,page : this.koreaPage}})
         .then(value => {
-          console.log(value)
-          self.chinaList = value.recipes;
-          self.chinaPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+          value.recipes.forEach(recipe =>{this.chinaList.push(recipe); console.log(recipe)})
+          self.chinaPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {
           console.log(reason)
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:3,page : this.koreaPage}})
         .then(value => {
-          console.log(value)
-          self.westernList = value.recipes;
-          self.westernPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+          value.recipes.forEach(recipe =>{this.westernList.push(recipe); console.log(recipe)})
+          self.westernPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {
           console.log(reason)

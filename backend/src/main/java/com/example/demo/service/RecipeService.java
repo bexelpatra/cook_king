@@ -25,4 +25,6 @@ public interface RecipeService {
 
     boolean deleteContent(ContentEntity contentEntity);
     boolean deleteContent(List<ContentEntity> contentEntity);
+
+    String test(String path);
 }

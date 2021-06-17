@@ -8,6 +8,7 @@ import com.example.demo.entity.UsersEntity;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.repository.CuisineRepository;
 import com.example.demo.repository.RecipeRepository;
+import com.example.demo.service.RecipeService;
 import com.example.demo.service.TestService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.SMTP;
@@ -47,6 +48,7 @@ public class TestController {
     private final UserService userService;
     private final RecipeRepository recipeRepository;
     private final CuisineRepository cuisineRepository;
+    private final RecipeService recipeService;
 
 //    @RequestMapping(value = "/test1",method = RequestMethod.GET)
     @GetMapping(value = "/test1")  // get 방식은 param만 받는다.
@@ -288,6 +290,17 @@ public class TestController {
         cuisineEntity.setName(path);
 
         result.put("dd",cuisineRepository.save(cuisineEntity));
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+
+    }
+    @GetMapping(value = "/test17")
+    public ResponseEntity pathTest(@RequestParam("s")String path){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        File file = new File(path);
+        String x= file.getAbsolutePath();
+        String y= recipeService.test(path);
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
 

@@ -33,6 +33,7 @@ public class RecipeServiceImpl implements RecipeService {
     private int maxInt = Integer.MAX_VALUE;
 
     private final String localPath = "D:/coook/";
+    private final String urlPath = "D:/coook/";
     @Override
     public List<RecipesEntity> getRecipeByFirstCategory(FirstCategoryKind firstCategoryKind, int page) {
         if(firstCategoryKind==null) return new ArrayList<RecipesEntity>();
@@ -81,7 +82,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipesEntity.setUsersEntity(usersEntity);
 
         recipesEntity = recipeRepository.save(recipesEntity);
-        saveContentEntity(multiFileDto,recipesEntity,localPath);
+        saveContentEntity(multiFileDto,recipesEntity,urlPath);
         // 이미지 저장
         Utils.saveImage(multiFileDto.getFile(),usersEntity,recipesEntity.getId());
         return recipesEntity;
@@ -95,7 +96,7 @@ public class RecipeServiceImpl implements RecipeService {
         recipesEntity = recipeRepository.save(recipesEntity);
         deleteContent(recipesEntity);
 
-        saveContentEntity(multiFileDto,recipesEntity,localPath);
+        saveContentEntity(multiFileDto,recipesEntity,urlPath);
         // 이미지 저장
         Utils.deleteAndSaveImage(multiFileDto.getFile(),usersEntity,recipesEntity.getId());
         return recipesEntity;
@@ -146,6 +147,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Deprecated
     public boolean deleteContent(ContentEntity contentEntity) {
         contentRepository.delete(contentEntity);
         File file = new File(localPath + contentEntity.getName());
@@ -156,6 +158,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Deprecated
     public boolean deleteContent(List<ContentEntity> contentEntity) {
         int nullFile = contentEntity.stream().filter(entity ->!new File(entity.getUrl()).exists()).toArray().length;
         if(nullFile>0) return false;
@@ -163,5 +166,12 @@ public class RecipeServiceImpl implements RecipeService {
             deleteContent(entity);
         }
         return false;
+    }
+
+    @Override
+    public String test(String path) {
+        File file = new File(path);
+
+        return file.getPath() + ":" + file.getAbsolutePath();
     }
 }
