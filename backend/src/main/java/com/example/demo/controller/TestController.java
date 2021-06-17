@@ -1,26 +1,24 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.*;
+import com.example.demo.entity.CuisineEntity;
 import com.example.demo.entity.FirstCategoryEntity;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
+import com.example.demo.enums.FirstCategoryKind;
+import com.example.demo.repository.CuisineRepository;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.TestService;
 import com.example.demo.service.UserService;
-import com.example.demo.utilities.MyMail;
-import com.example.demo.utilities.Querying;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import javassist.bytecode.analysis.MultiType;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Test;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -48,6 +46,7 @@ public class TestController {
     private final TestService testService;
     private final UserService userService;
     private final RecipeRepository recipeRepository;
+    private final CuisineRepository cuisineRepository;
 
 //    @RequestMapping(value = "/test1",method = RequestMethod.GET)
     @GetMapping(value = "/test1")  // get 방식은 param만 받는다.
@@ -249,7 +248,8 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/test13")
+
+    @PostMapping(value = "/test13") // 즐겨찾기 추가하기
     public ResponseEntity test13(@RequestParam(value = "token")String token,
                                  @RequestParam(value = "recipe")int recipe){
         Map<String,Object> result = new HashMap<>();
@@ -259,5 +259,37 @@ public class TestController {
 
         result.put("result",xx);
         return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/test14") // 쿼리테스트
+    public ResponseEntity test14(@RequestParam("val")int val){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+//        List<RecipesEntity> recipesEntities = recipeRepository.findPopular20Recipes(FirstCategoryKind.of(val));
+//        List<RecipesEntity> recipesEntities2 = recipeRepository.findPopular20Recipes(val);
+
+//        result.put("result1",recipesEntities);
+//        result.put("result2",recipesEntities2);
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @PostMapping(value = "/test15")
+    public ResponseEntity deleteTest(@RequestParam("path")String path){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        Utils.deleteRecursive(new File(path));
+        return new ResponseEntity(result,httpStatus);
+
+    }
+    @PostMapping(value = "/test16")
+    public ResponseEntity postTestFromFront(@RequestParam("s")String path){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        CuisineEntity cuisineEntity = new CuisineEntity();
+        cuisineEntity.setName(path);
+
+        result.put("dd",cuisineRepository.save(cuisineEntity));
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+
     }
 }

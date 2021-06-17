@@ -17,7 +17,7 @@ public enum ContentKind {
     public int getValue() { return value; }
     public String getDesc() { return desc; }
 
-    public static ContentKind byValue(int val){
+    public static ContentKind of(int val){
         for (ContentKind contentKind : values()) {
             if(contentKind.getValue() == val) return contentKind;
         }

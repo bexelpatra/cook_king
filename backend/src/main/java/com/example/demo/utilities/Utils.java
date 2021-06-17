@@ -2,14 +2,12 @@ package com.example.demo.utilities;
 
 import com.example.demo.dto.ContentDto;
 import com.example.demo.dto.MultiFileDto;
-import com.example.demo.entity.ContentEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.enums.ContentKind;
 import com.example.demo.testing.MyEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -230,7 +228,7 @@ public abstract class Utils<T> {
             contentDtos.add(ContentDto.builder()
                     .description(texts[i])
                     .order(orders[i] == null ? a++:orders[i] )
-                    .contentKind(ContentKind.byValue(kinds[i]) == null? ContentKind.IMAGE: ContentKind.byValue(kinds[i]))
+                    .contentKind(ContentKind.of(kinds[i]) == null? ContentKind.IMAGE: ContentKind.of(kinds[i]))
                     .build());
         }
 
@@ -255,5 +253,39 @@ public abstract class Utils<T> {
             saveImage(file,UsersEntity,recipeId,count++);
         }
         count = 0;
+    }
+
+    public static void deleteAndSaveImage(MultipartFile multipartFile, UsersEntity UsersEntity, int recipeId, int order) throws Exception{
+        String savePath = String.format("%s/%d/%d/",localPath,UsersEntity.getId(),recipeId);
+        String fileName = String.format("%d.png",order);
+        File file = new File(savePath);
+        if(!file.exists()){
+            file.mkdirs();
+        }else{
+            deleteRecursive(new File(savePath));
+        }
+
+        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s.png",savePath,fileName));
+        fileOutputStream.write(multipartFile.getBytes());
+        fileOutputStream.close();
+    }
+
+    public static void deleteAndSaveImage(MultipartFile[] multipartFile, UsersEntity UsersEntity, int recipeId) throws Exception{
+        int count = 1;
+        for (MultipartFile file : multipartFile) {
+            deleteAndSaveImage(file,UsersEntity,recipeId,count++);
+        }
+        count = 0;
+    }
+    public static void deleteRecursive(File file){
+        if(file.isDirectory()){
+            File[] deleteFiles = file.listFiles();
+            for (File deleteFile : deleteFiles) {
+                deleteRecursive(deleteFile);
+            }
+
+        }else if(file.isFile()) {
+            file.delete();
+        }
     }
 }

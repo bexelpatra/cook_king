@@ -9,15 +9,19 @@ import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.enums.SecondCategoryKind;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RecipeService {
     List<RecipesEntity> getRecipeByFirstCategory(FirstCategoryKind firstCategoryKind,int page);
+    List<RecipesEntity> getRecipeByFirstCategoryOrderByFavoriteCount(FirstCategoryKind firstCategoryKind,int page);
     List<RecipesEntity> getRecipeByCategories(FirstCategoryKind[] firstCategoryKind, SecondCategoryKind[] secondCategoryKind, int page);
     List<RecipesEntity> getRecipeByCategoriesAndKeyword(FirstCategoryKind[] firstCategoryKind, SecondCategoryKind[] secondCategoryKind,String keyword, int page);
     RecipesEntity save(RecipesDto recipesDto);
     RecipesEntity saveRecipeAndImage(RecipesDto recipesDto, MultiFileDto multiFileDto, UsersEntity usersEntity) throws Exception;
-
+    RecipesEntity deleteAndSaveRecipeAndImage(RecipesEntity recipesEntity,RecipesDto recipesDto, MultiFileDto multiFileDto, UsersEntity usersEntity) throws Exception;
     RecipesDto getRecipeById(int recipeId);
+    Optional<RecipesEntity> getRecipeEntityById(int recipeId);
+
 
     boolean deleteContent(ContentEntity contentEntity);
     boolean deleteContent(List<ContentEntity> contentEntity);

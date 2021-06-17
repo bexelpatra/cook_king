@@ -53,8 +53,8 @@
                 <img :src=recipe.src height="55" width="55"/>
               </div>
               <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
-                <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-                <div class="text-left">{{strSummary(recipe.introduce,16)}}</div>
+                <div class="text-weight-bold text-left" style="font-size: 1.2em">{{this.util.strSummary(recipe.name,20)}}</div>
+                <div class="text-left">{{this.util.strSummary(recipe.description,16)}}</div>
               </div>
             </q-card>
           </q-btn>
@@ -77,26 +77,17 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
-  import * as myUtil from 'boot/myUtilsOldVertion';
-
+  import {myUtil} from "boot/myUtil";
   export default {
     name: 'BoardList',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout',])
     },
     data(){
       return{
+        util : myUtil(this),
         keyword : '',
-        recipeList : [{
-          name : '워워우어워워',
-          introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-          src : 'imgs/1.png',
-        },{
-          name : 'ds',
-          introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-          src : 'imgs/2.png',
-        }
-        ],
+        recipeList : [{}],
         searchOption:'',
         options : [{value : 1, label : '이름'},{value : 2, label : '재료'},{value : 3, label : '키워드'}],
         tt : 0,
@@ -105,22 +96,10 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
-      ttest(arg){
-        this.ttt = myUtil.comma(arg);
-        myUtil.notify(this,"왜 ㅇ난ㅇㄹ모",'info')
-        return myUtil.comma(arg);
-      },
-      testt(arg){
-        myUtil.notify(this,"나와라!",'info');
-      },
-      testtt(){
-        myUtil.pageMove(this,"Main",{name : 'dd',c8 : 'sadfnklasjkl'})
-        this.$router.push({name :'',query : {}})
-      },
+      ...mapActions(['fetchServer']),
       // 문자길이 줄이기
-      strSummary : (string, num)=>{
-        return myUtil.strSummary(string,num);
+      stringSummary : (string, num)=>{
+        return this.util.strSummary(string,num);
       },
       // 페이지 이동
       pageMove : (to,query) =>{
@@ -129,7 +108,16 @@
       // 키워드로 검색하기
       searching : args =>{
         this.searchOption.label;
+      },
+      getRecipes(){
+        this.fetchServer({path :'/recipe/recipes',param:{firstCategory:[0,1,2,3],secondCategory:[0,1,2,3,4,5],keyword : ''}})
+        .then(value => {
+          this.recipeList = value.recipes
+          console.log(this.recipeList)
+        })
+        .catch(error => console.log(error))
       }
+
     },
 
     beforeCreate() {},
@@ -143,6 +131,7 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
       this.getLayout.addcontent = true;
+      this.getRecipes();
     },
     mounted() {},
     beforeUpdate() {},

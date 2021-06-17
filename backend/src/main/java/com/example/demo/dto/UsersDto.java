@@ -107,6 +107,7 @@ public class UsersDto {
     }
 
     public static UsersDto fix(UsersDto usersDto){
+        if(usersDto == null) return null;
         usersDto.setPassword(null);
         return usersDto;
     }
