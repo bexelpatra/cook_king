@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.MultiFileDto;
 import com.example.demo.dto.RecipesDto;
 import com.example.demo.dto.TestDto2;
 import com.example.demo.entity.RecipesEntity;
+import com.example.demo.entity.UsersEntity;
 import com.example.demo.enums.FirstCategoryKind;
+import com.example.demo.enums.SecondCategoryKind;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.Utils;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,43 +28,97 @@ public class RecipeController {
     private final RecipeService recipeService;
     private final UserService userService;
 
-    @GetMapping(value = "/recipe")
-    public ResponseEntity getRecipesByCategory(@RequestParam("firstCategory") int fKind,
+    /**
+     * 레시피들 검색하기
+     * @param fKind first category들
+     * @param sKind second category들
+     * @param page 마지막 recipe의 id
+     * @return
+     */
+    @GetMapping(value = "/recipes")
+    public ResponseEntity getRecipesByCategory(@RequestParam(value = "firstCategory") int[] fKind,
+                                               @RequestParam(value = "secondCategory") int[] sKind,
+                                               @RequestParam(value = "keyword") String keyword,
                                                @RequestParam(name = "page",defaultValue = "-1")int page){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
+        // 1. parameter 검증하기
+        FirstCategoryKind[] firstCategoryKinds = FirstCategoryKind.byValue(fKind);
+        SecondCategoryKind[] secondCategoryKinds = SecondCategoryKind.byValue(sKind);
+        if(firstCategoryKinds ==null) {
+            result.put("desc","1차 분류가 잘못되었습니다.");
+            httpStatus = HttpStatus.ACCEPTED;
+            return new ResponseEntity(result,httpStatus);
+        }
+        if(secondCategoryKinds == null){
+            result.put("desc","2차 분류가 잘못되었습니다.");
+            httpStatus = HttpStatus.ACCEPTED;
+            return new ResponseEntity(result,httpStatus);
+        }
 
-        List<RecipesEntity> recipesEntityList = recipeService.getRecipeByFirstCategory(FirstCategoryKind.byValue(fKind),page);
-        List<RecipesDto> recipesDtoList = Utils.to(RecipesDto.class,recipesEntityList);
+        List<RecipesDto> recipesDtoList = new ArrayList<>();
+        recipeService.getRecipeByCategoriesAndKeyword(firstCategoryKinds,secondCategoryKinds,keyword,page).stream().forEach(recipesEntity -> recipesDtoList.add(recipesEntity.to()));
 
         result.put("desc","성공적으로 조회했습니다.");
-        result.put("recipesList",recipesDtoList);
+        result.put("recipes",recipesDtoList);
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/recipe2")
-    public ResponseEntity postRecipe(@RequestParam("token") String token,
-                                     @RequestBody RecipesDto recipesDto){
+    /**
+     * 레시피 내용 조회하기
+     * @param recipeId
+     * @return
+     */
+    @GetMapping(value = "/recipe/content")
+    public ResponseEntity getRecipeContent(@RequestParam(name = "recipe")int recipeId){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        RecipesDto recipesDto = recipeService.getRecipeById(recipeId);
+        result.put("desc","성공적으로 조회했습니다.");
+        result.put("recipe",recipesDto);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    /**
+     * 레시피 신규 등록하기
+     * @param token
+     * @param recipesDto
+     * @param multiFileDto
+     * @return
+     */
+    @PostMapping(value = "/recipe")
+    public ResponseEntity postRecipe(@RequestParam("token")String token, RecipesDto recipesDto, MultiFileDto multiFileDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
 
         // 1. token 검증
-        if(!userService.findUsersEntityByToken(token).isPresent()){
-
-        };
-        //2. recipesDto -> entity변환후 저장
-        recipeService.save(recipesDto);
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseGet(null);
+        if(usersEntity==null){
+            httpStatus = HttpStatus.ACCEPTED;
+            result.put("desc","토큰 오류");
+            return new ResponseEntity(result,httpStatus);
+        }
+        RecipesEntity recipesEntity = null;
+        try {
+            recipesEntity = recipeService.saveRecipeAndImage(recipesDto,multiFileDto,usersEntity);
+            result.put("recipe",recipesEntity.to());
+            result.put("desc","성공적으로 저장했습니다.");
+            httpStatus = HttpStatus.OK;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("desc","이미지 저장 실패");
+            httpStatus = HttpStatus.ACCEPTED;
+        }
 
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/recipe")
-    public ResponseEntity postRecipe2(RecipesDto recipesDto,TestDto2 testDto2){
+    public ResponseEntity mailRecipes(@RequestParam("fKind")int fkind,@RequestParam("page")int page){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
-
-        // 1. token 검증
 
         return new ResponseEntity(result,httpStatus);
     }

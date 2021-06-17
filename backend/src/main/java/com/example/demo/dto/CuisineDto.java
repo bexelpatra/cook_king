@@ -5,7 +5,6 @@ import lombok.Data;
 
 @Data
 public class CuisineDto {
-    public final Class convert = CuisineEntity.class;
     private int id;
     private String name;
 

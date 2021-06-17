@@ -4,7 +4,9 @@ import com.example.demo.dto.*;
 import com.example.demo.entity.FirstCategoryEntity;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
+import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.TestService;
+import com.example.demo.service.UserService;
 import com.example.demo.utilities.MyMail;
 import com.example.demo.utilities.Querying;
 import com.example.demo.utilities.SMTP;
@@ -44,6 +46,8 @@ public class TestController {
 //    private final UsersRepository usersRepository;
 
     private final TestService testService;
+    private final UserService userService;
+    private final RecipeRepository recipeRepository;
 
 //    @RequestMapping(value = "/test1",method = RequestMethod.GET)
     @GetMapping(value = "/test1")  // get 방식은 param만 받는다.
@@ -223,6 +227,37 @@ public class TestController {
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
 
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @PostMapping(value = "/test11")
+    public ResponseEntity test11(@RequestParam(value = "s")int[] s){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        result.put("s",s);
+
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PostMapping(value = "/test12")
+    public ResponseEntity test12(@RequestParam(value = "token")String token,
+                                 @RequestParam(value = "recipe")int recipe){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        RecipesEntity recipesEntity = recipeRepository.getRecipesEntityById(recipe).orElse(null);
+        userService.findUsersEntityByToken(token).ifPresent(usersEntity -> usersEntity.getUsersFavoriteRecipes().add(recipesEntity));
+
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @PostMapping(value = "/test13")
+    public ResponseEntity test13(@RequestParam(value = "token")String token,
+                                 @RequestParam(value = "recipe")int recipe){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = HttpStatus.OK;
+        int x = userService.findUsersEntityByToken(token).orElseThrow(RuntimeException::new).getId();
+        Integer xx = userService.addFavoriteRecipe(x, recipe);
+
+        result.put("result",xx);
         return new ResponseEntity(result,httpStatus);
     }
 }

@@ -24,4 +24,14 @@ public enum FirstCategoryKind {
         }
         return null;
     }
+
+    public static FirstCategoryKind[] byValue(int[] values){
+        FirstCategoryKind[] firstCategoryKinds = new FirstCategoryKind[values.length];
+        for(int i=0;i<values.length;i++){
+            firstCategoryKinds[i] = byValue(values[i]);
+            if(byValue(values[i])==null) return null;
+        }
+
+        return firstCategoryKinds;
+    }
 }

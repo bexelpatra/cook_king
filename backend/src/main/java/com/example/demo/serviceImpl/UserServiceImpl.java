@@ -10,6 +10,7 @@ import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -62,4 +63,23 @@ public class UserServiceImpl implements UserService {
                 .regDate(new Date())
                 .build()));
     }
+
+    @Override
+    public Integer addFavoriteRecipe(int usersId, int recipeId) {
+        Integer result = 0;
+        String m = "";
+        try{
+            result = usersRepository.addFavoriteRecipe(usersId,recipeId);
+        }catch (Exception e){
+            m = e.getMessage().split(";")[2];
+            if(m.contains("null")){
+                result = 3;
+            }else if(m.toLowerCase().contains("primary")){
+                result = usersRepository.deleteFavoriteRecipe(usersId,recipeId);
+                if(result == 1) result = 2;
+            }
+        }
+        return result;
+    }
+
 }
