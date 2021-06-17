@@ -26,7 +26,11 @@
     },
     data() {
       return {
-        appVersion : LocalStorage.getItem("US_VS")
+        userEM : LocalStorage.getItem("US_EM"),
+        userPW : LocalStorage.getItem("US_PW"),
+        userTK : LocalStorage.getItem("US_TK"),
+        appVersion : LocalStorage.getItem("US_VS"),
+
       }
     },
 
@@ -38,7 +42,12 @@
       },
     },
 
-    beforeCreate() {},
+    beforeCreate() {
+      LocalStorage.set("US_TK", "");
+      LocalStorage.set("US_EM", "");
+      LocalStorage.set("US_PW", "");
+      LocalStorage.set("US_VS", "");
+    },
     created() {
       setTimeout(() => {
         this.gotoMain();

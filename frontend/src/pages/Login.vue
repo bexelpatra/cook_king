@@ -77,7 +77,7 @@
           return;
         }
         // 로그인 서버 연동
-        this.$router.push({path : '/addcontent', query : {to: to, from : from}});
+        this.$router.push({path : '/main', query : {to: to, from : from}});
 
         },
 

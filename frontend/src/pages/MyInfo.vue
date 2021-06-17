@@ -35,6 +35,7 @@
           icon="savings"
           flat
           label="쿡_코인"
+          @click="cookCoin"
         />
       <q-separator/>
     </section>
@@ -75,10 +76,20 @@
        * 클릭 이벤트
        ========================================*/
       securitybtn(){
-        this.$router.push('personer');
+        // this.$router.push('personer');
+        this.$q.notify({
+          message : '기능 추가 예정 입니다.',
+          type : 'info'
+        })
       },
       myConTentPage(){
         this.$router.push('mycontent');
+      },
+      cookCoin(){
+        this.$q.notify({
+          message : '기능 추가 예정 입니다.',
+          type : 'info'
+        })
       }
     },
 
