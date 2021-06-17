@@ -1,4 +1,5 @@
 <!--fixme 레시피 게시물 작성-->
+<script src="../../babel.config.js"></script>
 <template>
   <q-page class="bg-grey-2">
     <!--fixme 메인 이미지 -->
@@ -302,9 +303,9 @@
         form.append("text",this.titleImage.text)
         form.append("kind",this.titleImage.kind)
         //카테고리 1차 분류
-        form.append("firstCategory",this.oneselect.val)
+        form.append("firstCategoryInt",this.oneselect.val)
         //카테고리 2차 분류
-        form.append("secondCategory",this.twoselect.val)
+        form.append("secondCategoryInt",this.twoselect.val)
         //타이틀 제목
         form.append("title",this.title);
         //한줄 설명

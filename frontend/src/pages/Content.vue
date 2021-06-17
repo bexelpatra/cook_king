@@ -10,23 +10,35 @@
         class="z-top q-ma-sm absolute-top-left"
         @click="backBtn"
       />
+      <div class="z-top q-ma-sm  absolute-top-right">
+        <q-btn
+          v-if="bookmark"
+          flat
+          dense
+          round
+          icon="favorite_border"
+          @click="bookmark = false"
+        />
+        <q-btn
+          v-if="!bookmark"
+          flat
+          dense
+          round
+          color="red"
+          icon="favorite"
+          @click="bookmark = true"
+        />
+      </div>
+
       <q-btn
-        v-if="bookmark"
+        v-if="change"
         flat
         dense
         round
-        icon="favorite_border"
-        @click="bookmark = false"
-        class="z-top q-ma-sm absolute-top-right"
-      />
-      <q-btn
-        v-if="!bookmark"
-        flat
-        dense
-        round
-        icon="favorite"
-        @click="bookmark = true"
-        class="z-top q-ma-sm absolute-top-right"
+        icon="create"
+        @click="changeBtn"
+        class="q-mr-sm absolute-top-right z-top"
+        style="margin-top: 13vw"
       />
     </section>
     <!-- fixme 콘텐츠 -->
@@ -92,6 +104,7 @@
     data(){
       return{
         bookmark : true,
+        change: true,
 
         util : new myUtil(this),
         x : window.innerWidth,
@@ -112,6 +125,10 @@
        *  클릭 이벤트
        ===================================*/
       backBtn(){ this.$router.back()},
+
+      changeBtn(){
+        console.log('게시물 수정 버튼');
+      }
 
     },
 

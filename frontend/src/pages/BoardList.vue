@@ -91,7 +91,7 @@
       <div v-if="recipeList!=null">
         <div v-for="recipe in recipeList">
           <q-btn dense flat class="full-width" >
-            <q-card flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
+            <q-card @click="contentPage" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
               <div class="q-pa-sm full-height" style="width: 20%;">
                 <img :src=recipe.src height="55" width="55"/>
               </div>
@@ -192,13 +192,18 @@
       // searching1 : args =>{
       // this.searchOption.label;
       // }
-    },
+
+      contentPage(){
+        this.$router.push('content');
+      },
+
+
 
     /**=======================================
      * sever 통신구간
      =========================================*/
 
-
+    },
     beforeCreate() {},
     created() {
       window.onpopstate = ()=>{}
