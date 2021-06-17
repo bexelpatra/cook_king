@@ -2,7 +2,7 @@
 <template>
   <q-page class="bg-white q-pa-sm">
     <section>
-      <!-- 검색창   -->
+      <!-- fixme 1,2차 분류 -->
       <div class="flex q-gutter-y-sm">
         <!-- 1차 분류 -->
         <q-select
@@ -60,6 +60,7 @@
         </q-select>
       </div>
 
+      <!-- fixme 검색창 -->
       <div class="q-mt-sm row">
         <q-input
           dark
@@ -83,36 +84,34 @@
           @click="searching()"
         />
       </div>
-    </section>
 
-    <section class="q-mt-sm">
-      <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
-      <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
-      <div v-if="recipeList!=null">
-        <div v-for="recipe in recipeList">
-          <q-btn dense flat class="full-width" >
-            <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
-              <div class="q-pa-sm full-height" style="width: 20%;">
-                <img :src=recipe.src height="55" width="55"/>
-              </div>
-              <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
-                <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-                <div class="text-left">{{strSummary(recipe.introduce,16)}}</div>
-              </div>
-            </q-card>
+      <!-- fixme 게시물 -->
+      <section class="q-mt-sm">
+        <!--     반복문을 돌리면서 검색 결과를 보여줘야 한다. -->
+        <!--      기본값으로 나오는 것들은 무엇을 보여줄지 정해야 한다.-->
+        <div v-if="recipeList!=null">
+          <div v-for="recipe in recipeList">
+            <q-btn dense flat class="full-width" >
+              <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
+                <div class="q-pa-sm full-height" style="width: 20%;">
+                  <img :src=recipe.src height="55" width="55"/>
+                </div>
+                <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
+                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
+                  <div class="text-left">{{strSummary(recipe.introduce,16)}}</div>
+                </div>
+              </q-card>
+            </q-btn>
+            <q-separator class="bg-grey-4"/>
+          </div>
+
+          <q-btn flat class="full-width" @click="">
+            <span>더보기</span>
           </q-btn>
-          <q-separator class="bg-grey-4"/>
         </div>
-        <q-btn flat class="full-width" @click="ttest(tt)">
-          <span>더보기</span>
-        </q-btn>
-      </div>
-      <div v-else>
-        <q-card>
-          <q-card-section>
-          </q-card-section>
-        </q-card>
-      </div>
+
+      </section>
+
     </section>
   </q-page>
 </template>
@@ -180,11 +179,9 @@
         // this.util.goTo('/content',{recipe : recipe})
       },
 
-
-
-    /**=======================================
-     * sever 통신구간
-     =========================================*/
+      /**=======================================
+       * sever 통신구간
+       =========================================*/
 
     },
     beforeCreate() {},

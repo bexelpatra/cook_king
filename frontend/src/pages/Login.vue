@@ -24,7 +24,7 @@
           class="q-mt-sm full-width bg-blue text-white text-weight-bolder"
           style="font-size: 1.2rem"
           label="로그인"
-          @click="mainPage"
+          @click="loginBtn"
         />
       </section>
 
@@ -68,7 +68,18 @@
        ========================================*/
       SignupPage(){this.$router.push('signup');},
       FindPW(){this.$router.push('findpw');},
-      mainPage(to,from){this.$router.push({path : '/addcontent', query : {to: to, from : from}});},
+      loginBtn(to,from){
+        if (this.email == null || this.email == '' || this.password == null || this.password == ''){
+          this.$q.notify({
+            message : '이메일/비밀번호 입력해주세요.',
+            type : 'negative'
+          })
+          return;
+        }
+        // 로그인 서버 연동
+        this.$router.push({path : '/addcontent', query : {to: to, from : from}});
+
+        },
 
 
     },
