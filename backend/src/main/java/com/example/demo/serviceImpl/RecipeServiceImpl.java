@@ -14,6 +14,7 @@ import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<RecipesEntity> getRecipeByCategoriesAndKeyword(FirstCategoryKind[] firstCategoryKind, SecondCategoryKind[] secondCategoryKind,String keyword, int page) {
         if(page <= 0) page = maxInt;
-        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryKindInAndSecondCategoryKindInAndTitleContainingOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,keyword,PageRequest.of(0,20));
+        List<RecipesEntity> recipesEntities = new ArrayList<>();
+        if(keyword == null) {
+            recipesEntities = recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryKindInAndSecondCategoryKindInOrderByIdDesc(page,firstCategoryKind,secondCategoryKind, PageRequest.of(0,20));
+        } else{
+            recipesEntities =recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryKindInAndSecondCategoryKindInAndTitleContainingOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,keyword,PageRequest.of(0,20));
+        }
+        return recipesEntities;
     }
     @Override
     public RecipesEntity save(RecipesDto recipesDto) {

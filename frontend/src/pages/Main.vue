@@ -160,7 +160,7 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage, Platform} from 'quasar';
-  import * as myUtil from 'boot/myUtilsOldVertion';
+  import {myUtil} from "boot/myUtil";
 
   export default {
     name: 'Main',
@@ -171,6 +171,7 @@
       return{
         /** Splide 데이터 */
         //main recipe
+        util : new myUtil(this),
         mainslides : [],
         mainOptions : {
           type: 'slide',
@@ -211,12 +212,20 @@
             src : 'imgs/3.png',
           }
         ],
+        koreaList:[],
+        koreaPage : -1,
+        japanList :[],
+        japanPage : -1,
+        chinaList :[],
+        chinaPage : -1,
+        westernList:[],
+        westernPage : -1,
         index : 0,
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['fetchServer']),
 
       /** Splide */
       onMounted(index){
@@ -279,9 +288,47 @@
        ====================================*/
       //fixme 문자길이 줄이기
       stringSummary : (string, num)=>{
-        return myUtil.strSummary(string,num);
+        return this.util.strSummary(string,num);
       },
-
+      getRecipes(){
+        let self = this;
+        this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:0,page : this.koreaPage}})
+        .then(value => {
+          console.log(value)
+          self.koreaList = value.recipes;
+          self.koreaPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+        })
+        .catch(reason => {
+          console.log(reason)
+        })
+        this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:1,page : this.koreaPage}})
+        .then(value => {
+          console.log(value)
+          self.japanList = value.recipes;
+          self.japanPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+        })
+        .catch(reason => {
+          console.log(reason)
+        })
+        this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:2,page : this.koreaPage}})
+        .then(value => {
+          console.log(value)
+          self.chinaList = value.recipes;
+          self.chinaPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+        })
+        .catch(reason => {
+          console.log(reason)
+        })
+        this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:3,page : this.koreaPage}})
+        .then(value => {
+          console.log(value)
+          self.westernList = value.recipes;
+          self.westernPage = value.recipes.size>0? value.recipes.map(value => value.id).sort()[0]:-1;
+        })
+        .catch(reason => {
+          console.log(reason)
+        })
+      }
 
     },
 
@@ -296,6 +343,7 @@
       this.getLayout.headerLayout = false;
       this.getLayout.addcontent = false;
       document.addEventListener("deviceready", this.Device, false);
+      this.getRecipes();
     },
     mounted() {},
     beforeUpdate() {},
