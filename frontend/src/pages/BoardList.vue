@@ -50,11 +50,10 @@
               v-on="itemEvents"
             >
               <q-item-section>
-                <q-item-label v-html="opt.label" ></q-item-label>
+                <q-item-label v-html="opt.label"/>
               </q-item-section>
               <q-item-section side>
-                <q-checkbox :value="selected" @input="toggleOption"></q-checkbox>
-
+                <q-checkbox :value="selected" @input="toggleOption"/>
               </q-item-section>
             </q-item>
           </template>
