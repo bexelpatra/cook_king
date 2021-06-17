@@ -43,7 +43,7 @@ exports.getQuery = (vue) =>{
  * @param length
  * @returns {string}
  */
-exports.strSummary = (str, len) =>{
+exports.strSummary2 = (str, len) =>{
   str = str.toString();
   if(str.length < len){
     return str;

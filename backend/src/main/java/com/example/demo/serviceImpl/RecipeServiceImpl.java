@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,22 +37,29 @@ public class RecipeServiceImpl implements RecipeService {
         if(firstCategoryKind==null) return new ArrayList<RecipesEntity>();
         if(page <= 0) page = maxInt;
 
-        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryEntityKindOrderByIdDesc(
+        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryKindOrderByIdDesc(
                 page,
                 firstCategoryKind,
                 PageRequest.of(0,20, Sort.by(Sort.Direction.DESC,"id")));
     }
 
     @Override
+    public List<RecipesEntity> getRecipeByFirstCategoryOrderByFavoriteCount(FirstCategoryKind firstCategoryKind, int page) {
+        if(firstCategoryKind==null) return new ArrayList<RecipesEntity>();
+        if(page <= 0) page = maxInt;
+        return recipeRepository.findPopular20Recipes(firstCategoryKind.getValue(),page);
+    }
+
+    @Override
     public List<RecipesEntity> getRecipeByCategories(FirstCategoryKind[] firstCategoryKind, SecondCategoryKind[] secondCategoryKind, int page) {
         if(page <= 0) page = maxInt;
-        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryEntityInAndSecondCategoryEntityInOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,PageRequest.of(0,20));
+        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryKindInAndSecondCategoryKindInOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,PageRequest.of(0,20));
     }
 
     @Override
     public List<RecipesEntity> getRecipeByCategoriesAndKeyword(FirstCategoryKind[] firstCategoryKind, SecondCategoryKind[] secondCategoryKind,String keyword, int page) {
         if(page <= 0) page = maxInt;
-        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryEntityInAndSecondCategoryEntityInAndTitleContainingOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,keyword,PageRequest.of(0,20));
+        return recipeRepository.findRecipesEntitiesByIdIsLessThanAndFirstCategoryKindInAndSecondCategoryKindInAndTitleContainingOrderByIdDesc(page,firstCategoryKind,secondCategoryKind,keyword,PageRequest.of(0,20));
     }
     @Override
     public RecipesEntity save(RecipesDto recipesDto) {
@@ -64,6 +70,7 @@ public class RecipeServiceImpl implements RecipeService {
     public RecipesEntity saveRecipeAndImage(RecipesDto recipesDto, MultiFileDto multiFileDto, UsersEntity usersEntity) throws Exception {
 
         RecipesEntity recipesEntity = recipesDto.convert().to();
+        if(recipesEntity.getFirstCategoryKind()==null || recipesEntity.getSecondCategoryKind()==null) throw new RuntimeException("category not found");
         recipesEntity.setUsersEntity(usersEntity);
 
         recipesEntity = recipeRepository.save(recipesEntity);
@@ -73,16 +80,34 @@ public class RecipeServiceImpl implements RecipeService {
         return recipesEntity;
     }
 
+    // recipe 수정할때 사용한다. recipeEntity를 받아서 content를 삭제하고 나머지 내용들을 싹 업어친다.
+    @Override
+    public RecipesEntity deleteAndSaveRecipeAndImage(RecipesEntity recipesEntity, RecipesDto recipesDto, MultiFileDto multiFileDto, UsersEntity usersEntity) throws Exception {
+
+        recipesDto.update(recipesEntity);
+        recipesEntity = recipeRepository.save(recipesEntity);
+        deleteContent(recipesEntity);
+
+        saveContentEntity(multiFileDto,recipesEntity,localPath);
+        // 이미지 저장
+        Utils.deleteAndSaveImage(multiFileDto.getFile(),usersEntity,recipesEntity.getId());
+        return recipesEntity;
+    }
     @Override
     public RecipesDto getRecipeById(int recipeId) {
         Optional<RecipesEntity> optional = recipeRepository.getRecipesEntityById(recipeId);
         if(!optional.isPresent()) return null;
         RecipesEntity recipesEntity = optional.get();
-        RecipesDto recipesDto = recipesEntity.to();
+        RecipesDto recipesDto = recipesEntity.toWithContents();
 
         recipesDto.setContentDtos(Utils.to(ContentDto.class,recipesEntity.getContentEntities()));
 
         return recipesDto;
+    }
+
+    @Override
+    public Optional<RecipesEntity> getRecipeEntityById(int recipeId) {
+        return recipeRepository.getRecipesEntityById(recipeId);
     }
 
     private List<ContentEntity> saveContentEntity(MultiFileDto multiFileDto, RecipesEntity recipesEntity, String localPath){
@@ -94,7 +119,7 @@ public class RecipeServiceImpl implements RecipeService {
             String fileName = orders[i]+".png";
 
             contentEntities.add(ContentEntity.builder()
-                    .contentKind(ContentKind.byValue(kinds[i]))
+                    .contentKind(ContentKind.of(kinds[i]))
                     .description(texts[i])
                     .order(orders[i])
                     .path(localPath)
@@ -106,6 +131,11 @@ public class RecipeServiceImpl implements RecipeService {
         }
 
         return contentRepository.saveAll(contentEntities);
+    }
+
+    private void deleteContent(RecipesEntity recipesEntity){
+        recipesEntity.setContentEntities(null);
+        recipeRepository.save(recipesEntity);
     }
 
     @Override

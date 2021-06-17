@@ -22,7 +22,7 @@ public enum PinKind implements MyEnum<PinKind,Integer> {
     public String getDesc() { return desc; }
 
     @Override
-    public PinKind byValue(int val) {
+    public PinKind of(int val) {
         for (PinKind pinKind : values()) {
             if(pinKind.getValue() == val) return pinKind;
         }

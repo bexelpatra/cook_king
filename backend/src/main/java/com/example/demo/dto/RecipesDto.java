@@ -4,10 +4,8 @@ import com.example.demo.entity.*;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.enums.SecondCategoryKind;
 import com.example.demo.utilities.Utils;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +16,12 @@ public class RecipesDto {
     private String stuffs;
     private String description;
 
-    private int firstCategory=-1;
-    private int secondCategory=-1;
+    private int firstcategoryInt =-1;
+    private int secondcategoryInt =-1;
+
+    private FirstCategoryKind firstCategoryKind;
+    private SecondCategoryKind secondCategoryKind;
+
     private String cuisine = "";
     private String userToken="";
 
@@ -60,16 +62,28 @@ public class RecipesDto {
     }
 
     public RecipesDto convert(){
-        firstCategoryDto.setKind(FirstCategoryKind.byValue(this.firstCategory));
-        secondCategoryDto.setKind(SecondCategoryKind.byValue(this.secondCategory));
+        this.firstCategoryKind = (FirstCategoryKind.of(this.firstcategoryInt));
+        this.secondCategoryKind = (SecondCategoryKind.of(this.secondcategoryInt));
         return this;
     }
 
     public RecipesEntity to(){
         RecipesEntity recipesEntity = Utils.to(RecipesEntity.class,this);
-        recipesEntity.setFirstCategoryEntity(Utils.to(FirstCategoryEntity.class,this.firstCategoryDto));
-        recipesEntity.setSecondCategoryEntity(Utils.to(SecondCategoryEntity.class,this.secondCategoryDto));
         recipesEntity.setCuisineEntity(null);
         return recipesEntity;
+    }
+
+    /**
+     * 이미지 정보를 지우고 dto내용으로 업데이트 합니다.
+     * (제목, 설명, 재료, 1차 분류, 2차 분류)
+     * @param recipesEntity
+     */
+    public void update(RecipesEntity recipesEntity){
+        recipesEntity.setTitle(getTitle());
+        recipesEntity.setDescription(getDescription());
+        recipesEntity.setStuffs(getStuffs());
+        recipesEntity.setFirstCategoryKind(getFirstCategoryKind());
+        recipesEntity.setSecondCategoryKind(getSecondCategoryKind());
+        recipesEntity.setContentEntities(null);
     }
 }
