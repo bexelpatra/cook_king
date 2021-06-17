@@ -109,11 +109,7 @@
         util : new myUtil(this),
         x : window.innerWidth,
         y : window.innerHeight*0.33,
-        recipe :{
-          name : '맛좋다;',
-          intro : '이러쿵저러쿵 먹으면 좋다',
-          src :'imgs/1.png',
-        },
+        recipe :{},
         dot :'',
       }
     },

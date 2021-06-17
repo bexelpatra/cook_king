@@ -24,6 +24,6 @@ public interface RecipeRepository extends JpaRepository<RecipesEntity,Long> {
     @Query(value="select count(*) from users_favorite_recipes where recipes_id = ?1", nativeQuery = true)
     Integer getFavoriteUsersNumber(int id);
 
-    @Query(value="select*, (select count(*) from users_favorite_recipes as inside where inside.recipes_id = outside.id) as counts from recipes as outside where outside.first_category = :firstKind and outside.id < :idLessThan order by counts desc limit 20", nativeQuery = true)
+    @Query(value="select*, (select count(*) from users_favorite_recipes as inside where inside.recipes_id = outside.id) as counts from recipes as outside where outside.first_category = :firstKind and outside.id < :idLessThan order by counts,outside.id desc limit 20", nativeQuery = true)
     List<RecipesEntity> findPopular20Recipes(@Param("firstKind")int firstKind,@Param("idLessThan") int idLessThan);
 }

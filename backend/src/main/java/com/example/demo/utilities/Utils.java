@@ -27,8 +27,8 @@ public abstract class Utils<T> {
     public Utils() {
 
     }
-    private static final String localPath ="D:/coook";
-    private static final String urlPath ="";
+    private static final String localPath ="frontend/public/imgs/";
+    private static final String urlPath ="imgs/";
 
     // 제네릭 메소드 연습차원으로 만들어본 내용들
     public static  <T extends MyEnum> int getValue(T t){
@@ -243,11 +243,11 @@ public abstract class Utils<T> {
         File file = new File(savePath);
         if(!file.exists())file.mkdirs();
 
-        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s.png",savePath,fileName));
+        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s",savePath,fileName));
         fileOutputStream.write(multipartFile.getBytes());
         fileOutputStream.close();
     }
-    public static void saveImage(MultipartFile[] multipartFile, UsersEntity UsersEntity, int recipeId) throws Exception{
+    public static void saveImage( MultipartFile[] multipartFile, UsersEntity UsersEntity, int recipeId) throws Exception{
         int count = 1;
         for (MultipartFile file : multipartFile) {
             saveImage(file,UsersEntity,recipeId,count++);
@@ -265,7 +265,7 @@ public abstract class Utils<T> {
             deleteRecursive(new File(savePath));
         }
 
-        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s.png",savePath,fileName));
+        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s",savePath,fileName));
         fileOutputStream.write(multipartFile.getBytes());
         fileOutputStream.close();
     }
@@ -283,7 +283,7 @@ public abstract class Utils<T> {
             for (File deleteFile : deleteFiles) {
                 deleteRecursive(deleteFile);
             }
-
+            file.delete();
         }else if(file.isFile()) {
             file.delete();
         }
