@@ -39,7 +39,7 @@ public class RecipeController {
     @GetMapping(value = "/recipes")
     public ResponseEntity getRecipesByCategory(@RequestParam(value = "firstCategory") int[] fKind,
                                                @RequestParam(value = "secondCategory") int[] sKind,
-                                               @RequestParam(value = "keyword") String keyword,
+                                               @RequestParam(value = "keyword",required = false) String keyword,
                                                @RequestParam(name = "page",defaultValue = "-1")int page){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -150,7 +150,7 @@ public class RecipeController {
         return new ResponseEntity(result,httpStatus);
     }
     @GetMapping(value = "/pop-recipes")
-    public ResponseEntity mainRecipes(@RequestParam("fKind")int fkind, @RequestParam(value = "page",required = false,defaultValue = "-1")int page){
+    public ResponseEntity mainRecipes(@RequestParam("firstcategory")int fkind, @RequestParam(value = "page",required = false,defaultValue = "-1")int page){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
         FirstCategoryKind kind = FirstCategoryKind.of(fkind);

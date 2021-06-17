@@ -58,12 +58,14 @@
           </div>
         <q-btn @click="test11" label="왜 안보이냐 싯팔"/>
         <q-btn @click="test12" label="test12"/>
+          <q-img src = "../../public/imgs/1.png"></q-img>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
         <q-input type="file" v-model="file" @change="onChangeImages"/>
         <q-img :src="imageUrl"
                :ratio="3/4"
         ></q-img>
+
       </section>
     </q-page>
 </template>
