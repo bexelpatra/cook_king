@@ -127,9 +127,10 @@ export async function updateImage(state,args) {
   const url = HOST +args.path + addQuery(args.param);
   const requestInit = {
     method : args.method,
-    // headers: {
-    //   ...args.header
-    // },
+    headers: {
+      // 'Access-Control-Allow-Origin' :'',
+      // ...args.header
+    },
     body : args.body,
   };
   console.log(url);

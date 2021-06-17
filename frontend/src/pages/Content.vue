@@ -10,23 +10,35 @@
         class="z-top q-ma-sm absolute-top-left"
         @click="backBtn"
       />
+      <div class="z-top q-ma-sm  absolute-top-right">
+        <q-btn
+          v-if="bookmark"
+          flat
+          dense
+          round
+          icon="favorite_border"
+          @click="addFavorite"
+        />
+        <q-btn
+          v-if="!bookmark"
+          flat
+          dense
+          round
+          color="red"
+          icon="favorite"
+          @click="addFavorite"
+        />
+      </div>
+
       <q-btn
-        v-if="bookmark"
+        v-if="change"
         flat
         dense
         round
-        icon="favorite_border"
-        @click="bookmark = false"
-        class="z-top q-ma-sm absolute-top-right"
-      />
-      <q-btn
-        v-if="!bookmark"
-        flat
-        dense
-        round
-        icon="favorite"
-        @click="bookmark = true"
-        class="z-top q-ma-sm absolute-top-right"
+        icon="create"
+        @click="changeBtn"
+        class="q-mr-sm absolute-top-right z-top"
+        style="margin-top: 13vw"
       />
     </section>
     <!-- fixme 콘텐츠 -->
@@ -87,11 +99,12 @@
   export default {
     name: 'Content',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','fetchServer'])
     },
     data(){
       return{
         bookmark : true,
+        change: true,
 
         util : new myUtil(this),
         x : window.innerWidth,
@@ -113,6 +126,14 @@
        ===================================*/
       backBtn(){ this.$router.back()},
 
+      changeBtn(){
+        console.log('게시물 수정 버튼');
+      },
+      // 즐겨찾기 추가하기
+      addFavorite(){
+        this.fetchServer({path : 'user/favorite-recipe',method :'patch',param :{token : LocalStorage.getToken(),recipeId : this.recipe.id}})
+      }
+
     },
 
     beforeCreate() {},
@@ -126,8 +147,10 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
+      this.recipe = this.util.getQuery().recipe;
     },
-    mounted() {},
+    mounted() {
+    },
     beforeUpdate() {},
     updated() {},
     beforeDestroy() {},

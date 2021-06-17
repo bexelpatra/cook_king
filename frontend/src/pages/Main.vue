@@ -1,42 +1,9 @@
 <template>
   <q-page class="bg-white">
-    <!-- fixme 인기 레시피  텍스트 왼쪽 마진 줘야됨. -->
-    <section>
-      <div class="q-pa-md text-h5 text-grey-6 text-weight-bold">
-        <span class="text-blue">인기 </span>레시피
-      </div>
-      <div class="flex flex-center">
-        <q-card flat style="width: 98vw; border-radius: 10px;" >
-          <splide
-            :slides="mainslides"
-            class="no-padding q-mb-xs"
-            :options="mainOptions"
-            @splide:moved = 'onMounted'
-          >
-            <splide-slide v-for="(main,index) in mainList" :key="index">
-              <div
-                class="q-mx-xs"
-                style="height: 80vw;border-radius: 5px 5px;"
-              >
-                <div class="q-ml-xs full-width absolute-top" style="width: 91vw; height: 55vw">
-                  <img class="full-width" :src="main.src" style="height: 55vw;"/>
-                </div>
-                <div class="q-mx-xs absolute-bottom text-h5" style="margin-bottom: 10vw">
-                  {{main.name}}
-                </div>
-              </div>
-            </splide-slide>
-          </splide>
-        </q-card>
-      </div>
-    </section>
-
-    <q-separator style="height: 3px"/>
-
     <!-- fixme 한식 레시피 -->
     <section class="q-mb-sm">
       <div class="q-pa-md text-h5 text-grey-6 text-weight-bold q-pt-md">
-        <span class="p1">한식 </span>레시피
+        <span class="text-black">한식 </span> 인기
       </div>
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
@@ -67,7 +34,7 @@
     <!-- fixme 양식 레시피-->
     <section class="q-mb-sm">
       <div class="q-pa-md text-h5 text-grey-6 text-weight-bold q-pt-md">
-        <span class="text-black">양식</span> 레시피
+        <span class="text-black">양식</span> 인기
       </div>
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
@@ -98,7 +65,7 @@
     <!-- fixme 일식 레시피-->
     <section class="q-mb-sm">
       <div class="q-pa-md text-h5 text-grey-6 text-weight-bold q-pt-md">
-        <span class="text-black">일식</span> 레시피
+        <span class="text-black">일식</span> 인기
       </div>
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
@@ -129,7 +96,7 @@
     <!-- fixme 중식 레시피-->
     <section class="q-mb-sm">
       <div class="q-pa-md text-h5 text-grey-6 text-weight-bold q-pt-md">
-        <span class="text-black">중식</span> 레시피
+        <span class="text-black">중식</span> 인기
       </div>
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
@@ -248,7 +215,7 @@
           return;
         }
         let linkSrc = window.location.href.split("#")[1];
-        if (linkSrc === "/main") {
+        if (linkSrc === "/Main") {
           this.$q.dialog(
             {
               title: '<div class="text-h5 text-weight-bolder"><span class="text-orange-6">모두의</span> 레시피 종료</div>',

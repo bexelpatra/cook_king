@@ -1,4 +1,5 @@
 <!--fixme 레시피 게시물 작성-->
+<script src="../../babel.config.js"></script>
 <template>
   <q-page class="bg-grey-2">
     <!--fixme 메인 이미지 -->
@@ -20,7 +21,7 @@
 
     <q-separator style="height: 3px"/>
 
-    <!--fixme 대분류 중분류 소분류 -->
+    <!--fixme 1차분류 2차분류 -->
     <section class="row">
       <q-select
         label="1차 분류"
@@ -190,7 +191,7 @@
         titleImage:[{dataUrl : '',order :0,text :'타이툴',file :null, kind : 2}],
         thumb :null,
 
-        //대분류 중분류 소분류
+        //1차 2차 분류
         oneselect: '',
         options1: [{val: 0, label: '한식'},{val: 1, label: '일식'},{val: 2, label: '중식'},{val: 3, label: '양식'}],
         twoselect:'',
@@ -302,9 +303,9 @@
         form.append("text",this.titleImage.text)
         form.append("kind",this.titleImage.kind)
         //카테고리 1차 분류
-        form.append("firstCategory",this.oneselect.val)
+        form.append("firstcategoryInt",this.oneselect.val)
         //카테고리 2차 분류
-        form.append("secondCategory",this.twoselect.val)
+        form.append("secondcategoryInt",this.twoselect.val)
         //타이틀 제목
         form.append("title",this.title);
         //한줄 설명
