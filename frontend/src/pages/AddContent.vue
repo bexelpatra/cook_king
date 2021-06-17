@@ -303,9 +303,9 @@
         form.append("text",this.titleImage.text)
         form.append("kind",this.titleImage.kind)
         //카테고리 1차 분류
-        form.append("firstCategoryInt",this.oneselect.val)
+        form.append("firstcategoryInt",this.oneselect.val)
         //카테고리 2차 분류
-        form.append("secondCategoryInt",this.twoselect.val)
+        form.append("secondcategoryInt",this.twoselect.val)
         //타이틀 제목
         form.append("title",this.title);
         //한줄 설명

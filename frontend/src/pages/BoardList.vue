@@ -91,7 +91,7 @@
       <div v-if="recipeList!=null">
         <div v-for="recipe in recipeList">
           <q-btn dense flat class="full-width" >
-            <q-card @click="contentPage" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
+            <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
               <div class="q-pa-sm full-height" style="width: 20%;">
                 <img :src=recipe.src height="55" width="55"/>
               </div>
@@ -153,25 +153,10 @@
     methods:{
       ...mapMutations([]),
       ...mapActions([]),
-      ttest(arg){
-        this.ttt = myUtil.comma(arg);
-        myUtil.notify(this,"왜 ㅇ난ㅇㄹ모",'info')
-        return myUtil.comma(arg);
-      },
-      testt(arg){
-        myUtil.notify(this,"나와라!",'info');
-      },
-      testtt(){
-        myUtil.pageMove(this,"Main",{name : 'dd',c8 : 'sadfnklasjkl'})
-        this.$router.push({name :'',query : {}})
-      },
+
       // 문자길이 줄이기
       strSummary : (string, num)=>{
         return myUtil.strSummary(string,num);
-      },
-      // 페이지 이동
-      pageMove : (to,query) =>{
-        // myUtil.pageMove(this,to,query);
       },
       // 카테고리 체크 외 키워드로 검색하기
       searching(){
@@ -189,12 +174,10 @@
           return;
         } this.searchOption.label;
       },
-      // searching1 : args =>{
-      // this.searchOption.label;
-      // }
 
-      contentPage(){
-        this.$router.push('content');
+      contentPage(recipe){
+        this.$router.push({path:'content',query : {recipe : recipe}});
+        // this.util.goTo('/content',{recipe : recipe})
       },
 
 

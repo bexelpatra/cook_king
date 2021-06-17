@@ -128,8 +128,8 @@ export async function updateImage(state,args) {
   const requestInit = {
     method : args.method,
     headers: {
-      'Access-Control-Allow-Origin' :'*',
-      ...args.header
+      // 'Access-Control-Allow-Origin' :'',
+      // ...args.header
     },
     body : args.body,
   };

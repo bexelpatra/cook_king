@@ -17,7 +17,7 @@
           dense
           round
           icon="favorite_border"
-          @click="bookmark = false"
+          @click="addFavorite"
         />
         <q-btn
           v-if="!bookmark"
@@ -26,7 +26,7 @@
           round
           color="red"
           icon="favorite"
-          @click="bookmark = true"
+          @click="addFavorite"
         />
       </div>
 
@@ -99,7 +99,7 @@
   export default {
     name: 'Content',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','fetchServer'])
     },
     data(){
       return{
@@ -128,6 +128,10 @@
 
       changeBtn(){
         console.log('게시물 수정 버튼');
+      },
+      // 즐겨찾기 추가하기
+      addFavorite(){
+        this.fetchServer({path : 'user/favorite-recipe',method :'patch',param :{token : LocalStorage.getToken(),recipeId : this.recipe.id}})
       }
 
     },
@@ -143,8 +147,10 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
+      this.recipe = this.util.getQuery().recipe;
     },
-    mounted() {},
+    mounted() {
+    },
     beforeUpdate() {},
     updated() {},
     beforeDestroy() {},
