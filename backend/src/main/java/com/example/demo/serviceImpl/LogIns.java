@@ -35,9 +35,9 @@ public class LogIns implements LogIn {
                 optionalUsersEntity = logInByPassword(mail,pw);
                 break;
         }
-
         if(optionalUsersEntity.isPresent()){
-            UsersDto.fix(Utils.to(UsersDto.class,optionalUsersEntity));
+            UsersEntity usersEntity = optionalUsersEntity.get();
+            usersDto = Optional.of(UsersDto.fix(Utils.to(UsersDto.class,usersEntity)));
         }
 
         return usersDto;
@@ -57,6 +57,6 @@ public class LogIns implements LogIn {
         }
 
         String finalEncoded = encoded;
-        return userService.findUsersEntityByEmail(email).filter(usersEntity -> usersEntity.getPassword().equals(finalEncoded));
+        return userService.findUsersEntityByEmail(email).filter(usersEntity1 -> usersEntity1.getPassword().equals(finalEncoded));
     }
 }

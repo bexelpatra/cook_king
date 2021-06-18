@@ -44,7 +44,7 @@
   export default {
     name: 'Login',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','isLogIn'])
     },
     data(){
       return{
@@ -57,11 +57,12 @@
         to: '',
         from : '',
         query : '',
+        util : new myUtil(this),
       }
     },
     methods:{
-      ...mapMutations([]),
-      ...mapActions([]),
+      ...mapMutations(['setLogIn']),
+      ...mapActions(['fetchServer']),
 
       /**======================================
        * 클릭 이벤트
@@ -76,8 +77,15 @@
           })
           return;
         }
+        this.fetchServer({path : 'user/user',param:{e:this.email,p:this.password,type : 1}})
+        .then(value => {
+          LocalStorage.set("t",value.token);
+          LocalStorage.set("e",value.email);
+          this.util.goTo('main',{noti :{message : '로그인',color:'info'}})
+        })
+        .catch(reason => {console.log(reason)})
         // 로그인 서버 연동
-        this.$router.push({path : '/main', query : {to: to, from : from}});
+        // this.$router.push({path : '/addcontent', query : {to: to, from : from}});
 
         },
 

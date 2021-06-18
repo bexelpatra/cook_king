@@ -32,8 +32,8 @@ public class RecipeServiceImpl implements RecipeService {
     private final ContentRepository contentRepository;
     private int maxInt = Integer.MAX_VALUE;
 
-    private final String localPath = "D:/coook/";
-    private final String urlPath = "D:/coook/";
+    private final String localPath = "frontend/public/imgs/";
+    private final String urlPath = "imgs/";
     @Override
     public List<RecipesEntity> getRecipeByFirstCategory(FirstCategoryKind firstCategoryKind, int page) {
         if(firstCategoryKind==null) return new ArrayList<RecipesEntity>();

@@ -11,6 +11,7 @@ import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.TestService;
 import com.example.demo.service.UserService;
+import com.example.demo.utilities.AES;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 @RestController
@@ -301,6 +309,48 @@ public class TestController {
         File file = new File(path);
         String x= file.getAbsolutePath();
         String y= recipeService.test(path);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+
+    }
+
+    @GetMapping(value = "/test18")
+    public ResponseEntity AESchanger(@RequestParam("s")String path){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        String x = "";
+        try {
+            x = new AES().aesEncode(path);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        }
+        result.put("x",x);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @PostMapping(value = "/test19")
+    public ResponseEntity image(MultiFileDto multiFileDto) throws Exception {
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setId(10);
+        Utils.saveImage(multiFileDto.getFile(),usersEntity,3);
+
+        result.put("url",String.format("imgs/%d/%d/%d.png",10,3,1));
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
 

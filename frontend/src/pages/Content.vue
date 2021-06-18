@@ -127,7 +127,7 @@
       },
       // 즐겨찾기 추가하기
       addFavorite(){
-        this.fetchServer({path : 'user/favorite-recipe',method :'patch',param :{token : LocalStorage.getToken(),recipeId : this.recipe.id}})
+        this.fetchServer({path : 'user/favorite-recipe',method :'patch',param :{token : LocalStorage.getItem("token"),recipeId : this.recipe.id}})
       }
 
     },
