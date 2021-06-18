@@ -42,6 +42,8 @@ const routes = [
       {path: '/personer', name: 'personer', component: () => import('pages/settings/Personal.vue')},
       //내 게시물
       {path: '/mycontent', name: 'mycontent', component: () => import('pages/settings/MyConTent.vue')},
+      //코인
+      {path: '/cookcoin', name: 'cookcoin', component: () => import('pages/settings/Cook_Coin.vue')},
     ]
   },
 
