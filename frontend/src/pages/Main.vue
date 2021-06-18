@@ -132,7 +132,7 @@
   export default {
     name: 'Main',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','isLogIn'])
     },
     data(){
       return{
@@ -191,7 +191,7 @@
       }
     },
     methods:{
-      ...mapMutations([]),
+      ...mapMutations(['setLogIn']),
       ...mapActions(['fetchServer']),
 
       /** Splide */
@@ -266,7 +266,7 @@
         let self = this;
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:0,page : this.koreaPage}})
         .then(value => {
-          value.recipes.forEach(recipe =>{this.koreaList.push(recipe); console.log(recipe)})
+          value.recipes.forEach(recipe =>{this.koreaList.push(recipe);})
           self.koreaPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
 
         })
@@ -275,7 +275,7 @@
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:1,page : this.koreaPage}})
         .then(value => {
-          value.recipes.forEach(recipe =>{this.japanList.push(recipe); console.log(recipe)})
+          value.recipes.forEach(recipe =>{this.japanList.push(recipe);})
           self.japanPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {
@@ -283,7 +283,7 @@
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:2,page : this.koreaPage}})
         .then(value => {
-          value.recipes.forEach(recipe =>{this.chinaList.push(recipe); console.log(recipe)})
+          value.recipes.forEach(recipe =>{this.chinaList.push(recipe); })
           self.chinaPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {
@@ -291,7 +291,7 @@
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:3,page : this.koreaPage}})
         .then(value => {
-          value.recipes.forEach(recipe =>{this.westernList.push(recipe); console.log(recipe)})
+          value.recipes.forEach(recipe =>{this.westernList.push(recipe); })
           self.westernPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {

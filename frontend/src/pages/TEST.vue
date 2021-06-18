@@ -59,6 +59,11 @@
         <q-btn @click="test11" label="왜 안보이냐 싯팔"/>
         <q-btn @click="test12" label="test12"/>
           <q-img src = "../../public/imgs/1.png"></q-img>
+          <div>
+            <q-btn @click = "test13" label="이미지 실험"/>
+            <q-input type="file" label="가랏!" v-model="pnz"/>
+            <q-img :src="url"/>
+          </div>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
         <q-input type="file" v-model="file" @change="onChangeImages"/>
@@ -96,12 +101,16 @@
         img :'',
         form :{
           imgs:[]
-        }
+        },
+
+        url:'',
+        pnz : null,
+
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['sample','test123','asyncTest','fetchServer']),
+      ...mapActions(['sample','test123','asyncTest','fetchServer','updateImage']),
       // onClickImageUpload() {
       //   this.$refs.imageInput.click();
       // },
@@ -200,23 +209,23 @@
 
       },
       test9(){
-        console.log(this.img);
-        console.log(this.img[0]);
+        console.log(this.pnz);
+        console.log(this.pnz[0]);
         let form = new FormData();
 
         // form.append("files",new Blob(this.img))
-        form.append("multipart",this.img[0])
+        form.append("file",this.pnz[0])
         // this.fetchServer({path : 'test/file1',method :'post',body :{files : this.img[0]}})
         // this.fetchServer({path : 'test/file2',method :'post',body :{files : new Blob(this.img).arrayBuffer()}})
         // this.fetchServer({path : 'test/file2',method :'post',body :{files : filestr}})
-        // this.fetchServer({path : 'test/file3',method :'post',body : form })
+        this.updateImage({path : 'test/file3',method :'post',body : form })
         // this.fetchServer({path : 'test/file3',method :'post',body :form,header :{"Content-Type":"multipart/form-data"}})
         // this.fetchServer({path : 'test/file1',method :'post',body :{multipartFile : this.img[0]}})
         let init = {
           body : form,
           headers :{ "Content-Type":"multipart/form-data"}
         };
-        fetch("http://localhost:8081/test/file2",init)
+        // fetch("http://localhost:8081/test/file2",init)
       },
       test10 () {
         let form = new FormData();
@@ -244,7 +253,17 @@
       test12(){
         this.fetchServer({path : 'test/test16',param:{s : "얖얖얖",},method : 'post'})
         .then(value => console.log(value))
-      }
+      },
+      test13(){
+        let self = this;
+        let form = new FormData;
+        form.append("file",this.pnz[0])
+        this.updateImage({path : 'test/test19',method:'post',body:form})
+          .then(value => {
+            this.url = value.url;
+            console.log(value)
+          })
+      },
     },
 
     beforeCreate() {},
