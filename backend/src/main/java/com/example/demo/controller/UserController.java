@@ -13,9 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 로그인, 메일인증, 회원가입
@@ -161,7 +160,7 @@ public class UserController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PatchMapping(value = "/favorite-recipe")
+    @PostMapping(value = "/favorite-recipes")
     public ResponseEntity addFavoriteRecipe(@RequestParam("token")String token,@RequestParam("recipeId")int recipeId){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -169,6 +168,11 @@ public class UserController {
         UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
         addResult = userService.addFavoriteRecipe(usersEntity.getId(),recipeId);
 
+        List<Integer> favorite = usersEntity.getUsersFavoriteRecipes().stream()
+                .map(RecipesEntity::getId)
+                .collect(Collectors.toList());
+
+        result.put("favorite",favorite);
         if(addResult==1){
             result.put("desc","즐겨찾기 추가 완료");
             httpStatus = HttpStatus.OK;

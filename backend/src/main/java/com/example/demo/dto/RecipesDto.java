@@ -29,12 +29,12 @@ public class RecipesDto {
     private SecondCategoryDto secondCategoryDto = new SecondCategoryDto();
     private UsersDto usersDto = new UsersDto();
 
-    private List<ContentDto> contentDtos = new ArrayList<>();
+    private List<ContentDto> contentList = new ArrayList<>();
 
     private String url;
 
     // transient
-    private List<String> descriptions = new ArrayList<>();
+    private List<String> stuffList = new ArrayList<>();
 
     public RecipesDto setFirstCategoryDto(FirstCategoryDto firstCategoryDto) {
         this.firstCategoryDto = firstCategoryDto;
@@ -46,13 +46,13 @@ public class RecipesDto {
         return this;
     }
 
-    public RecipesDto setContentDtos(List<ContentDto> contentDtos) {
-        this.contentDtos = contentDtos;
+    public RecipesDto setContentList(List<ContentDto> contentList) {
+        this.contentList = contentList;
         return this;
     }
 
-    public RecipesDto setDescriptions(List<String> descriptions) {
-        this.descriptions = descriptions;
+    public RecipesDto setStuffList(List<String> stuffList) {
+        this.stuffList = stuffList;
         return this;
     }
 

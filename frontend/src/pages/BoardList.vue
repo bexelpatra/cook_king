@@ -92,13 +92,13 @@
         <div v-if="recipeList!=null">
           <div v-for="recipe in recipeList">
             <q-btn dense flat class="full-width" >
-              <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;" @click.prevent="pageMove('',recipe)">
+              <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;">
                 <div class="q-pa-sm full-height" style="width: 20%;">
-                  <img :src=recipe.src height="55" width="55"/>
+                  <img :src=recipe.url height="55" width="55"/>
                 </div>
                 <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
-                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.name,20)}}</div>
-                  <div class="text-left">{{strSummary(recipe.introduce,16)}}</div>
+                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.title,20)}}</div>
+                  <div class="text-left">{{strSummary(recipe.description,16)}}</div>
                 </div>
               </q-card>
             </q-btn>
@@ -108,6 +108,10 @@
           <q-btn flat class="full-width" @click="">
             <span>더보기</span>
           </q-btn>
+        </div>
+<!--        fixme 수정해야하낟-->
+        <div v-else>
+          아무것도 없음
         </div>
 
       </section>
@@ -130,6 +134,7 @@
       return{
         keyword : '',
         recipeList : [],
+        recipePage:-1,
         //1차 2차 분류
         oneselect: [],
         options1: [{val: 0, label: '한식'},{val: 1, label: '일식'},{val: 2, label: '중식'},{val: 3, label: '양식'}],
@@ -178,8 +183,8 @@
       getRecipes(){
         this.fetchServer({path :'/recipe/recipes',param:{firstCategory:[0,1,2,3],secondCategory:[0,1,2,3,4,5],keyword : ''}})
           .then(value => {
-            this.recipeList = value.recipes
-            console.log(this.recipeList)
+            value.recipes.forEach(recipe =>{this.recipeList.push(recipe); console.log(recipe)})
+            this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
           })
           .catch(error => console.log(error))
       },

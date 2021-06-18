@@ -27,6 +27,7 @@ public class UsersDto {
     private String nickname = null;
     private boolean autoLogIn = true;
 
+    private List<Integer> favorite = new ArrayList<>();
 //    Entity에서는 @Builder 사용시 반드시 @NoargsConstructor를 사용해야 한다.
     // 아래 생성자는 @NoargsConstructor와 동일하다.
 //    public UsersDto() {

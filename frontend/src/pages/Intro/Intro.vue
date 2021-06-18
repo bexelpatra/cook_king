@@ -34,15 +34,16 @@
     },
 
     methods: {
-      ...mapMutations(['setLogIn']),
+      ...mapMutations(['setLogIn','setFavorite']),
       ...mapActions(['fetchServer']),
       async gotoMain() {
         let self = this;
         let message = '';
         await this.fetchServer({path : 'user/user',param:{t:this.t, type : 0}})
-          .then(value => {
-            LocalStorage.set("t",value.token);
-            LocalStorage.set("e",value.email);
+          .then(user => {
+            LocalStorage.set("t",user.token);
+            LocalStorage.set("e",user.email);
+            this.setFavorite(user.favorite);
             this.setLogIn(true);
             message = '로그인 성공'
           })
@@ -58,6 +59,29 @@
       setTimeout(() => {
         this.gotoMain();
       }, 3800);
+
+      let list = [1,2,3,4,5,6,7,8];
+      let flatList = [[1,2,],[3,4],[5,6]]
+
+      // list
+      //   .filter(num => {
+      //     return num%2==0
+      //   })
+      //   .forEach(num=>{console.log(num)})
+
+      // list
+      // .map(num => {
+      //   return num*=10
+      // })
+      // .forEach(num =>consol.log(num))
+      // for (let number of list) {
+      //   if(number %2==0){
+      //     console.log(number);
+      //   }
+      // }
+
+      // flatList.map(value => value).forEach(value => console.log(value));
+      // flatList.flatMap(value => value).forEach(value => console.log(value));
     },
     beforeMount() {},
     mounted() {},

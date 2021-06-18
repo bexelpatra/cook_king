@@ -4,3 +4,6 @@ export const setLayout = (state, value) => {
 export const setLogIn = (state, value) => {
   state.logIn = value;
 }
+export const setFavorite = (state, value) => {
+  state.logIn = value;
+}
