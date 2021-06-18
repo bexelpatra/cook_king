@@ -1,5 +1,4 @@
 <!--fixme 레시피 게시물 작성-->
-<script src="../../babel.config.js"></script>
 <template>
   <q-page class="bg-grey-2">
     <!--fixme 메인 이미지 -->
