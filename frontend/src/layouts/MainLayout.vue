@@ -109,16 +109,14 @@
       //레시피
       recipePage(){ this.$router.push('boardlist'); },
       //즐찾
-      mybookPage(){ this.$router.push('bookmark'); },
+      mybookPage(){ this.$router.push('login'); },
       //내정보
-      myinfoPage(){ this.$router.push('myinfo'); },
+      myinfoPage(){ this.$router.push('login'); },
       //뒤로가기
       backBtn(){ this.$router.back()},
       //게시물작성
-      contentBtn(to,from){
-        // this.$router.push('addContent');
-        // this.$router.push('login');
-        this.$router.push({path : '/login', query:{to : to, from : from}})
+      contentBtn(){
+        this.$router.push('login');
       }
     },
     beforeCreate() {},
