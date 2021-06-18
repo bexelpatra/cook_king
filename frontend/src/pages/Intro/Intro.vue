@@ -18,23 +18,38 @@
 <script>
   import {LocalStorage, Platform} from 'quasar';
   import {mapGetters, mapMutations, mapActions} from 'vuex'
+  import {myUtil} from "boot/myUtil";
 
   export default {
     name: "Intro",
     computed: {
-      ...mapGetters([]),
+      ...mapGetters(['isLogIn']),
     },
     data() {
       return {
+        util : new myUtil(this),
+        t : LocalStorage.getItem("t"),
         appVersion : LocalStorage.getItem("US_VS")
       }
     },
 
     methods: {
-      ...mapMutations([]),
-      ...mapActions([]),
-      gotoMain() {
-        this.$router.push('/Main');
+      ...mapMutations(['setLogIn']),
+      ...mapActions(['fetchServer']),
+      async gotoMain() {
+        let self = this;
+        let message = '';
+        await this.fetchServer({path : 'user/user',param:{t:this.t, type : 0}})
+          .then(value => {
+            LocalStorage.set("t",value.token);
+            LocalStorage.set("e",value.email);
+            this.setLogIn(true);
+            message = '로그인 성공'
+          })
+          .catch(reason => {
+            message = '비회원'
+          })
+        this.util.goTo('main')
       },
     },
 

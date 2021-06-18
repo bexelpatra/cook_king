@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.example.demo.dto.*;
+import com.example.demo.enums.ContentKind;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.enums.SecondCategoryKind;
 import com.example.demo.utilities.Utils;
@@ -137,12 +138,18 @@ public class RecipesEntity {
         UsersDto usersDto = Utils.to(UsersDto.class,this.getUsersEntity());
         UsersDto.fix(usersDto);
         String des = this.getDescription() == null ? this.description ="": this.getDescription();
+        String url = "imgs/default.png";
+        ContentEntity content = this.getContentEntities().stream().filter(contentEntity -> contentEntity.getContentKind().getValue() == ContentKind.TITLE.getValue()).findFirst().orElse(null);
+        if(content!=null) url = content.getUrl();
+
         List<ContentDto> contentDtos = Utils.to(ContentDto.class,this.getContentEntities());
         return Utils.to(RecipesDto.class,this)
                 .setDescriptions(Arrays.asList(des.split("#")))
 //                .setUsersDto(UsersDto.fix(Utils.to(UsersDto.class,this.getUsersEntity())))
                 .setUsersDto(usersDto)
                 .setContentDtos(contentDtos)
+                .setUrl(url)
                 ;
+
     }
 }

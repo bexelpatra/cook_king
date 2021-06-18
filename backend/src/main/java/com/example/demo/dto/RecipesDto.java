@@ -31,7 +31,7 @@ public class RecipesDto {
 
     private List<ContentDto> contentDtos = new ArrayList<>();
 
-
+    private String url;
 
     // transient
     private List<String> descriptions = new ArrayList<>();
@@ -58,6 +58,11 @@ public class RecipesDto {
 
     public RecipesDto setUsersDto(UsersDto usersDto) {
         this.usersDto = usersDto;
+        return this;
+    }
+
+    public RecipesDto setUrl(String url) {
+        this.url = url;
         return this;
     }
 

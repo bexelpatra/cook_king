@@ -18,7 +18,7 @@ export class myUtil {
   }
 
   getQuery = () =>{
-    return this.vue.router.history.current.query;
+    return this.vue.$router.history.current.query;
   }
 
   strSummary = (str, len) =>{
