@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.unit.DataSize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
@@ -17,14 +18,15 @@ import javax.servlet.MultipartConfigElement;
 @EnableScheduling
 @SpringBootApplication
 @EnableAsync
+@CrossOrigin
 public class DemoApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) { SpringApplication.run(DemoApplication.class, args); }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(DemoApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        return builder.sources(DemoApplication.class);
+//    }
 
     @Bean
     public MultipartResolver multipartResolver() {

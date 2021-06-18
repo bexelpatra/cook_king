@@ -289,7 +289,9 @@
         .catch(reason => {
           console.log(reason)
         })
-        this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:3,page : this.koreaPage}})
+        this.fetchServer({
+          path : 'recipe/pop-recipes',
+          param :{firstcategory:3,page : this.koreaPage}})
         .then(value => {
           value.recipes.forEach(recipe =>{this.westernList.push(recipe); })
           self.westernPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
@@ -297,7 +299,7 @@
         .catch(reason => {
           console.log(reason)
         })
-      }
+      },
 
     },
 

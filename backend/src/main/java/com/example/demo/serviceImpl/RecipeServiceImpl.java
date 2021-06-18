@@ -14,7 +14,6 @@ import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -108,7 +107,7 @@ public class RecipeServiceImpl implements RecipeService {
         RecipesEntity recipesEntity = optional.get();
         RecipesDto recipesDto = recipesEntity.toWithContents();
 
-        recipesDto.setContentDtos(Utils.to(ContentDto.class,recipesEntity.getContentEntities()));
+        recipesDto.setContentList(Utils.to(ContentDto.class,recipesEntity.getContentEntities()));
 
         return recipesDto;
     }

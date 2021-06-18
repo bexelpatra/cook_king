@@ -46,12 +46,12 @@
       <q-card flat class="full-width">
         <!-- 메인사진과 요리이름 -->
         <div>
-          <img :src="recipe.src" class="full-width" :height="y">
-          <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.name}}</div>
+          <img :src="recipe.url" class="full-width" :height="y">
+          <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.title}}</div>
         </div>
         <!-- 간단 설명 및 소개 + 태그들 -->
         <div class="q-px-md">
-          <div class="text-grey-7" style="font-size: 1rem">"{{recipe.intro}}"</div>
+          <div class="text-grey-7" style="font-size: 1rem">"{{recipe.description}}"</div>
         </div>
 
         <q-separator class="q-my-sm"/>
@@ -60,13 +60,14 @@
         <section>
           <div class="q-pa-sm text-h5 text-weight-bold">재료</div>
           <!--todo 반복문 돌리면서 재료를 뽑아와야한다.-->
-          <div class="q-mx-sm flex" style="position: relative; height: 1.7em;">
+          <div class="q-mx-sm flex" style="position: relative; height: 1.7em;" v-for="stuff in recipe.stuffList">
             <div class="absolute-center full-width text-grey-7" style="border: dotted 1px grey"/>
             <span class="q-px-sm ingredient bg-white" style="left: 0;">
-              야야
+<!--              [12,12]-->
+              {{stuff.split(':')[0]}}
             </span>
             <span class="q-px-sm ingredient bg-white" style="right: 0;">
-              dddd
+              {{stuff.split(':')[1]}}
             </span>
           </div>
         </section>
@@ -76,11 +77,13 @@
           <div class="flex full-width">
             <!-- todo 반복문 돌림녀서 뽑아낸다. -->
             <div>
-              <div class="relative-position">
-                <div class="absolute-top-left"><q-badge>1</q-badge></div>
-                <img :src="recipe.src" class="full-width" :height="y*0.7">
-                <div>
-                  이런저런 설명들 궁시렁궁시렁
+              <div class="relative-position" v-for="(content,index) in recipe.contentList">
+                <div v-if="index !=0">
+                  <div class="absolute-top-left"><q-badge>{{index}}</q-badge></div>
+                  <img :src="content.url" class="full-width" :height="y*0.7">
+                  <div>
+                    {{content.description}}
+                  </div>
                 </div>
               </div>
             </div>
@@ -99,7 +102,7 @@
   export default {
     name: 'Content',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','getFavorite'])
     },
     data(){
       return{
@@ -114,7 +117,7 @@
       }
     },
     methods:{
-      ...mapMutations([]),
+      ...mapMutations(['setFavorite']),
       ...mapActions(['fetchServer']),
 
       /**=================================
@@ -125,15 +128,22 @@
       changeBtn(){
         console.log('게시물 수정 버튼');
       },
-
-      /**=======================================
-       * sever 통신구간
-       =========================================*/
-
       // 즐겨찾기 추가하기
       addFavorite(){
-        this.fetchServer({path : 'user/favorite-recipe',method :'patch',param :{token : LocalStorage.getItem("token"),recipeId : this.recipe.id}})
-      }
+        LocalStorage.set("t","test")
+        this.fetchServer({
+          path : 'user/favorite-recipes',
+          method :'post',
+          param :{
+            token : LocalStorage.getItem("t"),
+            recipeId : this.recipe.id}})
+        .then(result =>{
+          console.log(result)
+          this.setFavorite(result.favorite);
+          this.bookmark = !this.bookmark;
+        })
+        .catch(reason => console.log(reason))
+      },
 
     },
 
@@ -149,6 +159,10 @@
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
       this.recipe = this.util.getQuery().recipe;
+
+      this.bookmark =this.getFavorite.includes(this.recipe.id);
+
+      console.log(this.recipe)
     },
     mounted() {
     },

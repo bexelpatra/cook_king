@@ -1,6 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import com.example.demo.dto.UsersDto;
+import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.service.LogIn;
 import com.example.demo.service.UserService;
@@ -8,15 +9,19 @@ import com.example.demo.utilities.AES;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import sun.awt.image.IntegerInterleavedRaster;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class LogIns implements LogIn {
     private final UserService userService;
     private final List<LogIn> logIns;
+
     @Override
     public Optional<UsersDto> logIn(int type, String token, String mail, String pw) {
         Optional<UsersDto> usersDto = Optional.empty();
@@ -37,7 +42,17 @@ public class LogIns implements LogIn {
         }
         if(optionalUsersEntity.isPresent()){
             UsersEntity usersEntity = optionalUsersEntity.get();
-            usersDto = Optional.of(UsersDto.fix(Utils.to(UsersDto.class,usersEntity)));
+            UsersDto user = UsersDto.fix(Utils.to(UsersDto.class,usersEntity));
+
+            List<Integer> favorite = new ArrayList<>();
+            favorite = usersEntity.getUsersFavoriteRecipes()
+                    .stream()
+                    .map(RecipesEntity::getId)
+                    .collect(Collectors.toList());
+
+            user.setFavorite(favorite);
+
+            usersDto = Optional.of(user);
         }
 
         return usersDto;
