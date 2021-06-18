@@ -99,7 +99,7 @@
   export default {
     name: 'Content',
     computed:{
-      ...mapGetters(['getLayout','fetchServer'])
+      ...mapGetters(['getLayout'])
     },
     data(){
       return{
@@ -115,7 +115,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['fetchServer']),
 
       /**=================================
        *  클릭 이벤트
@@ -125,6 +125,11 @@
       changeBtn(){
         console.log('게시물 수정 버튼');
       },
+
+      /**=======================================
+       * sever 통신구간
+       =========================================*/
+
       // 즐겨찾기 추가하기
       addFavorite(){
         this.fetchServer({path : 'user/favorite-recipe',method :'patch',param :{token : LocalStorage.getItem("token"),recipeId : this.recipe.id}})
