@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const HOST = "http://localhost:8081/"; // ngrok주소를 사용할때는 https로 사용합니다.
-// const HOST = "https://23dc8d9a9e6d.ngrok.io/"; //ngrok http {{port}}
+// const HOST = "http://localhost:8081/"; // ngrok주소를 사용할때는 https로 사용합니다.
+const HOST = "https://0ea5e01f7cbb.ngrok.io/"; //ngrok http {{port}}
                                             // ex) ngrok http 8080
 export function someAction (/* context */) {
 }
-
+const COMMON_HEADER = {"Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"};
 const addQuery = (param) => {
   if(param == null) return '';
   let str = "?"
@@ -19,6 +21,10 @@ export const sample = (state, args) => {
   axios({
       method :'get',
       url : HOST+'test/test1',
+    headers: {
+      'Content-Type': 'application/json',
+      ...COMMON_HEADER
+    },
   })
     .then((res)=>{
     args.onSuccess(res);
@@ -82,7 +88,8 @@ export async function getMapping(state,args) {
     method : 'get',
     headers : {
       "Content-Type" : "application/json",
-      ...args.header
+      ...args.header,
+        ...COMMON_HEADER
     },
   };
   const response = await fetch(url,requestInit);
@@ -107,6 +114,8 @@ export async function fetchServer(state,args) {
     method : args.method,
     headers: {
       'Content-Type': contentType,
+      'Accept': '*/*',
+      ...COMMON_HEADER,
       ...args.header
     },
     body : body,

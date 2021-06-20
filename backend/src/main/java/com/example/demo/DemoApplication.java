@@ -12,6 +12,8 @@ import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -42,4 +44,15 @@ public class DemoApplication extends SpringBootServletInitializer {
 
         return factory.createMultipartConfig();
     }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer(){
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**")
+//                        .allowedOrigins("http://localhost:8080")
+//                        .allowedHeaders("Access-Control-Allow-Origin:*","Access-Control-Allow-Methods:*");
+//            }
+//        };
+//    }
 }

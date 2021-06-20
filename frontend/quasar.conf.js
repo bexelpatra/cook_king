@@ -12,7 +12,7 @@ module.exports = function (/* ctx */) {
     supportTS: false,
 
     // https://v1.quasar.dev/quasar-cli/prefetch-feature
-    // preFetch: true,
+    preFetch: true,
 
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
@@ -30,10 +30,10 @@ module.exports = function (/* ctx */) {
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      // 'ionicons-v4',
-      // 'mdi-v5',
-      // 'fontawesome-v5',
-      // 'eva-icons',
+      'ionicons-v4',
+      'mdi-v5',
+      'fontawesome-v5',
+      'eva-icons',
       // 'themify',
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
@@ -66,6 +66,14 @@ module.exports = function (/* ctx */) {
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack (/* chain */) {
         //
+      },
+      extendWebpack (cfg) {
+        cfg.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          // loader: 'eslint-loader',
+          exclude: /(node_modules|quasar)/
+        })
       },
     },
 

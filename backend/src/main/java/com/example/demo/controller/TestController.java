@@ -17,6 +17,7 @@ import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,9 +34,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+@CrossOrigin
 @RestController
-@RequestMapping(value = "test")
 @RequiredArgsConstructor
+@RequestMapping(value = "test")
 public class TestController {
 
     // todo 의존주입 3가지 방법(repository는 controller에서 사용을 지양한다.)
@@ -59,7 +61,7 @@ public class TestController {
     private final RecipeService recipeService;
 
 //    @RequestMapping(value = "/test1",method = RequestMethod.GET)
-    @GetMapping(value = "/test1")  // get 방식은 param만 받는다.
+    @GetMapping(value = "/test1",produces = MediaType.APPLICATION_JSON_VALUE)  // get 방식은 param만 받는다.
     public ResponseEntity test1(@RequestParam("name")String name, @RequestParam(value = "number",required = false)int x){
         Map<String,Object> result = new HashMap<>();
         result.put("time",System.nanoTime()/1000);
@@ -68,14 +70,14 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @PostMapping(value = {"/test2","/test2/"}) // get을 제외한 방식은 @RequestBody를 통해서 받는다.
+    @PostMapping(value = {"/test2","/test2/"},produces = MediaType.APPLICATION_JSON_VALUE) // get을 제외한 방식은 @RequestBody를 통해서 받는다.
     public ResponseEntity test2(@RequestBody UsersDto usersDto){
         Map<String,Object> result = new HashMap<>();
         result.put("user",usersDto);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/test123")
+    @GetMapping(value = "/test123",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity test123(@RequestParam("nong")String nong, @RequestParam(value = "number",required = false)int x){
         Map<String,Object> result = new HashMap<>();
         result.put("nong",nong);
@@ -85,7 +87,7 @@ public class TestController {
     }
 
     // calendar에 숫자 더하면 instance가 변해버리는가...
-    @PostMapping(value = "/test3")
+    @PostMapping(value = "/test3",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity enumtest(@RequestParam Map<String, String> map){
         Map<String,Object> result = new HashMap<>();
         for(int i=0;i<3;i++){
@@ -94,7 +96,7 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/test4")
+    @PostMapping(value = "/test4",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity objectmapperTest(@RequestParam Map<String, String> map){
         Map<String,Object> result = new HashMap<>();
         RecipesEntity recipesEntity = new RecipesEntity();
@@ -104,7 +106,7 @@ public class TestController {
         Utils.test(RecipesDto.class,new RecipesEntity());
         return new ResponseEntity(result, HttpStatus.OK);
     }
-    @PostMapping(value = "/test5")
+    @PostMapping(value = "/test5",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity classLoader(@RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         RecipesEntity recipesEntity = new RecipesEntity();
@@ -138,7 +140,7 @@ public class TestController {
         result.put("dd",aClass1);
         return new ResponseEntity(result, HttpStatus.OK);
     }
-    @PostMapping(value = "/test6")
+    @PostMapping(value = "/test6",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity test6(@RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         UsersDto usersDto = new UsersDto();
@@ -147,7 +149,7 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/test7")
+    @PostMapping(value = "/test7",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity test7(@RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         UsersDto usersDto = new UsersDto();
@@ -156,7 +158,7 @@ public class TestController {
         result.put("user",usersEntity);
         return new ResponseEntity(result, HttpStatus.OK);
     }
-    @GetMapping(value = "/test8/{path}")
+    @GetMapping(value = "/test8/{path}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity pathvar(@PathVariable("path") String path){
         Map<String,Object> result = new HashMap<>();
 
@@ -165,7 +167,7 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/test9/")
+    @GetMapping(value = "/test9/",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteDB(@RequestParam("email")String email,@RequestParam("type")int type){
         Map<String,Object> result = new HashMap<>();
         switch (type){
@@ -189,49 +191,49 @@ public class TestController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/test10")
+    @PostMapping(value = "/test10",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity sample22(@RequestParam("param") String param, @RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
         result.put("param",param);
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/file1")
+    @PostMapping(value = "/file1",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity file1(MultipartFile multipartFile){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
 
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/file2")
+    @PostMapping(value = "/file2",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity file2(@RequestParam TestDto2 testDto2){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
 
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/file3")
+    @PostMapping(value = "/file3",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity file3(TestDto2 testDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
 
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/file4")
+    @PostMapping(value = "/file4",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity file4(Wrapper testDto2s){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
 
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/file5")
+    @PostMapping(value = "/file5",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity file5(@RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
 
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/file6")
+    @PostMapping(value = "/file6",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity file6(@RequestBody MultipartFile multipartFile){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
@@ -239,7 +241,7 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/test11")
+    @PostMapping(value = "/test11",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity test11(@RequestParam(value = "s")int[] s){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
@@ -247,7 +249,7 @@ public class TestController {
 
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/test12")
+    @PostMapping(value = "/test12",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity test12(@RequestParam(value = "token")String token,
                                  @RequestParam(value = "recipe")int recipe){
         Map<String,Object> result = new HashMap<>();
@@ -259,7 +261,7 @@ public class TestController {
     }
 
 
-    @PostMapping(value = "/test13") // 즐겨찾기 추가하기
+    @PostMapping(value = "/test13",produces = MediaType.APPLICATION_JSON_VALUE) // 즐겨찾기 추가하기
     public ResponseEntity test13(@RequestParam(value = "token")String token,
                                  @RequestParam(value = "recipe")int recipe){
         Map<String,Object> result = new HashMap<>();
@@ -270,7 +272,7 @@ public class TestController {
         result.put("result",xx);
         return new ResponseEntity(result,httpStatus);
     }
-    @PostMapping(value = "/test14") // 쿼리테스트
+    @PostMapping(value = "/test14",produces = MediaType.APPLICATION_JSON_VALUE) // 쿼리테스트
     public ResponseEntity test14(@RequestParam("val")int val){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
@@ -282,7 +284,7 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/test15")
+    @PostMapping(value = "/test15",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteTest(@RequestParam("path")String path){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -290,7 +292,7 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
 
     }
-    @PostMapping(value = "/test16")
+    @PostMapping(value = "/test16",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity postTestFromFront(@RequestParam("s")String path){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -302,7 +304,7 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
 
     }
-    @GetMapping(value = "/test17")
+    @GetMapping(value = "/test17",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity pathTest(@RequestParam("s")String path){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -314,7 +316,7 @@ public class TestController {
 
     }
 
-    @GetMapping(value = "/test18")
+    @GetMapping(value = "/test18",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity AESchanger(@RequestParam("s")String path){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -341,7 +343,7 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
     }
 
-    @PostMapping(value = "/test19")
+    @PostMapping(value = "/test19",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity image(MultiFileDto multiFileDto) throws Exception {
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -355,7 +357,7 @@ public class TestController {
         return new ResponseEntity(result,httpStatus);
 
     }
-    @PutMapping(value = "/test20")
+    @PutMapping(value = "/test20",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity corsTest(@RequestBody TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -364,7 +366,7 @@ public class TestController {
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
-    @PutMapping(value = "/test21")
+    @PutMapping(value = "/test21",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity corsTest2(TestDto testDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -373,7 +375,7 @@ public class TestController {
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
-    @PutMapping(value = "/test22")
+    @PutMapping(value = "/test22",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity corsTest3(String s1){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
@@ -382,7 +384,7 @@ public class TestController {
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
-    @PutMapping(value = "/test23")
+    @PutMapping(value = "/test23",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity corsTest4(HttpRequest httpRequest){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
