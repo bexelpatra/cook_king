@@ -65,6 +65,7 @@
             <q-img :src="url"/>
           </div>
           <q-btn @click="test14" label="test14"/>
+          <q-btn @click="test15" label="test15"/>
 
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
@@ -277,6 +278,16 @@
         fetch('http://localhost:8081/test/test22',{method:'put',body :{"s1":"dd"},headers:{"Content-Type":"application/json"}
         })
         .then(value => console.log(value))
+      },
+      test15(){
+        this.sample({
+          onSuccess : (res)=>{
+            console.log(res)
+          },
+          onFail : (error)=>{
+            console.log(error)
+          }
+        })
       }
     },
 
