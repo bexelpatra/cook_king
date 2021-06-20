@@ -40,6 +40,7 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
+  import {myUtil} from "boot/myUtil";
 
   export default {
     name: 'Login',
