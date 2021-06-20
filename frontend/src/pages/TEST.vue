@@ -64,6 +64,8 @@
             <q-input type="file" label="가랏!" v-model="pnz"/>
             <q-img :src="url"/>
           </div>
+          <q-btn @click="test14" label="test14"/>
+
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
         <q-input type="file" v-model="file" @change="onChangeImages"/>
@@ -264,6 +266,18 @@
             console.log(value)
           })
       },
+      test14(){
+        let form = new FormData;
+        form.append("s1","dd")
+        form.append("s2","dd")
+        form.append("s3","dd")
+        form.append("s4","dd")
+        form.append("i1",2)
+        form.append("i1",3)
+        fetch('http://localhost:8081/test/test22',{method:'put',body :{"s1":"dd"},headers:{"Content-Type":"application/json"}
+        })
+        .then(value => console.log(value))
+      }
     },
 
     beforeCreate() {},

@@ -15,6 +15,7 @@ import com.example.demo.utilities.AES;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,6 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "test")
 @RequiredArgsConstructor
-@CrossOrigin
 public class TestController {
 
     // todo 의존주입 3가지 방법(repository는 controller에서 사용을 지양한다.)
@@ -354,5 +354,41 @@ public class TestController {
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
 
+    }
+    @PutMapping(value = "/test20")
+    public ResponseEntity corsTest(@RequestBody TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        result.put("test",testDto);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PutMapping(value = "/test21")
+    public ResponseEntity corsTest2(TestDto testDto){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        result.put("test",testDto);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PutMapping(value = "/test22")
+    public ResponseEntity corsTest3(String s1){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        result.put("test",s1);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+    @PutMapping(value = "/test23")
+    public ResponseEntity corsTest4(HttpRequest httpRequest){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        result.put("test",httpRequest);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
     }
 }
