@@ -14,15 +14,17 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in koreaList" :key="index">
-              <div
-                class="q-ml-xs q-mr-md  text-white"
-                style="height: 130px;border-radius: 5px 5px;"
-              >
-                <img class="full-width" src="imgs/224/2.png" style="height: 32vw;"/>
-              </div>
-              <div class="q-mx-xs text-h6">
-                {{recipe.title}}
-              </div>
+              <q-btn flat @click="contentPage(recipe)">
+                <div
+                  class="text-white"
+                  style="height: 130px;border-radius: 5px 5px;"
+                >
+                  <img class="full-width" src="imgs/224/2.png" style="height: 32vw;"/>
+                </div>
+                <div class="q-mx-xs full-width text-left text-h6">
+                  "{{recipe.title}}"
+                </div>
+              </q-btn>
             </splide-slide>
           </splide>
         </q-card>
@@ -45,15 +47,17 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in westernList" :key="index">
-              <div
-                class="q-ml-xs q-mr-md  text-white"
-                style="height: 130px;border-radius: 5px 5px;"
-              >
-                <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
-              </div>
-              <div class="q-mx-xs text-h6">
-                {{recipe.name}}
-              </div>
+              <q-btn flat @click="contentPage(recipe)">
+                <div
+                  class="text-white"
+                  style="height: 130px;border-radius: 5px 5px;"
+                >
+                  <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
+                </div>
+                <div class="q-mx-xs full-width text-left text-h6">
+                  "{{recipe.name}}"
+                </div>
+              </q-btn>
             </splide-slide>
           </splide>
         </q-card>
@@ -76,15 +80,17 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in japanList" :key="index">
-              <div
-                class="q-ml-xs q-mr-md  text-white"
-                style="height: 130px;border-radius: 5px 5px;"
-              >
-                <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
-              </div>
-              <div class="q-mx-xs text-h6">
-                {{recipe.name}}
-              </div>
+              <q-btn flat @click="contentPage(recipe)">
+                <div
+                  class="text-white"
+                  style="height: 130px;border-radius: 5px 5px;"
+                >
+                  <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
+                </div>
+                <div class="q-mx-xs full-width text-left text-h6">
+                  {{recipe.name}}
+                </div>
+              </q-btn>
             </splide-slide>
           </splide>
         </q-card>
@@ -107,15 +113,17 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in chinaList" :key="index">
-              <div
-                class="q-ml-xs q-mr-md  text-white"
-                style="height: 130px;border-radius: 5px 5px;"
-              >
-                <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
-              </div>
-              <div class="q-mx-xs text-h6">
-                {{recipe.name}}
-              </div>
+              <q-btn flat @click="contentPage(recipe)">
+                <div
+                  class="text-white"
+                  style="height: 130px;border-radius: 5px 5px;"
+                >
+                  <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
+                </div>
+                <div class="q-mx-xs full-width text-left text-h6">
+                  {{recipe.name}}
+                </div>
+              </q-btn>
             </splide-slide>
           </splide>
         </q-card>
@@ -215,7 +223,7 @@
           return;
         }
         let linkSrc = window.location.href.split("#")[1];
-        if (linkSrc === "/Main") {
+        if (linkSrc === "/main" || linkSrc === '/Main') {
           this.$q.dialog(
             {
               title: '<div class="text-h5 text-weight-bolder"><span class="text-orange-6">모두의</span> 레시피 종료</div>',
@@ -251,6 +259,14 @@
       },
 
       /**==================================
+       * 클릭이벤트
+       ====================================*/
+      //fixme Content 페이지 이동
+      contentPage(recipe){
+        this.$router.push({path:'content',query : {recipe : recipe}});
+      },
+
+      /**==================================
        * Boot import
        ====================================*/
       //fixme 문자길이 줄이기
@@ -261,6 +277,10 @@
       getContent(recipe){
         this.util.goTo('/content',{recipe:recipe})
       },
+
+      /**==================================
+       * 서버 통신
+       ====================================*/
       // fixme 카테고리별 요리 가져오기
       getRecipes(){
         let self = this;
