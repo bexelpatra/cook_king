@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -26,9 +27,9 @@ public class UsersEntity {
     private boolean autoLogIn;
 
     @JsonIgnore
-    private List<RecipesEntity> recipesEntities;
+    private List<RecipesEntity> recipesEntities = new ArrayList<>();
     @JsonIgnore
-    private List<RecipesEntity> usersFavoriteRecipes;
+    private List<RecipesEntity> usersFavoriteRecipes = new ArrayList<>();
 
     @Builder
     public UsersEntity(int id, String token, String password, Date regDate, String email, String pin, PinKind pinKind, String nickname, boolean autoLogIn) {

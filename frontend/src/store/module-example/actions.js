@@ -101,6 +101,7 @@ export async function fetchServer(state,args) {
   }
   let contentType = args.header == null|| args.header.Content_Type == null ? 'application/json' : args.header.Content_Type;
   let body = contentType.endsWith('json') ?JSON.stringify(args.body) : args.body;
+  if(!body) body = {}
   const url = HOST +args.path + addQuery(args.param);
   const requestInit = {
     method : args.method,

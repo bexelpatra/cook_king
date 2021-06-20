@@ -22,7 +22,6 @@ public interface RecipeService {
     RecipesDto getRecipeById(int recipeId);
     Optional<RecipesEntity> getRecipeEntityById(int recipeId);
 
-
     boolean deleteContent(ContentEntity contentEntity);
     boolean deleteContent(List<ContentEntity> contentEntity);
 

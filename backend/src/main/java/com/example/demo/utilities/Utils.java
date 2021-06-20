@@ -21,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public abstract class Utils<T> {
+public abstract class Utils<T, E> {
     static ObjectMapper objectMapper = new ObjectMapper();
     static Random random=new Random();
     public Utils() {
@@ -34,12 +34,10 @@ public abstract class Utils<T> {
     public static  <T extends MyEnum> int getValue(T t){
         return t.getValue();
     }
-
     // 제네릭 메소드 연습차원으로 만들어본 내용들
     public static <T extends MyEnum> String getDesc(T t){
         return t.getDesc();
     }
-
     // 제네릭 메소드 연습차원으로 만들어본 내용들
     public static <T extends MyEnum> T byValue(Class<T> t,int val){
         MyEnum[] ts = t.getEnumConstants();
