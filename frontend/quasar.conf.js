@@ -103,7 +103,11 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'LocalStorage',
+        'Dialog',
+        'Notify',
+      ]
     },
 
     // animations: 'all', // --- includes all animations
@@ -120,9 +124,9 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: `Quasar App`,
-        short_name: `Quasar App`,
-        description: `A Quasar Framework app`,
+        name: `모두의 레시피`,
+        short_name: `모두의 레시피`,
+        description: `모든 모방일에서 보는 손쉬운 레시피`,
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
