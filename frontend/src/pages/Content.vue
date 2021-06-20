@@ -127,6 +127,7 @@
 
       changeBtn(){
         console.log('게시물 수정 버튼');
+        this.util.goTo('updatecontent',{recipe : this.recipe})
       },
       // 즐겨찾기 추가하기
       addFavorite(){

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.RecipesDto;
 import com.example.demo.dto.UsersDto;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
@@ -164,29 +165,59 @@ public class UserController {
     public ResponseEntity addFavoriteRecipe(@RequestParam("token")String token,@RequestParam("recipeId")int recipeId){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
-        int addResult = 0;
-        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
-        addResult = userService.addFavoriteRecipe(usersEntity.getId(),recipeId);
 
-        List<Integer> favorite = usersEntity.getUsersFavoriteRecipes().stream()
-                .map(RecipesEntity::getId)
-                .collect(Collectors.toList());
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
+        RecipesEntity recipesEntity = recipeService.getRecipeEntityById(recipeId).orElseThrow(() -> new RuntimeException("no recipe found"));
+
+        int favoriteCount = usersEntity.getUsersFavoriteRecipes().size();
+        List<Integer> favorite = usersEntity.getUsersFavoriteRecipes().stream().map(RecipesEntity::getId).collect(Collectors.toList());
+        if(favorite.contains(recipeId)){
+            favorite.removeIf(integer -> integer.equals(recipeId));
+        }else {
+            favorite.add(recipeId);
+        }
+        int x = userService.addFavoriteRecipe(usersEntity.getId(),recipesEntity.getId());
+//        usersEntity = userService.addFavoriteRecipe(usersEntity,recipesEntity);
+        favoriteCount -= usersEntity.getUsersFavoriteRecipes().size();
+
 
         result.put("favorite",favorite);
-        if(addResult==1){
+        if(x == 1){
             result.put("desc","즐겨찾기 추가 완료");
             httpStatus = HttpStatus.OK;
-        }else if(addResult == 2){
+        }else if(x == 2){
             result.put("desc","즐겨찾기 삭제 완료.");
             httpStatus = HttpStatus.OK;
-        }else if(addResult == 3){
-            result.put("desc","요리를 찾지 못했습니다.");
-            httpStatus = HttpStatus.ACCEPTED;
         }else {
             result.put("desc","실패 : 알수없는 오류");
             httpStatus = HttpStatus.ACCEPTED;
         }
+        return new ResponseEntity(result,httpStatus);
+    }
 
+    @GetMapping(value = "/user/favorite-recipe")
+    public ResponseEntity myFavoriteRecipes(@RequestParam("token")String token){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
+        List<RecipesDto> recipesDtoList = usersEntity.getUsersFavoriteRecipes().stream().map(RecipesEntity::toWithContents).collect(Collectors.toList());
+
+        result.put("recipes",recipesDtoList);
+        result.put("desc","성공적으로 요리를 조회했습니다.");
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @GetMapping(value = "/user/recipe")
+    public ResponseEntity myRecipes(@RequestParam("token")String token){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
+        List<RecipesDto> recipesDtoList = usersEntity.getRecipesEntities().stream().map(RecipesEntity::toWithContents).collect(Collectors.toList());
+
+        result.put("recipes",recipesDtoList);
+        result.put("desc","성공적으로 요리를 조회했습니다.");
+        httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
 }

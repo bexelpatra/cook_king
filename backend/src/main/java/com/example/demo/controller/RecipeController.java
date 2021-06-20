@@ -123,7 +123,7 @@ public class RecipeController {
      * @param multiFileDto
      * @return
      */
-    @PatchMapping(value = "/recipe")
+    @PutMapping(value = "/recipe")
     public ResponseEntity patchRecipe(@RequestParam("token")String token, RecipesDto recipesDto, MultiFileDto multiFileDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;

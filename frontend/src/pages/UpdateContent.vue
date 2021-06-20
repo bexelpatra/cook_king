@@ -9,6 +9,7 @@
         class=" absolute-top-right bg-white"
         outlined
         filled
+
         v-model="thumb"
         @input="createTitleImg(thumb)"
         type="file"
@@ -161,7 +162,7 @@
           label="추가하기"/>
       </div>
     </section>
-<!--    <q-btn @click="test1">얖얖ㅇ퍄</q-btn>-->
+    <!--    <q-btn @click="test1">얖얖ㅇ퍄</q-btn>-->
     <!--fixme 등록하기 버튼 -->
     <q-footer>
       <q-btn dense class="full-width text-h6" @click="recipeChack">등록하기</q-btn>
@@ -175,7 +176,7 @@
   import {myUtil} from "boot/myUtil";
 
   export default {
-    name: 'AddContent',
+    name: 'UpdateContent',
     computed:{
       ...mapGetters(['getLayout'])
     },
@@ -328,16 +329,16 @@
         // 서버 통신 url
         this.updateImage({path : 'recipe/recipe',method :'post',param :{token :"test"},body :form})
           // then value 200 성공 코드
-        .then(value =>{
-          if(value.status==200){
-            this.$q.notify('성공적으로 등록 되었습니다.','info')
-            this.util.goTo('main',{})
-          }
-        })
+          .then(value =>{
+            if(value.status==200){
+              this.$q.notify('성공적으로 등록 되었습니다.','info')
+              this.util.goTo('main',{})
+            }
+          })
           //catch 실패 코드 200외 전부 처리
-        .catch(reason => {
+          .catch(reason => {
 
-        })
+          })
 
       },
       // test1(){
@@ -371,7 +372,20 @@
       this.getLayout.addcontent = false;
 
       this.recipe = this.util.getQuery().recipe;
+
+      this.title = this.recipe.title;
+      this.oneselect = this.options1[this.util.category(this.recipe.firstCategoryKind)]
+      this.twoselect = this.options2[this.util.category(this.recipe.secondCategoryKind)]
+
+      this.description = this.recipe.description;
+      this.row = this.recipe.stuffList;
+      this.adds = this.recipe.contentList;
+      this.order = this.recipe.contentList.size;
+
       console.log(this.recipe)
+      console.log(this.oneselect)
+      console.log(this.twoselect)
+      console.log(this.util.category(this.recipe.firstCategoryKind))
     },
     mounted() {},
     beforeUpdate() {},
