@@ -15,6 +15,8 @@ const routes = [
       {path: '/content', name: 'content', component: () => import('pages/Content.vue')},
       //게시물 작성
       {path: '/addcontent', name: 'addcontent', component: () => import('pages/AddContent.vue')},
+      // 게시물 수정
+      {path: '/updatecontent', name: 'updatecontent', component: () => import('pages/UpdateContent.vue')},
       //레시피 리스트
       {path: '/boardlist', name: 'boardlist', component: () => import('pages/BoardList.vue')},
       //즐겨찾기

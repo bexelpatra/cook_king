@@ -41,4 +41,41 @@ export class myUtil {
     }
     return str;
   }
+  category = (str) =>{
+    str = str.toString().toLocaleLowerCase();
+    switch (str) {
+      case 'korea' :
+        str = 0
+        break;
+      case 'japan' :
+        str = 1
+        break;
+      case 'china' :
+        str = 2
+        break;
+      case 'western' :
+        str = 4
+        break;
+
+      case 'etc' :
+        str = 0
+        break;
+      case 'fry_stir' :
+        str = 1
+        break;
+      case 'fry_deep' :
+        str = 2
+        break;
+      case 'grill' :
+        str = 3
+        break;
+      case 'steam' :
+        str = 4
+        break;
+      case 'soup' :
+        str = 5
+        break;
+    }
+    return parseInt(str);
+  }
 }

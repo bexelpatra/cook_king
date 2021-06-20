@@ -105,7 +105,7 @@
             <q-separator class="bg-grey-4"/>
           </div>
 
-          <q-btn flat class="full-width" @click="">
+          <q-btn flat class="full-width" @click="getMore">
             <span>더보기</span>
           </q-btn>
         </div>
@@ -168,7 +168,10 @@
             type : "negative"
           })
           return;
-        } this.searchOption.label;
+        }
+        let fCategory = this.oneselect.map(value => value.val);
+        let sCategory = this.twoselect.map(value => value.val);
+        this.recipeSearch(fCategory,sCategory,this.keyword)
       },
 
       contentPage(recipe){
@@ -181,7 +184,11 @@
        =========================================*/
 
       getRecipes(){
-        this.fetchServer({path :'/recipe/recipes',param:{firstCategory:[0,1,2,3],secondCategory:[0,1,2,3,4,5],keyword : ''}})
+        this.fetchServer({path :'/recipe/recipes',
+          param:{
+            firstCategory:[0,1,2,3],
+            secondCategory:[0,1,2,3,4,5],
+            keyword : ''}})
           .then(value => {
             value.recipes.forEach(recipe =>{this.recipeList.push(recipe); console.log(recipe)})
             this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
@@ -189,6 +196,37 @@
           .catch(error => console.log(error))
       },
 
+      recipeSearch(firstCategory,secondCategory,keyword){
+        // console.log(firstCategory,secondCategory,keyword);
+        let self = this;
+        this.fetchServer({path :'/recipe/recipes',
+          param:{
+            firstCategory:firstCategory,
+            secondCategory:secondCategory,
+            keyword : keyword}
+        })
+          .then(value => {
+            console.log(value)
+            console.log(value.recipes.length)
+            if(value.recipes.length!=0){
+              value.recipes.forEach(recipe =>{this.recipeList=[];this.recipeList.push(recipe); console.log(recipe)})
+            }else {
+              this.recipeList = [];
+            }
+            this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
+            console.log(this.recipeList)
+          })
+          .catch(error => console.log(error))
+      },
+
+      getMore(firstCategory,secondCategory,keyword){
+        this.fetchServer({path :'/recipe/recipes',param:{firstCategory:firstCategory,secondCategory:secondCategory,keyword : keyword == null? '':keyword}})
+          .then(value => {
+            value.recipes.forEach(recipe =>{this.recipeList.push(recipe); console.log(recipe)})
+            this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
+          })
+          .catch(error => console.log(error))
+      },
     },
     beforeCreate() {},
     created() {

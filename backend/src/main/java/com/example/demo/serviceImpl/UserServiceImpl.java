@@ -1,6 +1,7 @@
 package com.example.demo.serviceImpl;
 
 import com.example.demo.dto.UsersDto;
+import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.UsersRepository;
 import com.example.demo.service.EmailService;
@@ -10,9 +11,11 @@ import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import javax.transaction.Transactional;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,4 +85,26 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public UsersEntity addFavoriteRecipe(UsersEntity user, RecipesEntity recipesEntity) {
+        List<Integer> recipeIds = user.getUsersFavoriteRecipes().stream().map(RecipesEntity::getId).collect(Collectors.toList());
+        List<RecipesEntity> recipesEntities = user.getUsersFavoriteRecipes();
+        if(recipeIds.contains(recipesEntity.getId())){
+            recipesEntities.removeIf(recipes ->{
+                return recipes.getId() == recipesEntity.getId();
+            });
+            user.setRecipesEntities(recipesEntities);
+        }else {
+            user.getUsersFavoriteRecipes().add(recipesEntity);
+        }
+        return usersRepository.saveAndFlush(user);
+    }
+
+    @Override
+    @Transactional
+    public List<Integer> getFavoriteInteger(UsersEntity usersEntity) {
+        List<RecipesEntity> recipesEntities = usersEntity.getRecipesEntities();
+        List<Integer> integers = recipesEntities.stream().map(RecipesEntity::getId).collect(Collectors.toList());
+        return integers;
+    }
 }

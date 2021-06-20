@@ -66,6 +66,7 @@
           </div>
           <q-btn @click="test14" label="test14"/>
           <q-btn @click="test15" label="test15"/>
+          <q-btn @click="test16" label="test16"/>
 
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
@@ -288,6 +289,9 @@
             console.log(error)
           }
         })
+      },
+      test16(){
+        this.updateImage({path : 'recipe/recipe',method:'put',param:{token:'test'}})
       }
     },
 
