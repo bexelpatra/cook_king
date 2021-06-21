@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const HOST = "http://localhost:8081/"; // ngrok주소를 사용할때는 https로 사용합니다.
-const HOST = "https://1b680d727236.ngrok.io/"; //ngrok http {{port}}
+const HOST = "https://8cc71cc16c29.ngrok.io/"; //ngrok http {{port}}
                                             // ex) ngrok http 8080
 export function someAction (/* context */) {
 }
