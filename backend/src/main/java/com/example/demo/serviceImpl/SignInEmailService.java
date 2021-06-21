@@ -60,6 +60,7 @@ public class SignInEmailService implements EmailService {
             return false;
         }else {
             emailEntity.get().setCheck(true);
+            emailRepository.save(emailEntity.get());
             return true;
         }
     }

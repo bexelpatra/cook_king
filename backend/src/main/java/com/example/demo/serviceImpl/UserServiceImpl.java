@@ -47,8 +47,11 @@ public class UserServiceImpl implements UserService {
             3. 비밀번호가 8자리 이상인지 검사
             4. 기존 회원인지 검사
          */
-        if(!Utils.isValidEmail(email)) return Optional.empty();
-        if(!emailService.check(email)) return Optional.empty();
+        if(!Utils.isValidEmail(email)) {
+            return Optional.empty();
+        }
+        boolean flag = emailService.check(email);
+        if(!flag) return Optional.empty();
         if(usersDto.getPassword().length()<8) return Optional.empty();
         if(usersRepository.findUsersEntityByEmail(email).isPresent()) return Optional.empty();
         String password = "";

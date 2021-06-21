@@ -39,8 +39,8 @@ public class DemoApplication extends SpringBootServletInitializer {
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
 
-        factory.setMaxFileSize(DataSize.ofMegabytes(10));
-        factory.setMaxRequestSize(DataSize.ofMegabytes(10));
+        factory.setMaxFileSize(DataSize.ofMegabytes(100));
+        factory.setMaxRequestSize(DataSize.ofMegabytes(100));
 
         return factory.createMultipartConfig();
     }

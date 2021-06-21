@@ -87,8 +87,7 @@ public class RecipesDto {
         recipesEntity.setTitle(getTitle());
         recipesEntity.setDescription(getDescription());
         recipesEntity.setStuffs(getStuffs());
-        recipesEntity.setFirstCategoryKind(getFirstCategoryKind());
-        recipesEntity.setSecondCategoryKind(getSecondCategoryKind());
-        recipesEntity.setContentEntities(null);
+        recipesEntity.setFirstCategoryKind(FirstCategoryKind.of(this.firstcategoryInt));
+        recipesEntity.setSecondCategoryKind(SecondCategoryKind.of(this.secondcategoryInt));
     }
 }

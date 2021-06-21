@@ -189,7 +189,7 @@
         util : new myUtil(this),
         recipe :{},
         //타이틀 이미지
-        titleImage:[{dataUrl : '',order :0,text :'타이툴',file :null, kind : 2}],
+        titleImage:[{dataUrl : '',order :0,text :'타이틀',file :null, kind : 2}],
         thumb :null,
 
         //1차 2차 분류
@@ -206,13 +206,13 @@
         rows:[{}],
 
         //레시피 섹션
-        adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
+        adds:[{dataUrl : '',order :1,text :'',file :null, kind :0}],
         order : 1,
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['updateImage']),
+      ...mapActions(['updateImage','fetchServer']),
 
       /**======================================
        * 이미지  Kind : 0번 = 레시피 이미지 , 2번 = 타이틀이미지
@@ -298,7 +298,11 @@
       server(){
         let form = new FormData();
         //타이틀이미지
+        console.log(this.oneselect.val)
+        console.log(this.twoselect.val)
+
         this.adds.sort((a, b) => a.order-b.order);
+        form.append("id",this.recipe.id)
         form.append("file",this.titleImage.file[0])
         form.append("order",this.titleImage.order)
         form.append("text",this.titleImage.text)
@@ -312,6 +316,7 @@
         //한줄 설명
         form.append("description",this.description);
         //재료  str을 이용하여 String으로 변경 (한줄 출력)
+
         let str = '';
         for (let row of this.rows) {
           str +=row.foodname +':' + row.volume+"#"
@@ -321,13 +326,13 @@
         //레시피 이미지
         this.adds.forEach((add, index) => {
           form.append("file",add.file[0])
-          form.append("order",index)
+          form.append("order",index+1)
           form.append("text",add.text)
           form.append("kind",add.kind)
         })
-
+        form.forEach((value, key) => console.log(value,key))
         // 서버 통신 url
-        this.updateImage({path : 'recipe/recipe',method :'post',param :{token :"test"},body :form})
+        this.updateImage({path : 'recipe/recipe',method :'put',param :{token :"test"},body :form})
           // then value 200 성공 코드
           .then(value =>{
             if(value.status==200){
@@ -372,20 +377,46 @@
       this.getLayout.addcontent = false;
 
       this.recipe = this.util.getQuery().recipe;
-
       this.title = this.recipe.title;
       this.oneselect = this.options1[this.util.category(this.recipe.firstCategoryKind)]
       this.twoselect = this.options2[this.util.category(this.recipe.secondCategoryKind)]
-
       this.description = this.recipe.description;
       this.row = this.recipe.stuffList;
-      this.adds = this.recipe.contentList;
+      // titleImage:[{dataUrl : '',order :0,text :'타이틀',file :null, kind : 2}],
+      //adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
       this.order = this.recipe.contentList.size;
 
-      console.log(this.recipe)
-      console.log(this.oneselect)
-      console.log(this.twoselect)
-      console.log(this.util.category(this.recipe.firstCategoryKind))
+      this.fetchServer({path : 'recipe/recipe/contents',param:{token :"test",recipeId : this.recipe.id}})
+        .then(value =>{
+          this.adds = [];
+          for(let i =0;i<value.contents.length;i++){
+            let content = value.contents[i];
+            let file = this.util.dataURLtoFile('data:image/jpeg;base64,'+(content.bytes),'image');
+            if(i==0){
+              this.titleImage=({
+                dataUrl: content.url,
+                file : [file],
+                kind : 2,
+                order : content.order,
+              })
+              this.thumb = file;
+            }else{
+              this.adds.push({
+                dataUrl: content.url,
+                file : [file],
+                kind : 0,
+                order : content.order,
+              })
+            }
+
+          }
+        })
+      console.log(this.adds);
+      console.log(this.titleImage);
+      // console.log(this.recipe)
+      // console.log(this.oneselect)
+      // console.log(this.twoselect)
+      // console.log(this.util.category(this.recipe.firstCategoryKind))
     },
     mounted() {},
     beforeUpdate() {},

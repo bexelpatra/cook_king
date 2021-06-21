@@ -5,7 +5,6 @@ import com.example.demo.entity.CuisineEntity;
 import com.example.demo.entity.FirstCategoryEntity;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
-import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.repository.CuisineRepository;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.service.RecipeService;
@@ -14,6 +13,7 @@ import com.example.demo.service.UserService;
 import com.example.demo.utilities.AES;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
+import javafx.scene.image.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
@@ -25,14 +25,24 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -216,7 +226,13 @@ public class TestController {
     public ResponseEntity file3(TestDto2 testDto){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = HttpStatus.OK;
-
+        UsersEntity usersEntity = new UsersEntity();
+        usersEntity.setId(5000);
+        try {
+            Utils.saveImage(testDto.getFile(),usersEntity,3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return new ResponseEntity(result,httpStatus);
     }
     @PostMapping(value = "/file4",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -390,6 +406,46 @@ public class TestController {
         HttpStatus httpStatus = null;
 
         result.put("test",httpRequest);
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @GetMapping(value = "/test24")
+    public ResponseEntity getImageFile(@RequestParam("pathA")String path){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        File dirs = new File("D:\\class\\cook_king\\frontend\\public\\imgs\\1\\20");
+        File file = new File("D:\\class\\cook_king\\frontend\\public\\imgs\\4.png");
+        System.out.println(file.canRead());
+        FileOutputStream fileOutputStream = null;
+        byte[] bytes = new byte[(int)file.length()];
+        BufferedImage bufferedImage = null;
+        BufferedImage bufferedImage2;
+        InputStream inputStream = null;
+        byte[] bytes2 = new byte[1024*1024];
+        int x= 0;
+        try {
+            bytes2 = Files.readAllBytes(Paths.get("D:\\class\\cook_king\\frontend\\public\\imgs\\4.png"));
+//            bytes = Files.readAllBytes(Paths.get("D:\\class\\cook_king\\frontend\\public\\imgs\\1\\20"));
+//            inputStream = new BufferedInputStream(new FileInputStream(file));
+//
+//            x = inputStream.read();
+//            ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(fileOutputStream);
+//            ImageInputStream imageInputStream = ImageIO.createImageInputStream(inputStream);
+//            int numOfBytes = imageInputStream.read(bytes2);
+//            inputStream.read(bytes,0,bytes.length);
+//
+//            bufferedImage = ImageIO.read(file);
+//            bufferedImage2 =  ImageIO.read(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        result.put("dirs",dirs);
+        result.put("file",file);
+
+        result.put("bytes",bytes);
+        result.put("byte2",bytes2);
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
