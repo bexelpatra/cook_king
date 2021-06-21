@@ -41,13 +41,17 @@
         let message = '';
         await this.fetchServer({path : 'user/user',param:{t:this.t, type : 0}})
           .then(user => {
-            LocalStorage.set("t",user.token);
-            LocalStorage.set("e",user.email);
-            this.setFavorite(user.favorite);
-            this.setLogIn(true);
-            message = '로그인 성공'
+            if (user.status == 200){
+              LocalStorage.set("t",user.token);
+              LocalStorage.set("e",user.email);
+              this.setFavorite(user.favorite);
+              this.setLogIn(true);
+              message = '로그인 성공'
+              console.log('로그인성공');
+            } else{this.catch()};
           })
           .catch(reason => {
+            console.log('비회원');
             message = '비회원'
           })
         this.util.goTo('main')

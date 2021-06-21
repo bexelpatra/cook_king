@@ -6,12 +6,6 @@
 
           <div class="row full-width">
             <q-input class="col" label="이메일" v-model="emailTemp" :disable="emailCertResult" />
-<!--            <q-btn-->
-<!--              flat-->
-<!--              dense-->
-<!--              class="bg-grey-3"-->
-<!--              label="중복확인"-->
-<!--              @click="emailCheck(emailTemp)" :disable="mailCheck"/>-->
           </div>
 
           <div v-if="true" class="q-my-md bg-grey-3" >
@@ -21,7 +15,6 @@
               label="메일 발송"
               class="full-width"
               @click="sendCert" :disable="!sendEmail"/>
-
           </div>
 
           <div v-if="sendCertResult" class="row full-width">
@@ -68,7 +61,7 @@
           </div>
         </q-card-section>
 
-        <q-separator  />
+        <q-separator/>
 
         <q-card-actions>
           <q-btn
