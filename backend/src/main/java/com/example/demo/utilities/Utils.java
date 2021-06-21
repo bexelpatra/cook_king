@@ -262,16 +262,24 @@ public abstract class Utils<T, E> {
         }else{
             deleteRecursive(new File(savePath));
         }
-
-        FileOutputStream fileOutputStream=new FileOutputStream(String.format("%s%s",savePath,fileName));
+//        File save = new File(String.format())
+        FileOutputStream fileOutputStream=new FileOutputStream(new File(String.format("%s%s",savePath,fileName)));
         fileOutputStream.write(multipartFile.getBytes());
         fileOutputStream.close();
     }
 
     public static void deleteAndSaveImage(MultipartFile[] multipartFile, UsersEntity UsersEntity, int recipeId) throws Exception{
         int count = 1;
+        String savePath = String.format("%s/%d/%d/",localPath,UsersEntity.getId(),recipeId);
+        File deleteFile = new File(savePath);
+        if(!deleteFile.exists()){
+            deleteFile.mkdirs();
+        }else{
+            deleteRecursive(new File(savePath));
+        }
+
         for (MultipartFile file : multipartFile) {
-            deleteAndSaveImage(file,UsersEntity,recipeId,count++);
+            saveImage(file,UsersEntity,recipeId,count++);
         }
         count = 0;
     }

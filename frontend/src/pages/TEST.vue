@@ -67,7 +67,10 @@
           <q-btn @click="test14" label="test14"/>
           <q-btn @click="test15" label="test15"/>
           <q-btn @click="test16" label="test16"/>
-
+          <q-btn @click="test17" label="test17 : 이미지 받아오기"/>
+          <q-img :src="imageFromServer" v-model="fromServer"></q-img>
+          <q-btn @click="test18" label="test18 : 이미지 받아오기"/>
+          <div>{{fromServer}}</div>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
         <q-input type="file" v-model="file" @change="onChangeImages"/>
@@ -89,9 +92,15 @@
     computed :{
       ...mapGetters(['getLayout'])
     },
+    watch:{
+      fromServer: function(a,b){
+        console.log(a,b)
+      }
+    },
     data(){
       return {
         file : null,
+        imageFromServer : '',
         imageUrl: '',
         util :new myUtil(this),
         number : '',
@@ -106,6 +115,7 @@
         form :{
           imgs:[]
         },
+        fromServer:null,
 
         url:'',
         pnz : null,
@@ -292,7 +302,49 @@
       },
       test16(){
         this.updateImage({path : 'recipe/recipe',method:'put',param:{token:'test'}})
-      }
+      },
+      test17(){ // 서버에서 이미지 받아오기
+        this.fetchServer({path : 'test/test24',param:{pathA:encodeURI('D:/class/cook_king/frontend/public/imgs/1')}})
+        .then(value =>{
+          console.log(value.dirs)
+          console.log(value.file)
+          // console.log(value.bytes)
+          // console.log(typeof (value.byte2))
+          // console.log(atob(value.byte2))
+          // this.imageFromServer = 'data:image/jpeg;base64,'+atob(value.byte2)
+          // this.imageFromServer = 'data:image/jpeg;base64,'+(value.byte2)
+          // console.log(new Blob(atob(value.byte2)))
+          // console.log(new Blob(value.bytes))
+          // console.log(this.dataURLtoFile(atob(value.byte2),"dd"));
+          let file = (this.dataURLtoFile('data:image/jpeg;base64,'+(value.byte2),'dddd'));
+          // this.imageFromServer = window.URL.createObjectURL(file);
+          this.fromServer = file;
+          console.log(file)
+          // let form = new FormData();
+          // form.append("file",this.dataURLtoFile(this.imageFromServer,'dddd'))
+          // this.updateImage({path : 'test/file3',method :'post',body : form })
+        })
+      },
+      test18(){
+        this.fetchServer({path : 'recipe/recipe/contents',param:{token :"test",recipeId :29 }})
+          .then(value =>{
+              console.log(value)
+          })
+      },
+      dataURLtoFile : (dataurl, fileName) => {
+
+        let arr = dataurl.split(','),
+          mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]),
+          n = bstr.length,
+          u8arr = new Uint8Array(n);
+
+        while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+
+        return new File([u8arr], fileName, {type:mime});
+      },
     },
 
     beforeCreate() {},

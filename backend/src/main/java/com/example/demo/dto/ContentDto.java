@@ -15,11 +15,14 @@ public class ContentDto {
     private String title;
     private int order;
     private String description;
+    private String absolutePath;
 
     private ContentKind contentKind;
 
+    private byte[] bytes;
+
     @Builder
-    public ContentDto(int id, String path, String url, String title, int order, String description, ContentKind contentKind) {
+    public ContentDto(int id, String path, String url, String title, int order, String description, ContentKind contentKind,String absolutePath) {
         this.id = id;
         this.path = path;
         this.url = url;
@@ -27,6 +30,7 @@ public class ContentDto {
         this.order = order;
         this.description = description;
         this.contentKind = contentKind;
+        this.absolutePath = absolutePath;
     }
 
 }

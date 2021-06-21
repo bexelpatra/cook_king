@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ContentDto;
 import com.example.demo.dto.MultiFileDto;
 import com.example.demo.dto.RecipesDto;
+import com.example.demo.entity.ContentEntity;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.enums.FirstCategoryKind;
@@ -10,14 +12,19 @@ import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sun.swing.BakedArrayList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -168,6 +175,41 @@ public class RecipeController {
         result.put("desc",String.format("[%s]요리를 인기순으로 가져왔습니다.",kind.getDesc()));
         result.put("recipes",recipesDtoList);
         httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+    @GetMapping(value = "/recipe/contents")
+    public ResponseEntity getRecipesContents(@RequestParam("token")String token,@RequestParam("recipeId")int recipeId){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(()->new RuntimeException("user not found"));
+        RecipesEntity recipesEntity = recipeService.getRecipeEntityById(recipeId).orElseThrow(()->new RuntimeException("recipe not found"));
+        List<ContentDto> contentDtos = new ArrayList<>();
+
+        recipesEntity.getContentEntities().stream().forEach(contentEntity -> {
+            ContentDto contentDto = Utils.to(ContentDto.class,contentEntity);
+            byte[] bytes = {};
+            try {
+                bytes = Files.readAllBytes(Paths.get(contentEntity.getAbsolutePath()+contentEntity.getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            contentDto.setBytes(bytes);
+            contentDtos.add(contentDto);
+        });
+//        for (ContentEntity contentEntity : recipesEntity.getContentEntities()) {
+//            ContentDto contentDto = Utils.to(ContentDto.class,contentEntity);
+//            byte[] bytes = {};
+//            try {
+//                bytes = Files.readAllBytes(Paths.get(contentEntity.getAbsolutePath()+contentEntity.getName()));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            contentDto.setBytes(bytes);
+//        }
+
+
+        httpStatus = HttpStatus.OK;
+        result.put("contents",contentDtos);
         return new ResponseEntity(result,httpStatus);
     }
 }

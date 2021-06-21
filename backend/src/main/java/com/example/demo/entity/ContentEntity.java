@@ -18,13 +18,14 @@ public class ContentEntity {
     private String title;
     private int order;
     private String description;
+    private String absolutePath;
 
     private ContentKind contentKind;
 
     private RecipesEntity recipesEntity;
 
     @Builder
-    public ContentEntity(int id, String path, String url, String title, int order, String description, ContentKind contentKind, RecipesEntity recipesEntity,String name) {
+    public ContentEntity(int id, String path, String url, String title, int order, String description, ContentKind contentKind, RecipesEntity recipesEntity,String name,String absolutePath) {
         this.id = id;
         this.path = path;
         this.url = url;
@@ -34,6 +35,7 @@ public class ContentEntity {
         this.contentKind = contentKind;
         this.recipesEntity = recipesEntity;
         this.name= name;
+        this.absolutePath= absolutePath;
     }
 
     @Id
@@ -71,6 +73,11 @@ public class ContentEntity {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    @Basic
+    @Column(name = "absolute_path")
+    public String getAbsolutePath() { return absolutePath; }
+    public void setAbsolutePath(String absolutePath) { this.absolutePath = absolutePath; }
 
     @Basic
     @Column(name = "title")

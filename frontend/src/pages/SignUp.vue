@@ -239,7 +239,8 @@
         if(this.password != this.password2) {
           return this.util.notify("비밀번호가 다릅니다.","warning");
         }
-        _.throttle(function(){
+        // _.throttle(function(){
+        //   console.log("dddddd")
           this.fetchServer({path : 'user/users',method : 'post',
             body : {
               email : this.finalEmail,
@@ -251,15 +252,18 @@
           })
             .then(value => {
               // 회원가입 성공하면 어디로 가야 하는가?
-              this.util.goTo(main)
-              LocalStorage.set("email",value.user.email);
-              LocalStorage.set("token",value.user.token);
+              if(value.status == 200){
+                this.util.goTo('main')
+                LocalStorage.set("email",value.user.email);
+                LocalStorage.set("token",value.user.token);
+              }
             })
             .catch(reason => {
               console.log(reason)
               this.util.notify(reason.desc,'warning')
             })
-        },3000)
+
+        //} ,3000)
 
       },
       myTimer(){
