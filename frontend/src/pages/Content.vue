@@ -12,7 +12,7 @@
       />
       <div class="z-top q-ma-sm  absolute-top-right">
         <q-btn
-          v-if="bookmark"
+          v-if="!bookmark"
           flat
           dense
           round
@@ -20,7 +20,7 @@
           @click="addFavorite"
         />
         <q-btn
-          v-if="!bookmark"
+          v-if="bookmark"
           flat
           dense
           round
@@ -106,7 +106,7 @@
     },
     data(){
       return{
-        bookmark : true,
+        bookmark : false,
         change: true,
 
         util : new myUtil(this),
@@ -159,11 +159,9 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
+
       this.recipe = this.util.getQuery().recipe;
-
-      this.bookmark =this.getFavorite.includes(this.recipe.id);
-
-      console.log(this.recipe)
+      this.bookmark = this.getFavorite.includes(this.recipe.id);
     },
     mounted() {
     },

@@ -3,7 +3,7 @@
     <!-- fixme 한식 레시피 -->
     <section class="q-mb-sm">
       <div class="q-pa-md text-h5 text-grey-6 text-weight-bold q-pt-md">
-        <span class="text-black">한식 </span> 인기
+        <span class="text-black">한식</span> 인기
       </div>
       <div class="flex flex-center">
         <q-card flat style="width: 98vw; border-radius: 10px;" >
@@ -19,7 +19,7 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" src="imgs/224/2.png" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
                 </div>
                 <div class="q-mx-xs full-width text-left text-h6">
                   "{{recipe.title}}"
@@ -52,10 +52,10 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
                 </div>
                 <div class="q-mx-xs full-width text-left text-h6">
-                  "{{recipe.name}}"
+                  "{{recipe.title}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -85,10 +85,10 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
                 </div>
                 <div class="q-mx-xs full-width text-left text-h6">
-                  {{recipe.name}}
+                  {{recipe.title}}
                 </div>
               </q-btn>
             </splide-slide>
@@ -118,10 +118,10 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.src" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
                 </div>
                 <div class="q-mx-xs full-width text-left text-h6">
-                  {{recipe.name}}
+                  {{recipe.title}}
                 </div>
               </q-btn>
             </splide-slide>

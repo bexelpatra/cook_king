@@ -205,8 +205,8 @@
         rows:[{}],
 
         //레시피 섹션
-        adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
-        order : 1,
+        adds:[{dataUrl : '',order :1,text :'',file :null, kind :0}],
+        order : 2,
       }
     },
     methods:{
@@ -320,7 +320,7 @@
         //레시피 이미지
         this.adds.forEach((add, index) => {
           form.append("file",add.file[0])
-          form.append("order",index)
+          form.append("order",index+1)
           form.append("text",add.text)
           form.append("kind",add.kind)
         })

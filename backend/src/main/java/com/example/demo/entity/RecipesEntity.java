@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -139,10 +142,18 @@ public class RecipesEntity {
         String stuff = this.getStuffs() == null ? this.stuffs ="": this.getStuffs();
         String url = "imgs/default.png";
         ContentEntity content = this.getContentEntities().stream().filter(contentEntity -> contentEntity.getContentKind().getValue() == ContentKind.TITLE.getValue()).findFirst().orElse(null);
-
         if(content!=null) url = content.getUrl();
 
+
         List<ContentDto> contentDtos = Utils.to(ContentDto.class,this.getContentEntities());
+//        contentDtos.stream().forEach(contentDto -> {
+//            try {
+//                contentDto.setBytes(Files.readAllBytes(Paths.get(contentDto.getAbsolutePath() + contentDto.getName())));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+
         return Utils.to(RecipesDto.class,this)
                 .setStuffList(Arrays.asList(stuff.split("#")))
 //                .setUsersDto(UsersDto.fix(Utils.to(UsersDto.class,this.getUsersEntity())))
