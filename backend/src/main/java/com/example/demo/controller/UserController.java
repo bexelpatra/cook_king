@@ -65,7 +65,10 @@ public class UserController {
                                  ){
         Map<String, Object> result = new HashMap<>();
         HttpStatus status = null;
-
+        if(type ==0 && token.get().equals("undefined")){
+            result.put("desc","토큰이 없습니다.");
+            return new ResponseEntity(result,HttpStatus.ACCEPTED);
+        }
         Optional<UsersDto> usersDto = logIn.logIn(type,token.orElse(""),email.orElse(""),password.orElse(""));
         if(usersDto.isPresent()){
             result.put("user",usersDto);
@@ -79,16 +82,22 @@ public class UserController {
         return new ResponseEntity(result,status);
     }
 
+    // 사용자의 즐겨찾기 및 자기가 쓴 글등 모두 가져온다.
     @GetMapping(value = "/user/{token}")
     public ResponseEntity myInfo(@PathVariable("token")String token){
+        long l1 = System.currentTimeMillis();
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
         UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseThrow(() -> new RuntimeException("user not found"));
-        UsersDto usersDto = UsersDto.fix(Utils.to(usersEntity));
+
+        UsersDto usersDto = userService.getUserInfo(usersEntity);
 
         result.put("user",usersDto);
         result.put("desc","성공적으로 조회했습니다.");
         httpStatus = HttpStatus.OK;
+        long res = System.currentTimeMillis() - l1;
+        System.out.println(res);
+        result.put("time",res);
         return new ResponseEntity(result,httpStatus);
     }
     // 메일 인증번호 발송하기
@@ -177,8 +186,7 @@ public class UserController {
             favorite.add(recipeId);
         }
         int x = userService.addFavoriteRecipe(usersEntity.getId(),recipesEntity.getId());
-//        usersEntity = userService.addFavoriteRecipe(usersEntity,recipesEntity);
-        favoriteCount -= usersEntity.getUsersFavoriteRecipes().size();
+//        favoriteCount -= usersEntity.getUsersFavoriteRecipes().size();
 
 
         result.put("favorite",favorite);

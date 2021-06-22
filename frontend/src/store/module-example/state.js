@@ -2,6 +2,9 @@ export default function () {
   return {
     PageLayout : null,
     logIn : false,
-    favorite :[1,2],
+    favorite :[],
+    myRecipe : [],
+    test : 1,
+    userInfo:{},
   }
 }

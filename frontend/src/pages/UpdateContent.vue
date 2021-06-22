@@ -163,9 +163,9 @@
       </div>
     </section>
     <!--    <q-btn @click="test1">얖얖ㅇ퍄</q-btn>-->
-    <!--fixme 등록하기 버튼 -->
+    <!--fixme 수정하기 버튼 -->
     <q-footer>
-      <q-btn dense class="full-width text-h6" @click="recipeChack">등록하기</q-btn>
+      <q-btn dense class="full-width text-h6" @click="recipeChack">수정하기</q-btn>
     </q-footer>
   </q-page>
 </template>
@@ -381,7 +381,12 @@
       this.oneselect = this.options1[this.util.category(this.recipe.firstCategoryKind)]
       this.twoselect = this.options2[this.util.category(this.recipe.secondCategoryKind)]
       this.description = this.recipe.description;
-      this.row = this.recipe.stuffList;
+      
+      this.rows = [];
+      this.recipe.stuffList.forEach(stuff =>{
+        let x = stuff.split(":");
+        this.rows.push({foodname : x[0],volume:x[1]})
+      })
       // titleImage:[{dataUrl : '',order :0,text :'타이틀',file :null, kind : 2}],
       //adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
       this.order = this.recipe.contentList.size;
@@ -406,6 +411,7 @@
                 file : [file],
                 kind : 0,
                 order : content.order,
+                text : content.description,
               })
             }
 

@@ -26,4 +26,6 @@ public interface UserService {
     UsersEntity addFavoriteRecipe(UsersEntity user, RecipesEntity recipesEntity);
 
     List<Integer> getFavoriteInteger(UsersEntity usersEntity);
+
+    UsersDto getUserInfo(UsersEntity usersEntity);
 }

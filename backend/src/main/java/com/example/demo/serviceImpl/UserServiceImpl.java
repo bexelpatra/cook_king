@@ -1,5 +1,6 @@
 package com.example.demo.serviceImpl;
 
+import com.example.demo.dto.RecipesDto;
 import com.example.demo.dto.UsersDto;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.entity.UsersEntity;
@@ -8,10 +9,12 @@ import com.example.demo.service.EmailService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.AES;
 import com.example.demo.utilities.Utils;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -57,12 +60,13 @@ public class UserServiceImpl implements UserService {
         String password = "";
 
         try {
-            password = new AES().aesDecode(usersDto.getPassword());
+            password = new AES().aesEncode(usersDto.getPassword());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        String token = Base64.getEncoder().encodeToString(usersDto.getEmail().getBytes());
         return Optional.ofNullable(usersRepository.save(UsersEntity.builder()
+                .token(token)
                 .email(usersDto.getEmail())
                 .autoLogIn(true)
                 .password(password)
@@ -110,4 +114,20 @@ public class UserServiceImpl implements UserService {
         List<Integer> integers = recipesEntities.stream().map(RecipesEntity::getId).collect(Collectors.toList());
         return integers;
     }
+
+    private List<RecipesDto> recipeConverter(List<RecipesEntity> recipesEntities){
+        return recipesEntities.stream().map(RecipesEntity::toWithContents).collect(Collectors.toList());
+    }
+    @Override
+    public UsersDto getUserInfo(UsersEntity usersEntity) {
+        if(usersEntity == null) return null;
+        UsersDto usersDto = Utils.to(UsersDto.class,usersEntity);
+        UsersDto.fix(usersDto);
+        usersDto.setFavorite(getFavoriteInteger(usersEntity));
+        usersDto.setMyRecipe(recipeConverter(usersEntity.getRecipesEntities()));
+        usersDto.setMyFavoriteRecipe(recipeConverter(usersEntity.getUsersFavoriteRecipes()));
+        return usersDto;
+    }
+
+
 }

@@ -102,11 +102,13 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public RecipesEntity deleteAndSaveRecipeAndImage(RecipesEntity recipesEntity, RecipesDto recipesDto, MultiFileDto multiFileDto, UsersEntity usersEntity) throws Exception {
 
+        // #1 dto를 통해 새롭게 받아온 정보를 entity에 업데이트
         recipesDto.update(recipesEntity);
         recipesEntity.getContentEntities().clear();
-//        recipesEntity.setContentEntities(new ArrayList<>());
         contentRepository.deleteContents(recipesDto.getId());
-        recipesEntity.setContentEntities(saveContentEntity(multiFileDto,recipesEntity,urlPath+usersEntity.getId()+"/"+recipesEntity.getId()+"/"));
+        recipesEntity.setContentEntities(
+                saveContentEntity(multiFileDto,recipesEntity,urlPath+usersEntity.getId()+"/"+recipesEntity.getId()+"/")
+        );
         // 이미지 저장
         Utils.deleteAndSaveImage(multiFileDto.getFile(),usersEntity,recipesEntity.getId());
         recipeRepository.save(recipesEntity);
@@ -128,8 +130,8 @@ public class RecipeServiceImpl implements RecipeService {
     public Optional<RecipesEntity> getRecipeEntityById(int recipeId) {
         return recipeRepository.getRecipesEntityById(recipeId);
     }
-    private static int count = 1;
     private List<ContentEntity> saveContentEntity(MultiFileDto multiFileDto, RecipesEntity recipesEntity, String localPath){
+        int count = 1;
         Integer[] kinds = multiFileDto.getKind();
         Integer[] orders = multiFileDto.getOrder();
         String[] texts = multiFileDto.getText();
