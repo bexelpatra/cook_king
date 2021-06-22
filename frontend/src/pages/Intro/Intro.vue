@@ -35,21 +35,21 @@
 
     methods: {
       ...mapMutations(['setLogIn','setFavorite']),
-      ...mapActions(['fetchServer']),
+      ...mapActions(['fetchServer','userInfo']),
       async gotoMain() {
         let self = this;
         let message = '';
+        console.log(this.t)
+        // 로그인하기
         await this.fetchServer({path : 'user/user',param:{t:this.t, type : 0}})
-          .then(user => {
-            LocalStorage.set("t",user.token);
-            LocalStorage.set("e",user.email);
-            this.setFavorite(user.favorite);
-            this.setLogIn(true);
+          .then(success => {
+            this.userInfo({token : this.t})
             message = '로그인 성공'
           })
           .catch(reason => {
             message = '비회원'
           })
+        console.log(message)
         this.util.goTo('main')
       },
     },

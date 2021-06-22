@@ -70,6 +70,7 @@
           <q-btn @click="test17" label="test17 : 이미지 받아오기"/>
           <q-img :src="imageFromServer" v-model="fromServer"></q-img>
           <q-btn @click="test18" label="test18 : 이미지 받아오기"/>
+          <q-btn @click="test19" label="test19 : 사용자정보 업데이트"/>
           <div>{{fromServer}}</div>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
@@ -124,7 +125,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['sample','test123','asyncTest','fetchServer','updateImage']),
+      ...mapActions(['sample','test123','asyncTest','fetchServer','updateImage','userInfo']),
       // onClickImageUpload() {
       //   this.$refs.imageInput.click();
       // },
@@ -330,6 +331,9 @@
           .then(value =>{
               console.log(value)
           })
+      },
+      test19(){
+        this.userInfo({token : LocalStorage.getItem('t')});
       },
       dataURLtoFile : (dataurl, fileName) => {
 

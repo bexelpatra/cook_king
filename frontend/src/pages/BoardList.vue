@@ -97,17 +97,25 @@
                   <img :src=recipe.url height="55" width="55"/>
                 </div>
                 <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
-                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{strSummary(recipe.title,20)}}</div>
-                  <div class="text-left">{{strSummary(recipe.description,16)}}</div>
+                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{util.strSummary(recipe.title,20)}}</div>
+                  <div class="text-left">{{util.strSummary(recipe.description,16)}}</div>
+                </div>
+                <div>
+                  <div>{{util.category(recipe.firstCategoryKind).name}}</div>
+                  <div>{{util.category(recipe.secondCategoryKind).name}}</div>
                 </div>
               </q-card>
             </q-btn>
             <q-separator class="bg-grey-4"/>
           </div>
-
-          <q-btn flat class="full-width" @click="getMore">
-            <span>더보기</span>
-          </q-btn>
+          <div v-if="!stopMore">
+            <q-btn flat class="full-width" @click="getMore">
+              <span>더보기</span>
+            </q-btn>
+          </div>
+          <div v-else class="full-width text-center">
+            <span>마지막 게시물입니다.</span>
+          </div>
         </div>
 <!--        fixme 수정해야하낟-->
         <div v-else>
@@ -123,8 +131,8 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
-  import * as myUtil from 'boot/myUtilsOldVertion';
-
+  // import * as myUtil from 'boot/myUtilsOldVertion';
+  import {myUtil} from "boot/myUtil";
   export default {
     name: 'BoardList',
     computed:{
@@ -132,6 +140,7 @@
     },
     data(){
       return{
+        util : new myUtil(this),
         keyword : '',
         recipeList : [],
         recipePage:-1,
@@ -143,17 +152,13 @@
 
         tt : 0,
         ttt : 0,
+        stopMore :false,
       }
     },
     methods:{
       ...mapMutations([]),
       ...mapActions(['fetchServer']),
 
-      // 문자길이 줄이기
-      strSummary : (string, num)=>{
-        if(string ==null) return '';
-        return myUtil.strSummary2(string,num);
-      },
       // 카테고리 체크 외 키워드로 검색하기
       searching(){
         if (this.oneselect == null || this.oneselect == ''){
@@ -190,12 +195,13 @@
             secondCategory:[0,1,2,3,4,5],
             keyword : ''}})
           .then(value => {
-            value.recipes.forEach(recipe =>{this.recipeList.push(recipe); console.log(recipe)})
+            value.recipes.forEach(recipe =>{this.recipeList.push(recipe);})
             this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
           })
           .catch(error => console.log(error))
       },
-
+      // 새롭게 검색하기
+      // 기존에 검색된 리스트를 지우고 새롭게 덮어쓴다.
       recipeSearch(firstCategory,secondCategory,keyword){
         // console.log(firstCategory,secondCategory,keyword);
         let self = this;
@@ -208,22 +214,53 @@
           .then(value => {
             console.log(value)
             console.log(value.recipes.length)
+            this.stopMore = false;
             if(value.recipes.length!=0){
-              value.recipes.forEach(recipe =>{this.recipeList=[];this.recipeList.push(recipe); console.log(recipe)})
+              this.recipeList=[];
+              value.recipes.forEach(recipe =>{this.recipeList.push(recipe);})
             }else {
               this.recipeList = [];
             }
-            this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
             console.log(this.recipeList)
+            this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
           })
           .catch(error => console.log(error))
       },
 
-      getMore(firstCategory,secondCategory,keyword){
-        this.fetchServer({path :'/recipe/recipes',param:{firstCategory:firstCategory,secondCategory:secondCategory,keyword : keyword == null? '':keyword}})
+      getMore(){
+        //firstCategory,secondCategory,keyword
+        console.log(this.recipePage)
+        let firstCategory = [];
+        let secondCategory =[];
+        let keyword = this.keyword;
+        let page = this.recipePage;
+        if(this.oneselect.length != 0){
+          this.oneselect.forEach(value => firstCategory.push(value.val))
+        }else {
+          firstCategory = [0,1,2,3];
+        }
+
+        if(this.twoselect.length !=0){
+          this.twoselect.forEach(value => secondCategory.push(value.val))
+        }else{
+          secondCategory = [0,1,2,3,4,5];
+        }
+
+        if(keyword==null){
+          keyword = '';
+        }
+        this.fetchServer({path :'/recipe/recipes',
+          param:{
+            firstCategory:firstCategory,
+            secondCategory:secondCategory,
+            keyword :keyword,
+            page : page
+          }
+        })
           .then(value => {
-            value.recipes.forEach(recipe =>{this.recipeList.push(recipe); console.log(recipe)})
+            value.recipes.forEach(recipe =>{this.recipeList.push(recipe);})
             this.recipePage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
+            if(this.recipePage == -1) this.stopMore = true;
           })
           .catch(error => console.log(error))
       },

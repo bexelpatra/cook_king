@@ -111,7 +111,7 @@
       //즐찾
       mybookPage(){ this.$router.push('login'); },
       //내정보
-      myinfoPage(){ this.$router.push('login'); },
+      myinfoPage(){ this.$router.push('myinfo'); },
       //뒤로가기
       backBtn(){ this.$router.back()},
       //게시물작성

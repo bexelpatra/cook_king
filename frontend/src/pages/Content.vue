@@ -10,7 +10,7 @@
         class="z-top q-ma-sm absolute-top-left"
         @click="backBtn"
       />
-      <div class="z-top q-ma-sm  absolute-top-right">
+      <div class="z-top q-ma-sm  absolute-top-right" v-if="isLogIn">
         <q-btn
           v-if="!bookmark"
           flat
@@ -102,18 +102,21 @@
   export default {
     name: 'Content',
     computed:{
-      ...mapGetters(['getLayout','getFavorite'])
+      ...mapGetters(['getLayout','getFavorite','isLogIn'])
     },
     data(){
       return{
         bookmark : false,
         change: true,
-
+        logIn : this.isLogIn,
         util : new myUtil(this),
         x : window.innerWidth,
         y : window.innerHeight*0.33,
         recipe :{},
         dot :'',
+
+        favoriteMark : false,
+        updateMark : false,
       }
     },
     methods:{
@@ -131,7 +134,6 @@
       },
       // 즐겨찾기 추가하기
       addFavorite(){
-        LocalStorage.set("t","test")
         this.fetchServer({
           path : 'user/favorite-recipes',
           method :'post',
@@ -161,6 +163,8 @@
       this.getLayout.addcontent = false;
 
       this.recipe = this.util.getQuery().recipe;
+      console.log(this.getFavorite)
+      console.log(this.recipe.id)
       this.bookmark = this.getFavorite.includes(this.recipe.id);
     },
     mounted() {

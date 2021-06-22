@@ -15,12 +15,12 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-
-public class AES {
+@Component
+public final class AES {
     private String iv = "<^^>/~~~00000000".substring(0, 16);
     private Key keySpec;
 
-    public AES() throws UnsupportedEncodingException {
+    public AES()throws UnsupportedEncodingException {
 
         byte[] keyBytes = new byte[16];
         byte[] b = iv.getBytes("UTF-8");

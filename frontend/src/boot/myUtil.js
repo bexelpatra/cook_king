@@ -42,41 +42,41 @@ export class myUtil {
     return str;
   }
   category = (str) =>{
-    str = str.toString().toLocaleLowerCase();
+    let category ={};
     switch (str) {
-      case 'korea' :
-        str = 0
+      case 'KOREA' :
+        category = {id : 0,name :'한식'}
         break;
-      case 'japan' :
-        str = 1
+      case 'JAPAN' :
+        category = {id : 1,name :'일식'}
         break;
-      case 'china' :
-        str = 2
+      case 'CHINA' :
+        category = {id : 2,name :'중식'}
         break;
-      case 'western' :
-        str = 4
+      case 'WESTER' :
+        category = {id : 3,name :'양식'}
         break;
 
-      case 'etc' :
-        str = 0
+      case 'ETC' :
+        category = {id : 0,name :'기타'}
         break;
-      case 'fry_stir' :
-        str = 1
+      case 'FRY_STIR' :
+        category = {id : 1,name :'볶음'}
         break;
-      case 'fry_deep' :
-        str = 2
+      case 'fry_deep'.toUpperCase() :
+        category = {id : 2,name :'튀김'}
         break;
-      case 'grill' :
-        str = 3
+      case 'GRILL' :
+        category = {id : 3,name :'구이'}
         break;
-      case 'steam' :
-        str = 4
+      case 'STEAM' :
+        category = {id : 4,name :'찜'}
         break;
-      case 'soup' :
-        str = 5
+      case 'SOUP' :
+        category = {id : 5,name :'국물'}
         break;
     }
-    return parseInt(str);
+    return category;
   }
 
   dataURLtoFile(dataurl, fileName){
