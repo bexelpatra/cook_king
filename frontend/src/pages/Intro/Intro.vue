@@ -47,6 +47,7 @@
             message = '로그인 성공'
           })
           .catch(reason => {
+            console.log('비회원');
             message = '비회원'
           })
         console.log(message)
