@@ -46,6 +46,12 @@ const routes = [
       {path: '/mycontent', name: 'mycontent', component: () => import('pages/settings/MyConTent.vue')},
       //코인
       {path: '/cookcoin', name: 'cookcoin', component: () => import('pages/settings/Cook_Coin.vue')},
+      //내지갑
+      {path: '/mywallet', name: 'mywallet', component: () => import('pages/settings/MyWallet.vue')},
+      //선물
+      {path: '/present', name: 'present', component: () => import('pages/settings/Present.vue')},
+      //코인리스트
+      {path: '/coinlist', name: 'coinlist', component: () => import('pages/settings/CoinList.vue')},
     ]
   },
 
