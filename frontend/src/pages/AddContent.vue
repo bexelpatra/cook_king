@@ -332,6 +332,7 @@
           if(value.status==200){
             this.$q.notify('성공적으로 등록 되었습니다.','info')
             this.util.goTo('main',{})
+            //메인으로 가는 것보다 내 게시물로 가는 방향으로 이동
           }
         })
           //catch 실패 코드 200외 전부 처리
