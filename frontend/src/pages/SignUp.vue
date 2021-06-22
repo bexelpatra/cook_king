@@ -154,6 +154,7 @@
       passwordCheck:_.debounce(function(){
         if(this.password === this.password2){
           console.log("동일합니다.")
+          this.passwordComment = "동일한 비밀번호입니다.";
         }else{
           this.passwordComment = "비밀번호가 다릅니다.";
           console.log("비밀번호가 다릅니다.")
@@ -222,8 +223,10 @@
             console.log(success)
             desc = success.desc;
             color = success.status == 200 ? 'info' : 'warning';
-            this.emailCertResult = true;
-            this.finalEmail = this.emailTemp;
+            if(success.status==200){
+              this.emailCertResult = true;
+              this.finalEmail = this.emailTemp;
+            }
           })
           .catch(fail =>{
             console.log(fail)
@@ -254,8 +257,8 @@
               // 회원가입 성공하면 어디로 가야 하는가?
               if(value.status == 200){
                 this.util.goTo('main')
-                LocalStorage.set("email",value.user.email);
-                LocalStorage.set("token",value.user.token);
+                LocalStorage.set("e",value.user.email);
+                LocalStorage.set("t",value.user.token);
               }
             })
             .catch(reason => {

@@ -7,3 +7,9 @@ export const isLogIn = (state) => {
 export const getFavorite = (state) => {
   return state.favorite;
 }
+export const getMyRecipe = (state) => {
+  return state.myRecipe;
+}
+export const getUser = (state) => {
+  return state.userInfo;
+}

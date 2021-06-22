@@ -4,6 +4,7 @@ import axios from "axios";
 const HOST = "https://8f2dbb4edcc3.ngrok.io/"; //ngrok http {{port}}
                                             // ex) ngrok http 8080
 export function someAction (/* context */) {
+
 }
 const COMMON_HEADER = {"Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
@@ -158,7 +159,26 @@ export const requestMapping = (state, args) =>{
   axios.get(HOST+'user/mail-certification'+addQuery({email:args.email, number : args.number}),)
     .then(value => args.onSuccess(value))
     .catch(reason => args.onFail(reason))
-
 }
+
+/**
+ * 사용자의 모든 정보를 업데이트 한다.
+ * @param state
+ * @param args -> token을 넘긴다.
+ * 사용처 : intro, 글쓰기, 즐겨찾기추가시에 수정한다.
+ */
+export const userInfo =(state,args)=>{
+  console.log(args.token)
+  fetchServer(state,{path :'user/user/'+args.token})
+    .then(success =>{
+      if(success.status == 200){
+        state.state.userInfo = success.user;
+        state.state.myRecipe = success.user.myRecipe.map(value => value.id);
+        state.state.favorite = success.user.myFavoriteRecipe.map(value => value.id);
+        state.state.isLogIn = true;
+      }
+      console.log(success)
+    })
+    .catch(reason => console.log(reason))}
 //===================================================================================================================
 

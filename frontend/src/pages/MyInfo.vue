@@ -57,6 +57,7 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
+  import {myUtil} from "boot/myUtil";
 
   export default {
     name: 'MyInfo',
@@ -66,11 +67,12 @@
     data(){
       return{
         appVersion: LocalStorage.getItem("US_VS"),
+        util :new myUtil(this),
       }
     },
     methods:{
-      ...mapMutations([]),
-      ...mapActions([]),
+      ...mapMutations(['setFavorite','setLogIn']),
+      ...mapActions(['fetchServer']),
 
       /**======================================
        * 클릭 이벤트
@@ -95,7 +97,28 @@
 
     beforeCreate() {},
     created() {
+      let self = this;
       window.onpopstate = ()=>{}
+      this.fetchServer({path : 'user/user',param:{t:LocalStorage.getItem('t'), type : 0}})
+        .then(success => {
+          // 로그인 성공시
+          if(success.status==200){
+            this.setFavorite(success.user.favorite);
+            this.setLogIn(true);
+          }else{
+            let timer = setTimeout(function () {
+              console.log(this.data)
+              self.util.goTo('login')
+            },700);
+            self.util.notify('로그인 정보가 없습니다.','warning');
+          }
+        })
+        .catch(reason => {
+          let timer = setTimeout(function () {
+            this.util.goTo('login')
+          },700);
+          this.util.notify('로그인 정보가 없습니다.','warning');
+        })
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
