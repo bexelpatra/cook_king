@@ -10,7 +10,7 @@
         class="z-top q-ma-sm absolute-top-left"
         @click="backBtn"
       />
-      <div class="z-top q-ma-sm  absolute-top-right" v-if="isLogIn">
+      <div class="z-top q-ma-sm  absolute-top-right" v-if="logIn">
         <q-btn
           v-if="!bookmark"
           flat
@@ -102,13 +102,13 @@
   export default {
     name: 'Content',
     computed:{
-      ...mapGetters(['getLayout','getFavorite','isLogIn'])
+      ...mapGetters(['getLayout','getUser','isLogIn'])
     },
     data(){
       return{
         bookmark : false,
-        change: true,
-        logIn : this.isLogIn,
+        change: false,
+        logIn : false,
         util : new myUtil(this),
         x : window.innerWidth,
         y : window.innerHeight*0.33,
@@ -121,7 +121,7 @@
     },
     methods:{
       ...mapMutations(['setFavorite']),
-      ...mapActions(['fetchServer']),
+      ...mapActions(['fetchServer','userInfo']),
 
       /**=================================
        *  클릭 이벤트
@@ -133,17 +133,18 @@
         this.util.goTo('updatecontent',{recipe : this.recipe})
       },
       // 즐겨찾기 추가하기
-      addFavorite(){
+      async addFavorite(){
         this.fetchServer({
           path : 'user/favorite-recipes',
           method :'post',
           param :{
             token : LocalStorage.getItem("t"),
-            recipeId : this.recipe.id}})
+            recipeId : this.recipe.id}
+        })
         .then(result =>{
           console.log(result)
-          this.setFavorite(result.favorite);
           this.bookmark = !this.bookmark;
+          this.userInfo({token :LocalStorage.getItem('t')});
         })
         .catch(reason => console.log(reason))
       },
@@ -162,10 +163,13 @@
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
 
+
       this.recipe = this.util.getQuery().recipe;
-      console.log(this.getFavorite)
-      console.log(this.recipe.id)
-      this.bookmark = this.getFavorite.includes(this.recipe.id);
+      this.change = this.getUser.id == this.recipe.usersDto.id;
+
+      this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);
+      this.logIn = this.getUser ==null || this.getUser.id == 0 ? false:true;
+
     },
     mounted() {
     },

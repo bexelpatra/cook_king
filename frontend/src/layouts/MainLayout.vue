@@ -109,7 +109,7 @@
       //레시피
       recipePage(){ this.$router.push('boardlist'); },
       //즐찾
-      mybookPage(){ this.$router.push('login'); },
+      mybookPage(){ this.$router.push('bookmark'); },
       //내정보
       myinfoPage(){ this.$router.push('myinfo'); },
       //뒤로가기

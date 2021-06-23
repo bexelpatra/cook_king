@@ -71,6 +71,7 @@
           <q-img :src="imageFromServer" v-model="fromServer"></q-img>
           <q-btn @click="test18" label="test18 : 이미지 받아오기"/>
           <q-btn @click="test19" label="test19 : 사용자정보 업데이트"/>
+          <q-btn @click="test20" label="test20 : actions에서 페이지 이동"/>
           <div>{{fromServer}}</div>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
@@ -87,6 +88,7 @@
   import {mapGetters,mapActions,mapMutations,mapState} from 'vuex';
   import {LocalStorage} from 'quasar';
   import {myUtil} from "boot/myUtil";
+  import {userInfo} from "src/store/module-example/actions";
 
   export default {
     name: "TEST",
@@ -125,7 +127,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['sample','test123','asyncTest','fetchServer','updateImage','userInfo']),
+      ...mapActions(['sample','test123','asyncTest','fetchServer','updateImage','userInfo','c8']),
       // onClickImageUpload() {
       //   this.$refs.imageInput.click();
       // },
@@ -334,6 +336,10 @@
       },
       test19(){
         this.userInfo({token : LocalStorage.getItem('t')});
+      },
+      test20(){
+        let x = this.c8({vue : this});
+        let y = this.userInfo({token : 't'})
       },
       dataURLtoFile : (dataurl, fileName) => {
 
