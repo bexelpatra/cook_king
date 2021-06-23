@@ -12,6 +12,15 @@
           color="black"
           @click="backBtn"
         />
+        <q-btn
+          v-if="mainbackbotton"
+          flat
+          dense
+          round
+          icon="arrow_back"
+          color="black"
+          @click="mainbackBtn"
+        />
 
         <q-toolbar-title class="no-padding text-h5 text-weight-bold absolute-center">
           {{title}}
@@ -89,6 +98,7 @@
         headerLayout: false,
         title : '',
         backbotton: true,
+        mainbackbotton: true,
         bookmark: true,
         bookmarkbtn: true,
         addcontent: false,
@@ -114,10 +124,10 @@
       myinfoPage(){ this.$router.push('myinfo'); },
       //뒤로가기
       backBtn(){ this.$router.back()},
+      //Main page
+      mainbackBtn(){ this.$router.push('main')},
       //게시물작성
-      contentBtn(){
-        this.$router.push('login');
-      }
+      contentBtn(){this.$router.push('addcontent');}
     },
     beforeCreate() {},
     created() {

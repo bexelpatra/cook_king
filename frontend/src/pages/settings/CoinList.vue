@@ -84,6 +84,7 @@
       this.getLayout.headerLayout = true;
       this.getLayout.title = "상세 내역";
       this.getLayout.backbotton = true;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;

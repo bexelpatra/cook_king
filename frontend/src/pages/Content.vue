@@ -46,7 +46,7 @@
       <q-card flat class="full-width">
         <!-- 메인사진과 요리이름 -->
         <div>
-          <img :src="recipe.url" class="full-width" :height="y">
+          <img :src="recipe.url" class="full-width" style="height: 48vw">
           <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.title}}</div>
         </div>
         <!-- 간단 설명 및 소개 + 태그들 -->
@@ -72,19 +72,17 @@
           </div>
         </section>
 
+        <q-separator class="q-my-md"/>
+
         <!-- 컨텐츠 이미지 뿌리기 -->
-        <q-card-section>
-          <div class="flex full-width">
-            <!-- todo 반복문 돌림녀서 뽑아낸다. -->
-            <div>
-              <div class="relative-position" v-for="(content,index) in recipe.contentList">
-                <div v-if="index !=0">
-                  <div class="absolute-top-left"><q-badge>{{index}}</q-badge></div>
-                  <img :src="content.url" class="full-width" :height="y*0.7">
-                  <div>
-                    {{content.description}}
-                  </div>
-                </div>
+        <q-card-section class="q-mt-md">
+          <!-- todo 반복문 돌림녀서 뽑아낸다. -->
+          <div class="relative-position" v-for="(content,index) in recipe.contentList">
+            <div v-if="index !=0">
+              <div class="absolute-top-left"><q-badge>{{index}}</q-badge></div>
+              <img :src="content.url" class="full-width " style="height: 60vw"/>
+              <div class="q-mt-sm">
+                {{content.description}}
               </div>
             </div>
           </div>
@@ -110,8 +108,6 @@
         change: false,
         logIn : false,
         util : new myUtil(this),
-        x : window.innerWidth,
-        y : window.innerHeight*0.33,
         recipe :{},
         dot :'',
 
@@ -141,12 +137,12 @@
             token : LocalStorage.getItem("t"),
             recipeId : this.recipe.id}
         })
-        .then(result =>{
-          console.log(result)
-          this.bookmark = !this.bookmark;
-          this.userInfo({token :LocalStorage.getItem('t')});
-        })
-        .catch(reason => console.log(reason))
+          .then(result =>{
+            console.log(result)
+            this.bookmark = !this.bookmark;
+            this.userInfo({token :LocalStorage.getItem('t')});
+          })
+          .catch(reason => console.log(reason))
       },
 
     },
@@ -158,6 +154,7 @@
     beforeMount() {
       this.getLayout.headerLayout = false;
       this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.title = "레시피"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
@@ -176,7 +173,9 @@
     beforeUpdate() {},
     updated() {},
     beforeDestroy() {},
-    destroyed() {}
+    destroyed() {
+      this.userInfo({token : LocalStorage.getItem('t')});
+    }
   }
 </script>
 <style type="text/css">

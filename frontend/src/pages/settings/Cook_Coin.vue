@@ -111,6 +111,7 @@
       this.getLayout.headerLayout = true;
       this.getLayout.title = "내 코인";
       this.getLayout.backbotton = true;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;

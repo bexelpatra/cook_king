@@ -13,16 +13,16 @@
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(recipe,index) in koreaList" :key="index">
-              <q-btn flat @click="contentPage(recipe)">
+            <splide-slide v-for="(recipe,index) in koreaList" class="q-pr-sm" :key="index" style="height: 55vw">
+              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
                 </div>
-                <div class="q-mx-xs full-width text-left text-h6">
-                  "{{recipe.title}}"
+                <div class="q-mt-lg full-width text-left text-h6 text-black">
+                  "{{util.strSummary(recipe.title,7)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -46,16 +46,16 @@
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(recipe,index) in westernList" :key="index">
-              <q-btn flat @click="contentPage(recipe)">
+            <splide-slide v-for="(recipe,index) in westernList" class="q-pr-sm" :key="index" style="height: 55vw">
+              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
                 </div>
-                <div class="q-mx-xs full-width text-left text-h6">
-                  "{{recipe.title}}"
+                <div class="q-mt-lg full-width text-left text-h6">
+                  "{{util.strSummary(recipe.title,7)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -79,16 +79,16 @@
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(recipe,index) in japanList" :key="index">
-              <q-btn flat @click="contentPage(recipe)">
+            <splide-slide v-for="(recipe,index) in japanList" class="q-pr-sm" :key="index" style="height: 55vw">
+              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
                 </div>
-                <div class="q-mx-xs full-width text-left text-h6">
-                  {{recipe.title}}
+                <div class="q-mt-lg full-width text-left text-h6">
+                  {{util.strSummary(recipe.title,7)}}
                 </div>
               </q-btn>
             </splide-slide>
@@ -112,16 +112,16 @@
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
-            <splide-slide v-for="(recipe,index) in chinaList" :key="index">
-              <q-btn flat @click="contentPage(recipe)">
+            <splide-slide v-for="(recipe,index) in chinaList" class="q-pr-sm" :key="index" style="height: 55vw">
+              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 32vw;"/>
+                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
                 </div>
-                <div class="q-mx-xs full-width text-left text-h6">
-                  {{recipe.title}}
+                <div class="q-mt-lg full-width text-left text-h6">
+                  {{util.strSummary(recipe.title,7)}}
                 </div>
               </q-btn>
             </splide-slide>
@@ -163,7 +163,7 @@
           type: 'slide',
           focus : 'center',
           padding : {
-            right : '3rem',
+            right : '1.8rem',
           },
           arrows : false,
           drag : true,
@@ -332,6 +332,7 @@
     beforeMount() {
       this.getLayout.bottomFooter = true;
       this.getLayout.headerLayout = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.addcontent = false;
       document.addEventListener("deviceready", this.Device, false);
       this.getRecipes();

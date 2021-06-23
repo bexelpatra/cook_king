@@ -143,6 +143,7 @@
       this.getLayout.headerLayout = false;
       this.getLayout.title = "";
       this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
