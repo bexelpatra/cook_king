@@ -10,8 +10,8 @@
         outlined
         filled
 
-        v-model="thumb"
-        @input="createTitleImg(thumb)"
+        v-model="titleImage"
+        @input="createTitleImg(titleImage)"
         type="file"
       />
       <div v-if="titleImage != null && titleImage.dataUrl!=undefined" class="full-width">
@@ -212,7 +212,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['updateImage','fetchServer']),
+      ...mapActions(['updateImage','fetchServer','userInfo']),
 
       /**======================================
        * 이미지  Kind : 0번 = 레시피 이미지 , 2번 = 타이틀이미지
@@ -336,6 +336,7 @@
           // then value 200 성공 코드
           .then(value =>{
             if(value.status==200){
+              this.userInfo({token : LocalStorage.getItem('t')})
               this.$q.notify('성공적으로 등록 되었습니다.','info')
               this.util.goTo('main',{})
             }
@@ -378,10 +379,10 @@
 
       this.recipe = this.util.getQuery().recipe;
       this.title = this.recipe.title;
-      this.oneselect = this.options1[this.util.category(this.recipe.firstCategoryKind)]
-      this.twoselect = this.options2[this.util.category(this.recipe.secondCategoryKind)]
+      this.oneselect = this.options1[this.util.category(this.recipe.firstCategoryKind).id]
+      this.twoselect = this.options2[this.util.category(this.recipe.secondCategoryKind).id]
       this.description = this.recipe.description;
-      
+
       this.rows = [];
       this.recipe.stuffList.forEach(stuff =>{
         let x = stuff.split(":");
@@ -390,7 +391,7 @@
       // titleImage:[{dataUrl : '',order :0,text :'타이틀',file :null, kind : 2}],
       //adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
       this.order = this.recipe.contentList.size;
-
+      // 기존 정보 받아오기
       this.fetchServer({path : 'recipe/recipe/contents',param:{token :"test",recipeId : this.recipe.id}})
         .then(value =>{
           this.adds = [];
