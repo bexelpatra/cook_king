@@ -211,7 +211,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['updateImage']),
+      ...mapActions(['updateImage','userInfo']),
 
       /**======================================
        * 이미지  Kind : 0번 = 레시피 이미지 , 2번 = 타이틀이미지
@@ -326,10 +326,11 @@
         })
 
         // 서버 통신 url
-        this.updateImage({path : 'recipe/recipe',method :'post',param :{token :"test"},body :form})
+        this.updateImage({path : 'recipe/recipe',method :'post',param :{token :LocalStorage.getItem('t')},body :form})
           // then value 200 성공 코드
         .then(value =>{
           if(value.status==200){
+            this.userInfo({token : LocalStorage.getItem('t')})
             this.$q.notify('성공적으로 등록 되었습니다.','info')
             this.util.goTo('main',{})
             //메인으로 가는 것보다 내 게시물로 가는 방향으로 이동

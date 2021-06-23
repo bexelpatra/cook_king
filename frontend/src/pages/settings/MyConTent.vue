@@ -25,7 +25,7 @@
   export default {
     name: 'MyConTent',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','getUser'])
     },
     data(){
       return{
@@ -36,7 +36,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['fetchServer']),
+      ...mapActions(['fetchServer','userInfo']),
 
       /**======================================
        * 클릭 이벤트
@@ -46,17 +46,25 @@
       },
     },
 
-    beforeCreate() {},
+    beforeCreate() {
+    },
     created() {
+      this.userInfo({token : LocalStorage.getItem('t')})
+      this.myRecipe = this.getUser.myRecipe
+
       window.onpopstate = ()=>{}
-      this.fetchServer({path :'user/user/'+LocalStorage.getItem('t')})
-      .then(success =>{
-        if(success.status == 200){
-          this.myRecipe = success.user.myRecipe;
-          console.log(this.myRecipe)
-        }
-      })
-      .catch(reason => console.log(reason))
+      // 1번 : 서버에서 나의 레시피만 가져온다.
+      // this.fetchServer({path :'user/user/'+LocalStorage.getItem('t')})
+      // .then(success =>{
+      //   if(success.status == 200){
+      //     this.myRecipe = success.user.myRecipe;
+      //     console.log(this.myRecipe)
+      //   }
+      // })
+      // .catch(reason => console.log(reason))
+
+      // 2번 : 사용자 정보를 업데이트
+
     },
     beforeMount() {
       this.getLayout.headerLayout = true;

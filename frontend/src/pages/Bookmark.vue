@@ -35,7 +35,7 @@
     },
     methods:{
       ...mapMutations(['setFavorite','setLogIn']),
-      ...mapActions(['fetchServer']),
+      ...mapActions(['fetchServer','userInfo']),
       contentPage(recipe){
         this.util.goTo('/content',{recipe : recipe})
       },
@@ -45,6 +45,9 @@
     created() {
       let self = this;
       window.onpopstate = ()=>{}
+      /**
+       * 로그인 정보 확인하기
+       */
       this.fetchServer({path : 'user/user',param:{t:LocalStorage.getItem('t'), type : 0}})
         .then(success => {
           console.log(success)
@@ -75,6 +78,10 @@
       this.getLayout.bottomFooter = true;
       this.getLayout.addcontent = false;
 
+      /**
+       * 사용자 정보 업데이트
+       */
+      this.userInfo({token : LocalStorage.getItem('t')});
       this.fetchServer({path :'user/user/'+LocalStorage.getItem('t')})
         .then(success =>{
           if(success.status == 200){this.myFavoriteRecipe = success.user.myFavoriteRecipe;}

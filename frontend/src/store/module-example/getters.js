@@ -4,9 +4,15 @@ export const getLayout = (state) => {
 export const isLogIn = (state) => {
   return state.logIn;
 }
+/**
+ * @Deprecated
+ */
 export const getFavorite = (state) => {
   return state.favorite;
 }
+/**
+ * @Deprecated
+ */
 export const getMyRecipe = (state) => {
   return state.myRecipe;
 }

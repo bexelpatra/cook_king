@@ -1,4 +1,5 @@
 import axios from "axios";
+import {myUtil} from "boot/myUtil";
 
 // const HOST = "http://localhost:8081/"; // ngrok주소를 사용할때는 https로 사용합니다.
 const HOST = "https://8f2dbb4edcc3.ngrok.io/"; //ngrok http {{port}}
@@ -167,8 +168,8 @@ export const requestMapping = (state, args) =>{
  * @param args -> token을 넘긴다.
  * 사용처 : intro, 글쓰기, 즐겨찾기추가시에 수정한다.
  */
-export const userInfo =(state,args)=>{
-  console.log(args.token)
+export const userInfo = (state,args) => {
+
   fetchServer(state,{path :'user/user/'+args.token})
     .then(success =>{
       if(success.status == 200){
@@ -177,8 +178,29 @@ export const userInfo =(state,args)=>{
         state.state.favorite = success.user.myFavoriteRecipe.map(value => value.id);
         state.state.isLogIn = true;
       }
-      console.log(success)
     })
-    .catch(reason => console.log(reason))}
+    .catch(reason => console.log(reason))
+}
+
+export const logInCheck = (state, args) =>{
+  let flag = false;
+  fetchServer({path : 'user/user',param:{t:args.token, type : 0}})
+    .then(success => {
+      if(success.status==200){
+        userInfo(state,{token : args.token})
+        flag = true;
+      }else{
+
+      }
+    })
+    .catch(reason => {
+
+    })
+  return flag;
+}
+export  const c8= (state, args) =>{
+  console.log(args.vue)
+  args.vue.$router.push('main');
+}
 //===================================================================================================================
 
