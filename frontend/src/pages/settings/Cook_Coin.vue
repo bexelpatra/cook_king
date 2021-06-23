@@ -20,25 +20,38 @@
         flat
         dense
         class="col"
-        color="blue"
+        color="black"
+        size="1rem"
+        icon="badge"
+        style="border-right: solid 1px gray"
+        label="내 지갑"
+        @click="gotoMyWallet"
+      />
+      <q-btn
+        flat
+        dense
+        class="col"
+        color="black"
         size="1rem"
         icon="add"
         label="선물하기"
+        @click="gotoPreSent"
       />
     </section>
 
-    <!--fixme 선물 이력 -->
+    <!--fixme 선물 내역 -->
     <section class="q-pa-sm" style="border-bottom: solid 1px grey">
-      <div class="row">
-        <span class="q-mt-sm col text-weight-bold" style="font-size: 1rem">Coin 선물 내역</span>
-        <q-select
-          filled
+      <div class="row flex-center">
+        <span class="col text-weight-bold" style="font-size: 1rem">Coin 선물 내역</span>
+        <q-btn
+          flat
           dense
-          class="col"
-          v-model="single"
-          :options="options"
-          label="선택"
-        />
+          class="col-5 bg-grey-3 text-weight-bold text-grey-7"
+          label="상세내역"
+          @click="gotoCoinList"
+        >
+          <q-icon name="chevron_right"/>
+        </q-btn>
       </div>
     </section>
 
@@ -54,6 +67,7 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
+  import {myUtil} from 'boot/myUtil'
 
   export default {
     name: 'Cook_Coin',
@@ -62,6 +76,7 @@
     },
     data(){
       return{
+        util : new myUtil(this),
         single: null,
         options: ['전체선물','받은선물','보낸선물']
       }
@@ -74,6 +89,18 @@
        * 클릭 이벤트
        ========================================*/
 
+      gotoMyWallet(){
+        this.util.goTo('mywallet');
+      },
+
+      gotoPreSent(){
+        this.util.goTo('present');
+      },
+
+      gotoCoinList(){
+        this.util.goTo('coinlist');
+      }
+
     },
 
     beforeCreate() {},
@@ -85,7 +112,7 @@
       this.getLayout.title = "내 코인";
       this.getLayout.backbotton = true;
       this.getLayout.bookmarkbtn = false;
-      this.getLayout.bottomFooter = true;
+      this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
     },
     mounted() {},
