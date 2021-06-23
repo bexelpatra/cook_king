@@ -4,12 +4,14 @@
     <section class="flex justify-between">
       <div v-for="(recipe,index) in myRecipe" :key="index">
         <q-btn flat dense @click="contentPage(recipe)">
-          <q-card style="width: 42vw; height: 50vw">
-            <img class="justify-between" :src="recipe.url">
-            <div class="flex q-ml-sm">
-              <div class="text-h6">{{recipe.title}}</div>
-              <div class="text-subtitle2">{{recipe.description}}</div>
-            </div>
+          <q-card style="width: 42vw">
+            <div class="q-ml-sm absolute-top-left">{{index+1}}</div>
+            <img :src="recipe.url" style="height: 35vw"/>
+            <q-separator/>
+            <q-card-section>
+              <div class="text-weight-bold" style="font-size: 1rem">{{util.strSummary(recipe.title,5)}}</div>
+              <div class="text-grey-7" style="font-size: 0.8rem">{{util.strSummary(recipe.description,'6')}}</div>
+            </q-card-section>
           </q-card>
         </q-btn>
       </div>
@@ -71,6 +73,7 @@
       this.getLayout.backbotton = true;
       this.getLayout.title = "내 게시물"
       this.getLayout.bookmarkbtn = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
     },

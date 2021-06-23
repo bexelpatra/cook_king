@@ -203,6 +203,7 @@
     beforeMount() {
       this.getLayout.headerLayout = true;
       this.getLayout.backbotton = true;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.title = "비밀번호 찾기"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;

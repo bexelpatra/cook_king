@@ -300,6 +300,7 @@
       this.getLayout.backbotton = true;
       this.getLayout.title = "회원가입"
       this.getLayout.bookmarkbtn = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
     },
