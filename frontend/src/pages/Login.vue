@@ -112,7 +112,8 @@
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
-      this.getLayout.backbotton = true;
+      this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = true;
       this.getLayout.title = "로그인"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;

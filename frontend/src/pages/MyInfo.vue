@@ -123,6 +123,7 @@
       this.getLayout.headerLayout = true;
       this.getLayout.title = "내정보";
       this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
       this.getLayout.addcontent = false;

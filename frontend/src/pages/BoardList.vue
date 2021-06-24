@@ -97,12 +97,12 @@
                   <img :src=recipe.url height="55" width="55"/>
                 </div>
                 <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
-                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{util.strSummary(recipe.title,20)}}</div>
-                  <div class="text-left">{{util.strSummary(recipe.description,16)}}</div>
+                  <div class="text-weight-bold text-left" style="font-size: 1.2em">{{util.strSummary(recipe.title,8)}}</div>
+                  <div class="text-left">{{util.strSummary(recipe.description,10)}}</div>
                 </div>
-                <div>
-                  <div>{{util.category(recipe.firstCategoryKind).name}}</div>
-                  <div>{{util.category(recipe.secondCategoryKind).name}}</div>
+                <div class="q-mt-sm absolute-top-right">
+                  <div class="text-blue">{{util.category(recipe.firstCategoryKind).name}}</div>
+                  <div class="text-red">{{util.category(recipe.secondCategoryKind).name}}</div>
                 </div>
               </q-card>
             </q-btn>
@@ -272,6 +272,7 @@
     beforeMount() {
       this.getLayout.headerLayout = true;
       this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.title = "레시피"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;

@@ -14,7 +14,7 @@
         type="file"
       />
       <div v-if="titleImage != null && titleImage.dataUrl!=undefined" class="full-width">
-        <q-img style="height: 50vw;" :src="titleImage != null && titleImage.dataUrl == undefined ? '': titleImage.dataUrl"></q-img>
+        <img class="full-width" style="height: 50vw;" :src="titleImage != null && titleImage.dataUrl == undefined ? '': titleImage.dataUrl"/>
       </div>
     </section>
 
@@ -120,7 +120,7 @@
         />
         <q-card class="q-my-sm">
 
-          <div class="full-width" style="height: 50vw">
+          <div class="full-width" style="height: 65vw">
             <q-input
               dense
               style="width: 40vw; z-index: 1"
@@ -131,13 +131,13 @@
               v-model="add.file"
               type="file"
             />
-            <div v-if="add != null && add.dataUrl!=undefined" class="full-width">
-              <q-img style="height: 50vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"></q-img>
-            </div>
+            <q-card-section v-if="add != null && add.dataUrl!=undefined" class="full-width">
+              <img class="full-width" style="height: 60vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"/>
+            </q-card-section>
           </div>
 
-          <div class="q-mx-sm q-pb-sm text-left">
-            <div class="q-my-sm text-h5 text-grey-7">{{ index+1 }}.</div>
+          <div class="q-mx-sm text-left">
+            <div class="q-my-sm text-h6 text-grey-7">{{ index+1 }}.</div>
             <q-input
               v-model="add.text"
               filled
@@ -161,7 +161,6 @@
           label="추가하기"/>
       </div>
     </section>
-<!--    <q-btn @click="test1">얖얖ㅇ퍄</q-btn>-->
     <!--fixme 등록하기 버튼 -->
     <q-footer>
       <q-btn dense class="full-width text-h6" @click="recipeChack">등록하기</q-btn>
@@ -211,7 +210,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['updateImage','userInfo']),
+      ...mapActions(['updateImage','userInfo','fetchServer']),
 
       /**======================================
        * 이미지  Kind : 0번 = 레시피 이미지 , 2번 = 타이틀이미지
@@ -362,11 +361,36 @@
 
     beforeCreate() {},
     created() {
+      let self = this;
       window.onpopstate = ()=>{}
+      /**
+       * 로그인 정보 확인하기
+       */
+      this.fetchServer({path : 'user/user',param:{t:LocalStorage.getItem('t'), type : 0}})
+        .then(success => {
+          console.log(success)
+          if(success.status==200){
+
+
+          }else{
+            let timer = setTimeout(function () {
+              console.log(this.data)
+              self.util.goTo('login')
+            },700);
+            self.util.notify('로그인 정보가 없습니다.','warning');
+          }
+        })
+        .catch(reason => {
+          let timer = setTimeout(function () {
+            this.util.goTo('login')
+          },700);
+          this.util.notify('로그인 정보가 없습니다.','warning');
+        })
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
       this.getLayout.backbotton = true;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.title = "레시피"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
@@ -374,6 +398,12 @@
 
       this.recipe = this.util.getQuery().recipe;
       console.log(this.recipe)
+
+      /**
+       * 사용자 정보 업데이트
+       */
+      this.userInfo({token : LocalStorage.getItem('t')});
+
     },
     mounted() {},
     beforeUpdate() {},

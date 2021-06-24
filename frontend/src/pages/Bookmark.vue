@@ -4,12 +4,14 @@
     <section class="flex justify-between">
       <div v-for="(recipe,index) in myFavoriteRecipe" :key="index">
         <q-btn flat dense @click="contentPage(recipe)">
-          <q-card style="width: 42vw; height: 50vw">
-            <img class="justify-between" :src="recipe.url">
-            <div class="flex q-ml-sm">
-              <div class="text-h6">{{recipe.title}}</div>
-              <div class="text-subtitle2">{{recipe.description}}</div>
-            </div>
+          <q-card style="width: 42vw">
+            <div class="q-ml-sm absolute-top-left">{{index+1}}</div>
+            <img :src="recipe.url" style="height: 35vw"/>
+            <q-separator/>
+            <q-card-section>
+              <div class="text-weight-bold" style="font-size: 1rem">{{util.strSummary(recipe.title,5)}}</div>
+              <div class="text-grey-7" style="font-size: 0.8rem">{{util.strSummary(recipe.description,'6')}}</div>
+            </q-card-section>
           </q-card>
         </q-btn>
       </div>
@@ -25,7 +27,7 @@
   export default {
     name: 'Bookmark',
     computed:{
-      ...mapGetters(['getLayout'])
+      ...mapGetters(['getLayout','getUser'])
     },
     data(){
       return{
@@ -52,8 +54,8 @@
         .then(success => {
           console.log(success)
           if(success.status==200){
-            this.setFavorite(success.user.favorite);
-            this.setLogIn(true);
+            // this.setFavorite(success.user.favorite);
+            // this.setLogIn(true);
 
           }else{
             let timer = setTimeout(function () {
@@ -72,6 +74,7 @@
     beforeMount() {
       this.getLayout.headerLayout = true;
       this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.title = "즐겨찾기"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = true;
@@ -80,12 +83,13 @@
       /**
        * 사용자 정보 업데이트
        */
-      this.userInfo({token : LocalStorage.getItem('t')});
-      this.fetchServer({path :'user/user/'+LocalStorage.getItem('t')})
-        .then(success =>{
-          if(success.status == 200){this.myFavoriteRecipe = success.user.myFavoriteRecipe;}
-        })
-        .catch(reason => console.log(reason))
+      this.myFavoriteRecipe = this.getUser.myFavoriteRecipe;
+      // this.userInfo({token : LocalStorage.getItem('t')});
+      // this.fetchServer({path :'user/user/'+LocalStorage.getItem('t')})
+      //   .then(success =>{
+      //     if(success.status == 200){this.myFavoriteRecipe = success.user.myFavoriteRecipe;}
+      //   })
+      //   .catch(reason => console.log(reason))
     },
     mounted() {},
     beforeUpdate() {},

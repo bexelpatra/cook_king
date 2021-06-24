@@ -101,6 +101,7 @@
       this.getLayout.headerLayout = true;
       this.getLayout.title = "핀 인증";
       this.getLayout.backbotton = true;
+      this.getLayout.mainbackbotton = false;
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;

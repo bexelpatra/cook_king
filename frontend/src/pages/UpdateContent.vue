@@ -15,7 +15,7 @@
         type="file"
       />
       <div v-if="titleImage != null && titleImage.dataUrl!=undefined" class="full-width">
-        <q-img style="height: 50vw;" :src="titleImage != null && titleImage.dataUrl == undefined ? '': titleImage.dataUrl"></q-img>
+        <img class="full-width" style="height: 50vw;" :src="titleImage != null && titleImage.dataUrl == undefined ? '': titleImage.dataUrl"/>
       </div>
     </section>
 
@@ -121,7 +121,7 @@
         />
         <q-card class="q-my-sm">
 
-          <div class="full-width" style="height: 50vw">
+          <div class="full-width" style="height: 65vw">
             <q-input
               dense
               style="width: 40vw; z-index: 1"
@@ -132,13 +132,13 @@
               v-model="add.file"
               type="file"
             />
-            <div v-if="add != null && add.dataUrl!=undefined" class="full-width">
-              <q-img style="height: 50vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"></q-img>
-            </div>
+            <q-card-section v-if="add != null && add.dataUrl!=undefined" class="full-width">
+              <img class="full-width" style="height: 60vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"/>
+            </q-card-section>
           </div>
 
-          <div class="q-mx-sm q-pb-sm text-left">
-            <div class="q-my-sm text-h5 text-grey-7">{{ index+1 }}.</div>
+          <div class="q-mx-sm text-left">
+            <div class="q-my-sm text-h6 text-grey-7">{{ index+1 }}.</div>
             <q-input
               v-model="add.text"
               filled
@@ -371,7 +371,8 @@
     },
     beforeMount() {
       this.getLayout.headerLayout = true;
-      this.getLayout.backbotton = true;
+      this.getLayout.backbotton = false;
+      this.getLayout.mainbackbotton = true;
       this.getLayout.title = "레시피"
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
@@ -392,7 +393,7 @@
       //adds:[{dataUrl : '',order :0,text :'',file :null, kind :0}],
       this.order = this.recipe.contentList.size;
       // 기존 정보 받아오기
-      this.fetchServer({path : 'recipe/recipe/contents',param:{token :"test",recipeId : this.recipe.id}})
+      this.fetchServer({path : 'recipe/recipe/contents',param:{token : LocalStorage.getItem('t'),recipeId : this.recipe.id}})
         .then(value =>{
           this.adds = [];
           for(let i =0;i<value.contents.length;i++){
