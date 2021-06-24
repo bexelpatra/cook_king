@@ -19,7 +19,7 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6 text-black">
                   "{{util.strSummary(recipe.title,7)}}"
@@ -52,7 +52,7 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6">
                   "{{util.strSummary(recipe.title,7)}}"
@@ -85,7 +85,7 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6">
                   {{util.strSummary(recipe.title,7)}}
@@ -118,7 +118,7 @@
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="recipe.url" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6">
                   {{util.strSummary(recipe.title,7)}}
@@ -295,7 +295,7 @@
         })
         this.fetchServer({path : 'recipe/pop-recipes',param :{firstcategory:1,page : this.koreaPage}})
         .then(value => {
-          value.recipes.forEach(recipe =>{this.japanList.push(recipe);})
+          value.recipes.forEach(recipe =>{this.japanList.push(recipe);console.log(recipe)})
           self.japanPage = value.recipes.length>0? value.recipes[value.recipes.length-1].id :-1;
         })
         .catch(reason => {
