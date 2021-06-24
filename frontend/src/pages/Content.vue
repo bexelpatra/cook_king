@@ -47,7 +47,7 @@
         <!-- 메인사진과 요리이름 -->
         <div>
           <img :src="'data:image/jpeg;base64,'+recipe.bytes" class="full-width" style="height: 48vw">
-          <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.title}}</div>
+          <div class="q-pa-sm q-ml-sm text-h4 text-weight-bold">{{recipe.title}}</div>
         </div>
         <!-- 간단 설명 및 소개 + 태그들 -->
         <div class="q-px-md">
@@ -72,19 +72,22 @@
           </div>
         </section>
 
-        <q-separator class="q-my-md"/>
+        <q-separator class="q-mt-md"/>
 
         <!-- 컨텐츠 이미지 뿌리기 -->
-        <q-card-section class="q-mt-md">
+        <q-card-section>
           <!-- todo 반복문 돌림녀서 뽑아낸다. -->
-          <div class="relative-position" v-for="(content,index) in recipe.contentList">
+          <div class="text-h5 text-weight-bold">레시피</div>
+          <div class="q-mt-md relative-position" v-for="(content,index) in recipe.contentList">
             <div v-if="index !=0">
               <div class="absolute-top-left"><q-badge>{{index}}</q-badge></div>
               <img :src="'data:image/jpeg;base64,'+content.bytes" class="full-width " style="height: 60vw"/>
-              <div class="q-mt-sm">
+              <div class="q-mt-sm" style="font-size: 1rem">
                 {{content.description}}
               </div>
+              <q-separator class="q-my-lg"/>
             </div>
+
           </div>
         </q-card-section>
       </q-card>
