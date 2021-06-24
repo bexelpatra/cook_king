@@ -94,7 +94,7 @@
             <q-btn dense flat class="full-width" >
               <q-card @click="contentPage(recipe)" flat class="flex full-width" style="height:5em;">
                 <div class="q-pa-sm full-height" style="width: 20%;">
-                  <img :src=recipe.url height="55" width="55"/>
+                  <img :src="'data:image/jpeg;base64,' +recipe.bytes" height="55" width="55"/>
                 </div>
                 <div class="q-ml-xs q-pa-sm full-height" style="width: 70%;">
                   <div class="text-weight-bold text-left" style="font-size: 1.2em">{{util.strSummary(recipe.title,8)}}</div>
