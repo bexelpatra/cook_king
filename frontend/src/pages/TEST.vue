@@ -80,6 +80,8 @@
                :ratio="3/4"
         ></q-img>
 
+        <q-btn @click="test21" label="test21 : binary를 img로"/>
+        <q-img :src="byteImg"/>
       </section>
     </q-page>
 </template>
@@ -122,6 +124,8 @@
 
         url:'',
         pnz : null,
+
+        byteImg: '',
 
       }
     },
@@ -354,6 +358,13 @@
         }
 
         return new File([u8arr], fileName, {type:mime});
+      },
+      test21(){
+        this.fetchServer({path : 'test/test27',param:{path : 'D:/class/cook_king/frontend/public/imgs/5000/3000/1.JPG'}})
+          .then(success =>{
+            console.log(success.bytes)
+            this.byteImg = 'data:image/jpeg;base64,'+success.bytes;
+          })
       },
     },
 

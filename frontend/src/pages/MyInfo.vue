@@ -88,10 +88,11 @@
         this.$router.push('mycontent');
       },
       cookCoin(){
-        this.$q.notify({
-          message : '기능 추가 예정 입니다.',
-          type : 'info'
-        })
+        // this.$q.notify({
+        //   message : '기능 추가 예정 입니다.',
+        //   type : 'info'
+        // })
+        this.util.goTo('cookcoin');
       }
     },
 
@@ -99,6 +100,7 @@
     created() {
       let self = this;
       window.onpopstate = ()=>{}
+      console.log('myInfo 입장')
       this.fetchServer({path : 'user/user',param:{t:LocalStorage.getItem('t'), type : 0}})
         .then(success => {
           // 로그인 성공시
@@ -107,7 +109,6 @@
             this.setLogIn(true);
           }else{
             let timer = setTimeout(function () {
-              console.log(this.data)
               self.util.goTo('login')
             },700);
             self.util.notify('로그인 정보가 없습니다.','warning');

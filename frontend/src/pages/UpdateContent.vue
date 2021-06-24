@@ -14,8 +14,8 @@
         @input="createTitleImg(titleImage)"
         type="file"
       />
-      <div v-if="titleImage != null && titleImage.dataUrl!=undefined" class="full-width">
-        <img class="full-width" style="height: 50vw;" :src="titleImage != null && titleImage.dataUrl == undefined ? '': titleImage.dataUrl"/>
+      <div v-if="titleImage != null && titleImage.src!=undefined" class="full-width">
+        <img class="full-width" style="height: 50vw;" :src="titleImage != null && titleImage.src == undefined ? '': titleImage.src"/>
       </div>
     </section>
 
@@ -132,8 +132,8 @@
               v-model="add.file"
               type="file"
             />
-            <q-card-section v-if="add != null && add.dataUrl!=undefined" class="full-width">
-              <img class="full-width" style="height: 60vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"/>
+            <q-card-section v-if="add != null && add.src!=undefined" class="full-width">
+              <img class="full-width" style="height: 60vw;" :src="add != null && add.src == undefined ? '': add.src"/>
             </q-card-section>
           </div>
 
@@ -398,13 +398,15 @@
           this.adds = [];
           for(let i =0;i<value.contents.length;i++){
             let content = value.contents[i];
-            let file = this.util.dataURLtoFile('data:image/jpeg;base64,'+(content.bytes),'image');
+            let src = 'data:image/jpeg;base64,'+(content.bytes);
+            let file = this.util.dataURLtoFile(src,'image');
             if(i==0){
               this.titleImage=({
                 dataUrl: content.url,
                 file : [file],
                 kind : 2,
                 order : content.order,
+                src : src,
               })
               this.thumb = file;
             }else{
@@ -414,7 +416,9 @@
                 kind : 0,
                 order : content.order,
                 text : content.description,
+                src: src,
               })
+              console.log(content.bytes)
             }
 
           }
