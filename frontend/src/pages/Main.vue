@@ -22,7 +22,7 @@
                   <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6 text-black">
-                  "{{util.strSummary(recipe.title,7)}}"
+                  "{{util.strSummary(recipe.title,10)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -55,7 +55,7 @@
                   <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6">
-                  "{{util.strSummary(recipe.title,7)}}"
+                  "{{util.strSummary(recipe.title,10)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -88,7 +88,7 @@
                   <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6">
-                  {{util.strSummary(recipe.title,7)}}
+                  {{util.strSummary(recipe.title,10)}}
                 </div>
               </q-btn>
             </splide-slide>
@@ -121,7 +121,7 @@
                   <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
                 </div>
                 <div class="q-mt-lg full-width text-left text-h6">
-                  {{util.strSummary(recipe.title,7)}}
+                  {{util.strSummary(recipe.title,10)}}
                 </div>
               </q-btn>
             </splide-slide>
