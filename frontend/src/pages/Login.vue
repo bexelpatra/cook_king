@@ -65,6 +65,7 @@
       ...mapMutations(['setLogIn','setFavorite']),
       ...mapActions(['fetchServer','userInfo']),
 
+
       /**======================================
        * 클릭 이벤트
        ========================================*/
@@ -81,28 +82,26 @@
           return;
         }
         this.fetchServer({path : 'user/user',param:{e:this.email,p:this.password,type : 1}})
-        .then(success => {
-          if(success.status==200){
-            console.log(success);
-            LocalStorage.set("t",success.user.token);
-            LocalStorage.set("e",success.user.email);
-            this.userInfo({token : LocalStorage.getItem('t')})
-            let self = this;
-            let timer = setTimeout(function () {
-              self.util.goTo('main')
-            },700)
-            this.util.notify('로그인 성공','info')
-          }else{
-            this.util.notify("로그인에 실패했습니다",'warning')
-          }
-        })
-        .catch(reason => {console.log(reason)})
+          .then(success => {
+            if(success.status==200){
+              console.log(success);
+              LocalStorage.set("t",success.user.token);
+              LocalStorage.set("e",success.user.email);
+              this.userInfo({token : LocalStorage.getItem('t')})
+              let self = this;
+              let timer = setTimeout(function () {
+                self.util.goTo('main')
+              },700)
+              this.util.notify('로그인 성공','info')
+            }else{
+              this.util.notify("로그인에 실패했습니다",'warning')
+            }
+          })
+          .catch(reason => {console.log(reason)})
         // 로그인 서버 연동
         // this.$router.push({path : '/addcontent', query : {to: to, from : from}});
 
-        },
-
-
+      },
     },
 
     beforeCreate() {},

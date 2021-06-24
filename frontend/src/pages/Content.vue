@@ -46,7 +46,7 @@
       <q-card flat class="full-width">
         <!-- 메인사진과 요리이름 -->
         <div>
-          <img :src="recipe.url" class="full-width" style="height: 48vw">
+          <img :src="'data:image/jpeg;base64,'+recipe.bytes" class="full-width" style="height: 48vw">
           <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.title}}</div>
         </div>
         <!-- 간단 설명 및 소개 + 태그들 -->
@@ -80,7 +80,7 @@
           <div class="relative-position" v-for="(content,index) in recipe.contentList">
             <div v-if="index !=0">
               <div class="absolute-top-left"><q-badge>{{index}}</q-badge></div>
-              <img :src="content.url" class="full-width " style="height: 60vw"/>
+              <img :src="'data:image/jpeg;base64,'+content.bytes" class="full-width " style="height: 60vw"/>
               <div class="q-mt-sm">
                 {{content.description}}
               </div>
@@ -162,6 +162,7 @@
 
 
       this.recipe = this.util.getQuery().recipe;
+      console.log(this.recipe)
       this.change = this.getUser.id == this.recipe.usersDto.id;
 
       this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);
