@@ -13,8 +13,10 @@ import com.example.demo.service.UserService;
 import com.example.demo.utilities.AES;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
+import com.mchange.v2.io.IndentedWriter;
 import javafx.scene.image.Image;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,6 +30,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
+import javax.persistence.EntityManager;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
@@ -42,7 +45,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @CrossOrigin
 @RestController
@@ -449,4 +456,50 @@ public class TestController {
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
+    @GetMapping(value = "/test25")
+    public ResponseEntity bufferedWriteTest(@RequestParam("s")String s){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        File file = new File("xyz");
+        if(!file.exists()) file.mkdirs();
+        File text = new File("xyz/pp.txt");
+
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(text));
+            for (String x: s.split("@")) {
+                bufferedWriter.write(x);
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.flush();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(text));
+            bufferedReader.lines().forEach(line -> System.out.println(line));
+            bufferedReader.close();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @GetMapping(value = "/test26")
+    public ResponseEntity entityTest(@RequestParam("s")String s,
+                                     @RequestParam("s1")int s1,
+                                     @RequestParam("s2")int s2){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+    @GetMapping(value = "/test27")
+    public ResponseEntity img(@RequestParam("path")String path) throws Exception{
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        result.put("bytes",Files.readAllBytes(Paths.get(path)));
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
 }

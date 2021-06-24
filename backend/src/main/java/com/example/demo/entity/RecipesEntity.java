@@ -9,12 +9,15 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "recipes", schema = "mydb")
@@ -143,16 +146,22 @@ public class RecipesEntity {
         String url = "imgs/default.png";
         ContentEntity content = this.getContentEntities().stream().filter(contentEntity -> contentEntity.getContentKind().getValue() == ContentKind.TITLE.getValue()).findFirst().orElse(null);
         if(content!=null) url = content.getUrl();
+        byte[] bytes ={};
+        try {
+            bytes = Files.readAllBytes(Paths.get(content.getAbsolutePath()+content.getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-        List<ContentDto> contentDtos = Utils.to(ContentDto.class,this.getContentEntities());
-//        contentDtos.stream().forEach(contentDto -> {
-//            try {
-//                contentDto.setBytes(Files.readAllBytes(Paths.get(contentDto.getAbsolutePath() + contentDto.getName())));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
+//        List<ContentDto> contentDtos = Utils.to(ContentDto.class,this.getContentEntities());
+        List<ContentDto> contentDtos = this.getContentEntities().stream().map(contentEntity -> {
+            try {
+                return Utils.to(ContentDto.class,contentEntity).setBytes(Files.readAllBytes(Paths.get(contentEntity.getAbsolutePath()+contentEntity.getName())));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }).collect(Collectors.toList());
 
         return Utils.to(RecipesDto.class,this)
                 .setStuffList(Arrays.asList(stuff.split("#")))
@@ -160,7 +169,8 @@ public class RecipesEntity {
                 .setUsersDto(usersDto)
                 .setContentList(contentDtos)
                 .setUrl(url)
-                ;
+                .setBytes(bytes);
+
 
     }
 }

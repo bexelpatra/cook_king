@@ -2,7 +2,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      title="Transaction"
+      title="com.example.demo.chain.Transaction"
       :rows="rows"
       :columns="columns"
       row-key="name"

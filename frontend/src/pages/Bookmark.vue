@@ -44,7 +44,7 @@
     beforeCreate() {},
     created() {
       let self = this;
-      window.onpopstate = ()=>{}
+      window.onpopstate = (event)=>{}
       /**
        * 로그인 정보 확인하기
        */
@@ -57,7 +57,6 @@
 
           }else{
             let timer = setTimeout(function () {
-              console.log(this.data)
               self.util.goTo('login')
             },700);
             self.util.notify('로그인 정보가 없습니다.','warning');
