@@ -24,6 +24,7 @@ const routes = [
 
       //myUtil 샘플
       {path: '/test', name: 'test', component: () => import('pages/TEST.vue')},
+      {path: '/test2', name: 'test2', component: () => import('pages/TEST2.vue')},
 
       //fixme User
       //Login

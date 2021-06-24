@@ -32,7 +32,7 @@ public class RecipesDto {
     private List<ContentDto> contentList = new ArrayList<>();
 
     private String url;
-
+    private byte[] bytes ={};
     // transient
     private List<String> stuffList = new ArrayList<>();
 
@@ -63,6 +63,11 @@ public class RecipesDto {
 
     public RecipesDto setUrl(String url) {
         this.url = url;
+        return this;
+    }
+
+    public RecipesDto setBytes(byte[] bytes) {
+        this.bytes = bytes;
         return this;
     }
 

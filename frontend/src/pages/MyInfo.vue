@@ -88,19 +88,17 @@
         this.$router.push('mycontent');
       },
       cookCoin(){
-        // this.$q.notify({
-        //   message : '기능 추가 예정 입니다.',
-        //   type : 'info'
-        // })
-        this.util.goTo('cookcoin');
+        this.$q.notify({
+          message : '기능 추가 예정 입니다.',
+          type : 'info'
+        })
       }
     },
 
     beforeCreate() {},
     created() {
       let self = this;
-      window.onpopstate = ()=>{}
-      console.log('myInfo 입장')
+      window.onpopstate = (event)=>{}
       this.fetchServer({path : 'user/user',param:{t:LocalStorage.getItem('t'), type : 0}})
         .then(success => {
           // 로그인 성공시

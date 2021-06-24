@@ -33,4 +33,9 @@ public class ContentDto {
         this.absolutePath = absolutePath;
     }
 
+
+    public ContentDto setBytes(byte[] bytes) {
+        this.bytes = bytes;
+        return this;
+    }
 }

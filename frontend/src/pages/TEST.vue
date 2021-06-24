@@ -58,7 +58,7 @@
           </div>
         <q-btn @click="test11" label="왜 안보이냐 싯팔"/>
         <q-btn @click="test12" label="test12"/>
-          <q-img src = "../../public/imgs/1.png"></q-img>
+<!--          <q-img src = "../../public/imgs/1.png"></q-img>-->
           <div>
             <q-btn @click = "test13" label="이미지 실험"/>
             <q-input type="file" label="가랏!" v-model="pnz"/>
@@ -72,6 +72,8 @@
           <q-btn @click="test18" label="test18 : 이미지 받아오기"/>
           <q-btn @click="test19" label="test19 : 사용자정보 업데이트"/>
           <q-btn @click="test20" label="test20 : actions에서 페이지 이동"/>
+          <q-btn @click="test21" label="test21 : binary를 img로"/>
+          <q-img :src="byteImg"/>
           <div>{{fromServer}}</div>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
@@ -80,8 +82,6 @@
                :ratio="3/4"
         ></q-img>
 
-        <q-btn @click="test21" label="test21 : binary를 img로"/>
-        <q-img :src="byteImg"/>
       </section>
     </q-page>
 </template>
@@ -90,7 +90,6 @@
   import {mapGetters,mapActions,mapMutations,mapState} from 'vuex';
   import {LocalStorage} from 'quasar';
   import {myUtil} from "boot/myUtil";
-  import {userInfo} from "src/store/module-example/actions";
 
   export default {
     name: "TEST",
@@ -124,9 +123,7 @@
 
         url:'',
         pnz : null,
-
-        byteImg: '',
-
+        byteImg : '',
       }
     },
     methods:{
@@ -345,6 +342,13 @@
         let x = this.c8({vue : this});
         let y = this.userInfo({token : 't'})
       },
+      test21(){
+        this.fetchServer({path : 'test/test27',param:{path : 'D:/class/cook_king/frontend/public/imgs/5000/3000/1.JPG'}})
+        .then(success =>{
+          console.log(success.bytes)
+          this.byteImg = 'data:image/jpeg;base64,'+success.bytes;
+        })
+      },
       dataURLtoFile : (dataurl, fileName) => {
 
         let arr = dataurl.split(','),
@@ -358,13 +362,6 @@
         }
 
         return new File([u8arr], fileName, {type:mime});
-      },
-      test21(){
-        this.fetchServer({path : 'test/test27',param:{path : 'D:/class/cook_king/frontend/public/imgs/5000/3000/1.JPG'}})
-          .then(success =>{
-            console.log(success.bytes)
-            this.byteImg = 'data:image/jpeg;base64,'+success.bytes;
-          })
       },
     },
 

@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import com.example.demo.dto.WrapperRecipe;
 import com.example.demo.entity.RecipesEntity;
 import com.example.demo.enums.FirstCategoryKind;
 import com.example.demo.enums.SecondCategoryKind;

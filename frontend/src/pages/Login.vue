@@ -121,7 +121,13 @@
     mounted() {},
     beforeUpdate() {},
     updated() {},
-    beforeDestroy() {},
+    beforeDestroy() {
+      this.$router.beforeEach((to, from, next) =>{
+        next(false)
+       console.log(to)
+        this.util.goTo('/main',{})
+      })
+    },
     destroyed() {}
   }
 </script>
