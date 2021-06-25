@@ -332,7 +332,7 @@
         })
         form.forEach((value, key) => console.log(value,key))
         // 서버 통신 url
-        this.updateImage({path : 'recipe/recipe',method :'put',param :{token :"test"},body :form})
+        this.updateImage({path : 'recipe/recipe',method :'put',param :{token :LocalStorage.getItem('t')},body :form})
           // then value 200 성공 코드
           .then(value =>{
             if(value.status==200){
