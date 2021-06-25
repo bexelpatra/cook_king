@@ -65,7 +65,7 @@ public class RecipeController {
         }
 
         List<RecipesDto> recipesDtoList = new ArrayList<>();
-        recipeService.getRecipeByCategoriesAndKeyword(firstCategoryKinds,secondCategoryKinds,keyword,page).stream().forEach(recipesEntity -> recipesDtoList.add(recipesEntity.toWithContents()));
+        recipeService.getRecipeByCategoriesAndKeyword(firstCategoryKinds,secondCategoryKinds,keyword,page).stream().forEach(recipesEntity -> recipesDtoList.add(recipesEntity.to()));
 
         result.put("desc","성공적으로 조회했습니다.");
         result.put("recipes",recipesDtoList);
