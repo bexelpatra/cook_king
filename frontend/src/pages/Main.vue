@@ -9,20 +9,20 @@
         <q-card flat style="width: 98vw; border-radius: 10px;" >
           <splide
             :slides="koreaList"
-            class="no-padding q-mb-xs"
+            class="no-padding no-margin q-mb-xs"
             :options="serveOptions"
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in koreaList" class="q-pr-sm" :key="index" style="height: 55vw">
-              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
+              <q-btn flat @click="contentPage(recipe)">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw; border-radius: 5px;"/>
                 </div>
-                <div class="q-mt-lg full-width text-left text-h6 text-black">
-                  "{{util.strSummary(recipe.title,10)}}"
+                <div class="q-mt-lg full-width text-weight-bold text-left text-h6 text-black">
+                  "{{util.strSummary(recipe.title,15)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -47,15 +47,15 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in westernList" class="q-pr-sm" :key="index" style="height: 55vw">
-              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
+              <q-btn flat @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw; border-radius: 5px"/>
                 </div>
-                <div class="q-mt-lg full-width text-left text-h6">
-                  "{{util.strSummary(recipe.title,10)}}"
+                <div class="q-mt-lg full-width text-weight-bold text-left text-h6 text-black">
+                  "{{util.strSummary(recipe.title,15)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -80,15 +80,15 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in japanList" class="q-pr-sm" :key="index" style="height: 55vw">
-              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
+              <q-btn flat @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw; border-radius: 5px"/>
                 </div>
-                <div class="q-mt-lg full-width text-left text-h6">
-                  {{util.strSummary(recipe.title,10)}}
+                <div class="q-mt-lg full-width text-weight-bold text-left text-h6 text-black">
+                  "{{util.strSummary(recipe.title,15)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -113,15 +113,15 @@
             @splide:moved = 'onMounted'
           >
             <splide-slide v-for="(recipe,index) in chinaList" class="q-pr-sm" :key="index" style="height: 55vw">
-              <q-btn outline color="grey" @click="contentPage(recipe)" style="border-radius: 12px">
+              <q-btn flat @click="contentPage(recipe)" style="border-radius: 12px">
                 <div
                   class="text-white"
                   style="height: 130px;border-radius: 5px 5px;"
                 >
-                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw;"/>
+                  <img class="full-width" :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 40vw; border-radius: 5px"/>
                 </div>
-                <div class="q-mt-lg full-width text-left text-h6">
-                  {{util.strSummary(recipe.title,10)}}
+                <div class="q-mt-lg full-width text-weight-bold text-left text-h6 text-black">
+                  "{{util.strSummary(recipe.title,15)}}"
                 </div>
               </q-btn>
             </splide-slide>
@@ -147,16 +147,7 @@
         /** Splide 데이터 */
         //main recipe
         util : new myUtil(this),
-        mainslides : [],
-        mainOptions : {
-          type: 'slide',
-          focus : 'center',
-          padding : {
-            // right : '1rem',
-          },
-          arrows : false,
-          drag : true
-        },
+
         //serve recipe
         serveslides : [],
         serveOptions : {
@@ -169,24 +160,7 @@
           drag : true,
           pagination : false
         },
-        //게시물 출력
-        mainList : [
-          {
-            name : ' "된장찌개" ',
-            introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-            src : 'imgs/1.png',
-          },
-          {
-            name : ' "김치찌개" ',
-            introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-            src : 'imgs/2.png',
-          },
-          {
-            name : ' "볶음밥" ',
-            introduce : '집에서 해먹으면 워워우어워워 소리가라는 음식!아니야 이건 좀더 길어야지만 해',
-            src : 'imgs/3.png',
-          }
-        ],
+
         koreaList:[],
         koreaPage : -1,
         japanList :[],
