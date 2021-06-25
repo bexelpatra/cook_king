@@ -344,7 +344,7 @@
               this.util.goTo('main',{})
             }
           })
-          //catch 실패 코드 200외 전부 처리
+          //catch 실패 코드 200외 전부 처리!
           .catch(reason => {
 
           })
