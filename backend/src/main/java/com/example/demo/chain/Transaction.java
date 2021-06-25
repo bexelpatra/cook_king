@@ -1,5 +1,7 @@
 package com.example.demo.chain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
@@ -8,8 +10,12 @@ import java.util.Arrays;
 public class Transaction {
 
     public String transactionId;// transaction의 hash
+    @JsonIgnore
     public PublicKey sender; // 보내는 사람의 공개키
+    @JsonIgnore
     public PublicKey recipient; // 받는 사람의 공개키
+    private byte[] from;
+    private byte[] to;
     public float value; // 보내는 금액
     public byte[] signature;// 보내는 사람의 전자 서명
 
@@ -29,7 +35,9 @@ public class Transaction {
         this.sender = from;
         this.recipient = to;
         this.value = value;
-        this.inputs = inputs;
+        this.inputs = inputs==null? new ArrayList<>() : inputs;
+        this.from = from.getEncoded();
+        this.to = to.getEncoded();
     }
 
     // 입력받은 값들을 이용해서 hash값을 만든다.

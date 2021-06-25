@@ -121,8 +121,6 @@ public class RecipeServiceImpl implements RecipeService {
         RecipesEntity recipesEntity = optional.get();
         RecipesDto recipesDto = recipesEntity.toWithContents();
 
-        recipesDto.setContentList(Utils.to(ContentDto.class,recipesEntity.getContentEntities()));
-
         return recipesDto;
     }
 

@@ -134,10 +134,18 @@ public class RecipesEntity {
     }
 
     public RecipesDto to(){
+        String stuff = this.getStuffs() == null ? this.stuffs ="": this.getStuffs();
+        ContentEntity content = this.getContentEntities().stream().filter(contentEntity -> contentEntity.getContentKind().getValue() == ContentKind.TITLE.getValue()).findFirst().orElse(null);
+        byte[] bytes ={};
+        try {
+            bytes = Files.readAllBytes(Paths.get(content.getAbsolutePath()+content.getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return Utils.to(RecipesDto.class,this)
-                .setStuffList(Arrays.asList(this.description.split("#")))
+                .setStuffList(Arrays.asList(stuff.split("#")))
                 .setUsersDto(UsersDto.fix(Utils.to(UsersDto.class,this.getUsersEntity())))
-                ;
+                .setBytes(bytes);
     }
     public RecipesDto toWithContents(){
         UsersDto usersDto = Utils.to(UsersDto.class,this.getUsersEntity());
