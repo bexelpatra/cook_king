@@ -148,7 +148,7 @@
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions(['duplicateCheck','fetchServer']),
+      ...mapActions(['duplicateCheck','fetchServer','userInfo']),
       test(x){
       },
       passwordCheck:_.debounce(function(){
@@ -256,10 +256,10 @@
             .then(value => {
               // 회원가입 성공하면 어디로 가야 하는가?
               if(value.status == 200){
-                this.util.goTo('main')
                 LocalStorage.set("e",value.user.email);
                 LocalStorage.set("t",value.user.token);
                 this.util.notify(value.desc,'info');
+                this.util.goTo('/')
               }else if(value.status==202){
                 this.util.notify(value.desc,'warning');
               }

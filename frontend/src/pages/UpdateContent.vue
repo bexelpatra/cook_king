@@ -14,8 +14,8 @@
         @input="createTitleImg(titleImage)"
         type="file"
       />
-      <div v-if="titleImage != null && titleImage.src!=undefined" class="full-width">
-        <img class="full-width" style="height: 50vw;" :src="titleImage != null && titleImage.src == undefined ? '': titleImage.src"/>
+      <div v-if="titleImage != null && titleImage.bytes!=undefined" class="full-width">
+        <img class="full-width" style="height: 50vw;" :src="titleImage != null && titleImage.bytes == undefined ? '': 'data:image/jpeg;base64,'+titleImage.bytes"/>
       </div>
     </section>
 
@@ -132,8 +132,11 @@
               v-model="add.file"
               type="file"
             />
-            <q-card-section v-if="add != null && add.src!=undefined" class="full-width">
-              <img class="full-width" style="height: 60vw;" :src="add != null && add.src == undefined ? '': add.src"/>
+            <q-card-section v-if="add != null && add.bytes!=undefined" class="full-width">
+              <img class="full-width" style="height: 60vw;" :src="add != null && add.bytes == undefined ? '': 'data:image/jpeg;base64,'+add.bytes"/>
+            </q-card-section>
+            <q-card-section v-else class="full-width">
+              <img class="full-width" style="height: 60vw;" :src="add != null && add.dataUrl == undefined ? '': add.dataUrl"/>
             </q-card-section>
           </div>
 
@@ -332,7 +335,7 @@
         })
         form.forEach((value, key) => console.log(value,key))
         // 서버 통신 url
-        this.updateImage({path : 'recipe/recipe',method :'put',param :{token :"test"},body :form})
+        this.updateImage({path : 'recipe/recipe',method :'put',param :{token :LocalStorage.getItem('t')},body :form})
           // then value 200 성공 코드
           .then(value =>{
             if(value.status==200){
@@ -407,6 +410,7 @@
                 kind : 2,
                 order : content.order,
                 src : src,
+                bytes : content.bytes,
               })
               this.thumb = file;
             }else{
@@ -417,6 +421,7 @@
                 order : content.order,
                 text : content.description,
                 src: src,
+                bytes : content.bytes,
               })
               console.log(content.bytes)
             }
