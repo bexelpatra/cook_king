@@ -103,7 +103,7 @@ public class RecipeController {
         HttpStatus httpStatus = null;
 
         // 1. token 검증
-        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseGet(null);
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElse(null);
         if(usersEntity==null){
             httpStatus = HttpStatus.ACCEPTED;
             result.put("desc","토큰 오류");
@@ -136,7 +136,7 @@ public class RecipeController {
         HttpStatus httpStatus = null;
 
         // 1. token 검증
-        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElseGet(null);
+        UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElse(null);
         if(usersEntity==null){
             httpStatus = HttpStatus.ACCEPTED;
             result.put("desc","토큰 오류");

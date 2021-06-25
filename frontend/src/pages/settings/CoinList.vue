@@ -1,13 +1,11 @@
 <!--fixme 상세정보-->
 <template>
-  <div class="q-pa-md">
     <q-table
-      title="com.example.demo.chain.Transaction"
-      :rows="rows"
+      title="Treats"
+      :data="rows"
       :columns="columns"
       row-key="name"
     />
-  </div>
 </template>
 
 
@@ -24,47 +22,17 @@
     data(){
       return{
         util : new myUtil(this),
-        columns : [
-          // {
-          //   name: 'name',
-          //   required: true,
-          //   label: 'Dessert (100g serving)',
-          //   align: 'left',
-          //   field: row => row.name,
-          //   format: val => `${val}`,
-          //   sortable: true
-          // },
-          { name: 'transaction_id', align: 'center', label: 'transaction_id', field: 'transaction_id', sortable: true },
-          { name: 'from', label: 'from', field: 'from', sortable: true },
-          { name: 'to', label: 'to', field: 'to' },
-          { name: 'time', label: 'time', field: 'time' },
-          { name: 'amount', label: 'amount', field: 'amount' },
-          // { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        columns: [
+          {name: 'name', required: true, label: 'Dessert (100g serving)', align: 'left', field: row => row.name, format: val => `${val}`, sortable: true},
+          { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
+          { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
+          { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
+          { name: 'protein', label: 'Protein (g)', field: 'protein' },
+          { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
         ],
-        rows : [
-          {
-            name: 'Frozen Yogurt',
-            from: 159,
-            to: 24,
-            time: 4.0,
-            amount: 87,
-          },
-          {
-            name: 'Frozen Yogurt',
-            from: 159,
-            to: 24,
-            time: 4.0,
-            amount: 87,
-          },
-          {
-            name: 'Frozen Yogurt',
-            from: 159,
-            to: 24,
-            time: 4.0,
-            amount: 87,
-          },
+        rows: [
+          {name: 'Frozen Yogurt', calories: 159, fat: 6.0, carbs: 24, protein: 4.0, sodium: 87, calcium: '14%', iron: '1%'},
         ]
-
       }
     },
     methods:{

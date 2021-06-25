@@ -46,19 +46,19 @@
       <q-card flat class="full-width">
         <!-- 메인사진과 요리이름 -->
         <div>
-          <img :src="recipe.url" class="full-width" style="height: 48vw">
-          <div class="q-pa-sm text-h4 text-weight-bold">{{recipe.title}}</div>
+          <img :src="'data:image/jpeg;base64,'+recipe.bytes" class="full-width" style="height: 62vw">
+          <div class="q-pa-sm q-ml-sm text-h4 text-weight-bold">{{recipe.title}}</div>
         </div>
         <!-- 간단 설명 및 소개 + 태그들 -->
         <div class="q-px-md">
           <div class="text-grey-7" style="font-size: 1rem">"{{recipe.description}}"</div>
         </div>
 
-        <q-separator class="q-my-sm"/>
+        <q-separator class="q-my-md"/>
 
         <!-- 재료 -->
         <section>
-          <div class="q-pa-sm text-h5 text-weight-bold">재료</div>
+          <div class="q-pa-sm q-ml-sm text-h5 text-weight-bold">재료</div>
           <!--todo 반복문 돌리면서 재료를 뽑아와야한다.-->
           <div class="q-mx-sm flex" style="position: relative; height: 1.7em;" v-for="stuff in recipe.stuffList">
             <div class="absolute-center full-width text-grey-7" style="border: dotted 1px grey"/>
@@ -72,22 +72,30 @@
           </div>
         </section>
 
-        <q-separator class="q-my-md"/>
+        <q-separator class="q-mt-md"/>
 
         <!-- 컨텐츠 이미지 뿌리기 -->
-        <q-card-section class="q-mt-md">
+        <q-card-section>
           <!-- todo 반복문 돌림녀서 뽑아낸다. -->
-          <div class="relative-position" v-for="(content,index) in recipe.contentList">
+          <div class="text-h5 text-weight-bold">레시피</div>
+          <div class="q-mt-md relative-position" v-for="(content,index) in recipe.contentList">
             <div v-if="index !=0">
-              <div class="absolute-top-left"><q-badge>{{index}}</q-badge></div>
-              <img :src="content.url" class="full-width " style="height: 60vw"/>
-              <div class="q-mt-sm">
+              <div class="q-ml-xs absolute-top-left"><q-badge>{{index}}</q-badge></div>
+              <img :src="'data:image/jpeg;base64,'+content.bytes" class="full-width " style="height: 60vw"/>
+              <div style="font-size: 1rem; white-space: pre-line; overflow: auto">
                 {{content.description}}
               </div>
+              <q-separator class="q-my-lg"/>
             </div>
+
           </div>
         </q-card-section>
       </q-card>
+
+      <!-- fixme 페이지 업 -->
+      <q-page-scroller class="absolute-bottom-right" :scroll-offset="150" :offset="[18, 18]">
+        <q-btn fab icon="keyboard_arrow_up" color="blue-6"/>
+      </q-page-scroller>
     </section>
   </q-page>
 </template>
@@ -162,6 +170,7 @@
 
 
       this.recipe = this.util.getQuery().recipe;
+      console.log(this.recipe)
       this.change = this.getUser.id == this.recipe.usersDto.id;
 
       this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);

@@ -6,7 +6,7 @@
         <q-btn flat dense @click="contentPage(recipe)">
           <q-card style="width: 42vw">
             <div class="q-ml-sm absolute-top-left">{{index+1}}</div>
-            <img :src="recipe.url" style="height: 35vw"/>
+            <img :src="'data:image/jpeg;base64,' + recipe.bytes" style="height: 35vw"/>
             <q-separator/>
             <q-card-section>
               <div class="text-weight-bold" style="font-size: 1rem">{{util.strSummary(recipe.title,5)}}</div>
