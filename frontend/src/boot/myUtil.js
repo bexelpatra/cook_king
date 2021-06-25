@@ -53,7 +53,7 @@ export class myUtil {
       case 'CHINA' :
         category = {id : 2,name :'중식'}
         break;
-      case 'WESTER' :
+      case 'WESTERN' :
         category = {id : 3,name :'양식'}
         break;
 

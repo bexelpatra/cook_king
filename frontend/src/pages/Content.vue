@@ -82,7 +82,7 @@
             <div v-if="index !=0">
               <div class="q-ml-xs absolute-top-left"><q-badge>{{index}}</q-badge></div>
               <img :src="'data:image/jpeg;base64,'+content.bytes" class="full-width " style="height: 60vw"/>
-              <div style="font-size: 1rem; white-space: pre-line;">
+              <div style="font-size: 1rem; white-space: pre-line; overflow: auto">
                 {{content.description}}
               </div>
               <q-separator class="q-my-lg"/>
