@@ -90,7 +90,9 @@ public class RecipeServiceImpl implements RecipeService {
         recipesEntity.setUsersEntity(usersEntity);
 
         recipesEntity = recipeRepository.save(recipesEntity);
-        saveContentEntity(multiFileDto,recipesEntity,urlPath+usersEntity.getId()+"/"+recipesEntity.getId()+"/");
+        recipesEntity.setContentEntities(
+            saveContentEntity(multiFileDto,recipesEntity,urlPath+usersEntity.getId()+"/"+recipesEntity.getId()+"/")
+        );
 
         // 이미지 저장
         Utils.saveImage(multiFileDto.getFile(),usersEntity,recipesEntity.getId());
