@@ -69,4 +69,7 @@ public class Block {
         System.out.println("Transaction Succesfully added to Block");
         return true;
     }
+
+    public long getTimeStamp() { return timeStamp; }
+    public int getNonce() { return nonce; }
 }

@@ -1,13 +1,23 @@
 package com.example.demo.chain;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /*
     참고자료 : https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa
@@ -37,7 +47,7 @@ public class CookChain {
     }
 
     public static ArrayList<Block> blockChain = new ArrayList<>();
-    public static int difficulty = 5; //  채굴 난이도. hash에서 앞에 0이붙는 개수
+    public static int difficulty = 3; //  채굴 난이도. hash에서 앞에 0이붙는 개수
     // 아직 사용되지 않은 transactionout들, 잔고개념으로 볼 수 있다.
     public static HashMap<String,TransactionOutput> UTXOs = new HashMap<>();
 
@@ -89,16 +99,30 @@ public class CookChain {
         System.out.println("\nWalletA's balance is: " + walletA.getBalance());
         System.out.println("WalletB's balance is: " + walletB.getBalance());
 
-        Block block3 = new Block(block2.hash);
-        System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
-        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 20));
-        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 1));
-        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 2));
-        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 3));
-        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 4));
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
-
+//        Block block3 = new Block(block2.hash);
+//        System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
+//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 20));
+//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 1));
+//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 2));
+//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 3));
+//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 4));
+//        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
+//        System.out.println("WalletB's balance is: " + walletB.getBalance());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT,true);
+        String x= "";
+        JsonParser jsonParser = new JsonParser();
+        try {
+            objectMapper.writeValue(new File("im.txt"),blockChain);
+            x = objectMapper.writeValueAsString(blockChain);
+            BufferedReader bufferedReader = Files.newBufferedReader(Paths.get("im.txt"));
+            JsonArray jsonArray = jsonParser.parse(bufferedReader.lines().collect(Collectors.joining(""))).getAsJsonArray();
+            initConverter(jsonArray);
+            jsonArray.forEach(jsonElement -> jsonElement.getAsJsonObject().entrySet().stream().forEach(stringJsonElementEntry -> System.out.println(stringJsonElementEntry.getKey()+":"+stringJsonElementEntry.getValue())));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         isChainValid();
 
     }
@@ -186,4 +210,12 @@ public class CookChain {
         blockChain.add(newBlock);
     }
 
+    private static void initBlock(Block newBlock) {
+        blockChain.add(newBlock);
+    }
+
+    private static void initConverter(JsonArray jsonArray){
+//        jsonArray.forEach(jsonElement -> initBlock(new Block()));
+        jsonArray.forEach(jsonElement -> System.out.println(jsonElement.getAsJsonObject().get("transactions")));
+    }
 }

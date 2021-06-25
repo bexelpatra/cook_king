@@ -1,15 +1,23 @@
 package com.example.demo.chain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.security.*;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Wallet {
 
+    @JsonIgnore
     public PrivateKey privateKey;
+    @JsonIgnore
     public PublicKey publicKey;
+    private byte[] privatekey;
+    private byte[] publickey;
 
     public HashMap<String,TransactionOutput> UTXOs = new HashMap<>();
 
@@ -34,6 +42,8 @@ public class Wallet {
 
             privateKey = keyPair.getPrivate();
             publicKey = keyPair.getPublic();
+            this.privatekey = privateKey.getEncoded();
+            this.publickey = publicKey.getEncoded();
         }catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -75,4 +85,13 @@ public class Wallet {
         return newTransaction;
     }
 
+    public Wallet(byte[] privateKey,byte[] publicKey) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("ECDSA","BC");
+            this.privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKey));
+            this.publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(publicKey));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
