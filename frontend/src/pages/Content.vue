@@ -153,8 +153,9 @@
           .catch(reason => console.log(reason))
       },
       getContentList(recipeId){
-        this.fetchServer({path : 'recipe/recipe/content',param:{id : recipeId}})
+        this.fetchServer({path : 'recipe/recipe/content',param:{recipe : recipeId}})
         .then(success =>{
+          console.log(success)
           if(success.status==200){
             this.recipe.contentList = success.recipe.contentList;
           }
@@ -181,10 +182,11 @@
       this.getContentList(this.recipe.id);
       console.log(this.recipe)
       // 수정하기버튼
-      this.change = this.getUser.id == this.recipe.usersDto.id;
-
-      this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);
-      this.logIn = this.getUser ==null || this.getUser.id == 0 ? false:true;
+      if(this.getUser.id!=null){
+        this.change = this.getUser.id == this.recipe.usersDto.id;
+        this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);
+        this.logIn = this.getUser ==null || this.getUser.id == 0 ? false:true;
+      }
 
     },
     mounted() {
