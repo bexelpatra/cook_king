@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -73,6 +71,7 @@ public class TestController2 {
 //        block.addTransaction(new Transaction(CookChain.walletA.publicKey,CookChain.walletB.publicKey,1f,null));
 //        CookChain.addBlock(block);
         CookChain.dostuffs();
+        Arrays.stream("12031435153".split("")).collect(Collectors.groupingBy(String::length));
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }

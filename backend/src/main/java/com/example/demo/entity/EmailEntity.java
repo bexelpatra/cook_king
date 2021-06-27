@@ -71,6 +71,10 @@ public class EmailEntity {
     public boolean isCheck() { return check; }
     public void setCheck(boolean check) { this.check = check; }
 
+    @PostPersist
+    private void changer(){
+
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
