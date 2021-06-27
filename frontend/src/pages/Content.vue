@@ -152,7 +152,16 @@
           })
           .catch(reason => console.log(reason))
       },
-
+      getContentList(recipeId){
+        this.fetchServer({path : 'recipe/recipe/content',param:{recipe : recipeId}})
+        .then(success =>{
+          console.log(success)
+          if(success.status==200){
+            this.recipe.contentList = success.recipe.contentList;
+          }
+        })
+        .catch(reason => {console.log(reason)})
+      },
     },
 
     beforeCreate() {},
@@ -170,11 +179,14 @@
 
 
       this.recipe = this.util.getQuery().recipe;
+      this.getContentList(this.recipe.id);
       console.log(this.recipe)
-      this.change = this.getUser.id == this.recipe.usersDto.id;
-
-      this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);
-      this.logIn = this.getUser ==null || this.getUser.id == 0 ? false:true;
+      // 수정하기버튼
+      if(this.getUser.id!=null){
+        this.change = this.getUser.id == this.recipe.usersDto.id;
+        this.bookmark = this.getUser.myFavoriteRecipe.map(myFavoriteRecipe=> myFavoriteRecipe.id).includes(this.recipe.id);
+        this.logIn = this.getUser ==null || this.getUser.id == 0 ? false:true;
+      }
 
     },
     mounted() {
