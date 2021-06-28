@@ -24,6 +24,9 @@ public class Transaction {
 
     private static int sequence =0; // 몇번째 트랜잭션인지 센다.
 
+    public byte[] getFrom() { return from; }public void setFrom(byte[] from) { this.from = from; }
+    public byte[] getTo() { return to; }public void setTo(byte[] to) { this.to = to; }
+
     /**
      *
      * @param from 보내는 사람

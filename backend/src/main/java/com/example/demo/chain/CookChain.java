@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -213,9 +215,31 @@ public class CookChain {
     private static void initBlock(Block newBlock) {
         blockChain.add(newBlock);
     }
-
+    private static ObjectMapper objectMapper = new ObjectMapper();
     private static void initConverter(JsonArray jsonArray){
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+
 //        jsonArray.forEach(jsonElement -> initBlock(new Block()));
         jsonArray.forEach(jsonElement -> System.out.println(jsonElement.getAsJsonObject().get("transactions")));
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            String hash = jsonObject.get("hash").getAsString();
+            String previousHash = jsonObject.get("previousHash").getAsString();
+            String merkleRoot = jsonObject.get("merkleRoot").getAsString();
+            Date timeStamp = new Date(jsonObject.get("timeStamp").getAsLong());
+            int nonce = jsonObject.get("nonce").getAsInt();
+            JsonArray array = jsonObject.getAsJsonArray("transactions");
+            String x= "";
+        }
+    }
+
+    private void initTransaction(JsonArray jsonArray){
+        for (JsonElement jsonElement : jsonArray) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            int transactionId = jsonObject.get("transactionId").getAsInt();
+            float value =jsonObject.get("value").getAsFloat();
+//            String from = jsonObject.get("")
+        }
     }
 }
