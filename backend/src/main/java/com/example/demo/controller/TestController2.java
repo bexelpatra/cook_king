@@ -71,7 +71,6 @@ public class TestController2 {
 //        block.addTransaction(new Transaction(CookChain.walletA.publicKey,CookChain.walletB.publicKey,1f,null));
 //        CookChain.addBlock(block);
         CookChain.dostuffs();
-        Arrays.stream("12031435153".split("")).collect(Collectors.groupingBy(String::length));
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
