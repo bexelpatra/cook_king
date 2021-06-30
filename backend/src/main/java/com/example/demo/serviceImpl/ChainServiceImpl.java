@@ -1,23 +1,31 @@
 package com.example.demo.serviceImpl;
 
+import com.example.demo.chain.Block;
+import com.example.demo.chain.CookChain;
+import com.example.demo.chain.Wallet;
+import com.example.demo.entity.KeyEntity;
 import com.example.demo.entity.UsersEntity;
+import com.example.demo.repository.KeyRepository;
 import com.example.demo.service.ChainService;
+import com.example.demo.utilities.Utils;
+import com.google.gson.JsonParser;
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ChainServiceImpl implements ChainService {
+
+    private final KeyRepository keyRepository;
     @Override
     public String makePublicKeyToQRCode(String publicKey) {
         if(publicKey == null || publicKey.equals("")) return null;
@@ -54,7 +62,39 @@ public class ChainServiceImpl implements ChainService {
     }
 
     @Override
-    public String makeWallet(UsersEntity usersEntity) {
-        return null;
+    public KeyEntity makeWallet(UsersEntity usersEntity) {
+        if(usersEntity == null) return null;
+        Wallet wallet = new Wallet();
+        return keyRepository.save(new KeyEntity(join(wallet.publicKey.getEncoded()),join(wallet.privateKey.getEncoded()),usersEntity));
+    }
+
+    @Override
+    public boolean send(KeyEntity from, KeyEntity to, float value) {
+        JsonParser jsonParser = new JsonParser();
+        byte[] fromPublicKey = Utils.toBytes(jsonParser.parse(from.getPublicKey()).getAsJsonArray());
+        byte[] fromPrivateKey = Utils.toBytes(jsonParser.parse(from.getPrivateKey()).getAsJsonArray());
+
+        byte[] toPublicKey = Utils.toBytes(jsonParser.parse(to.getPublicKey()).getAsJsonArray());
+
+        Wallet sender = new Wallet(fromPrivateKey,fromPublicKey);
+
+        Block block = CookChain.blockChain.get(CookChain.blockChain.size()-1);
+        if(block.transactions.size()>1000){
+            CookChain.addBlock(new Block(block.hash));
+        }
+
+        return CookChain.blockChain.get(CookChain.blockChain.size()-1).addTransaction(sender.sendFunds(Utils.toPublicKey(toPublicKey),value));
+    }
+
+    private String join(byte[] bytes){
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (byte aByte : bytes) {
+            builder.append(aByte);
+            builder.append(",");
+        }
+        builder.deleteCharAt(builder.length()-1);
+        builder.append("]");
+        return builder.toString();
     }
 }

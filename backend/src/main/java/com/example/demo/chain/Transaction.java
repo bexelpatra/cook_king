@@ -1,11 +1,15 @@
 package com.example.demo.chain;
 
+import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.JsonArray;
+import javassist.bytecode.ByteArray;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Transaction {
 
@@ -14,9 +18,11 @@ public class Transaction {
     public PublicKey sender; // 보내는 사람의 공개키
     @JsonIgnore
     public PublicKey recipient; // 받는 사람의 공개키
-    private byte[] from;
-    private byte[] to;
+    private List<Byte> from = new ArrayList<>();
+    private List<Byte> to = new ArrayList<>();
+    private List<Byte> sign = new ArrayList<>();
     public float value; // 보내는 금액
+    @JsonIgnore
     public byte[] signature;// 보내는 사람의 전자 서명
 
     public ArrayList<TransactionInput> inputs = new ArrayList<>(); // 보내는 사람의 지갑에 있는 트랜잭션에서 UTXOs를 입력값으로 사용한다. ex)13200원을 보내려면 만원 1장, 천원 3장, 백원 2개
@@ -24,8 +30,9 @@ public class Transaction {
 
     private static int sequence =0; // 몇번째 트랜잭션인지 센다.
 
-    public byte[] getFrom() { return from; }public void setFrom(byte[] from) { this.from = from; }
-    public byte[] getTo() { return to; }public void setTo(byte[] to) { this.to = to; }
+    public List<Byte> getFrom() { return from; }public void setFrom(List<Byte> from) { this.from = from; }
+    public List<Byte> getTo() { return to; }public void setTo(List<Byte> to) { this.to = to; }
+    public List<Byte> getSign() { return sign; }public void setSign(List<Byte> sign) { this.sign = sign; }
 
     /**
      *
@@ -39,10 +46,21 @@ public class Transaction {
         this.recipient = to;
         this.value = value;
         this.inputs = inputs==null? new ArrayList<>() : inputs;
-        this.from = from.getEncoded();
-        this.to = to.getEncoded();
+        for (byte b : from.getEncoded()) this.from.add(b);
+        for(byte b : to.getEncoded()) this.to.add(b);
     }
 
+    public Transaction(String transactionId,PublicKey from, PublicKey to, float value, ArrayList<TransactionInput> inputs,ArrayList<TransactionOutput> outputs, JsonArray sign){
+        this.transactionId = transactionId;
+        this.sender = from;
+        this.recipient = to;
+        this.value = value;
+        this.inputs = inputs==null? new ArrayList<>() : inputs;
+        for (byte b : from.getEncoded()) this.from.add(b);
+        for(byte b : to.getEncoded()) this.to.add(b);
+        this.outputs = outputs == null? new ArrayList<>() : outputs;
+        this.signature = Utils.toBytes(sign);
+    }
     // 입력받은 값들을 이용해서 hash값을 만든다.
     private String calculateHash(){
         sequence++;
@@ -58,6 +76,7 @@ public class Transaction {
     public void generateSignature(PrivateKey privateKey){
         String data = StringUtil.getStringFromKey(sender) + StringUtil.getStringFromKey(recipient)+ Float.toString(value);
         signature = StringUtil.applyECDSASig(privateKey, data);
+        for(byte b : signature){sign.add(b);}
     }
     // 서명 검증하기 : 전자서명을 검증한다.
     public boolean verifySignature(){

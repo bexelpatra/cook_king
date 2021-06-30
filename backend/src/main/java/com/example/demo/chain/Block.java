@@ -33,6 +33,7 @@ public class Block {
         this.transactions = transactions;
         this.timeStamp = timeStamp;
         this.nonce = nonce;
+        this.merkleRoot = StringUtil.getMerkleRoot(transactions);
     }
 
     public String calculateHash(){

@@ -67,10 +67,20 @@ public class TestController2 {
     public ResponseEntity chainSend(){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
-//        Block block = new Block(CookChain.blockChain.get(CookChain.blockChain.size()-1).hash);
-//        block.addTransaction(new Transaction(CookChain.walletA.publicKey,CookChain.walletB.publicKey,1f,null));
-//        CookChain.addBlock(block);
+
         CookChain.dostuffs();
+
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
+
+    @GetMapping(value = "/check")
+    public ResponseEntity chainCheck(){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+        Wallet wallet1 = new Wallet();
+        Wallet wallet2 = new Wallet();
+        CookChain.check();
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }

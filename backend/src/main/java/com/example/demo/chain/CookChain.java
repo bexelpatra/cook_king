@@ -1,5 +1,6 @@
 package com.example.demo.chain;
 
+import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -7,18 +8,21 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.KeyFactory;
+import java.security.PublicKey;
 import java.security.Security;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.function.Function;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /*
@@ -36,18 +40,44 @@ public class CookChain {
     @Bean(initMethod = "init",destroyMethod = "destroy")
     public Coin coin(){ return new Coin(); }
     public class Coin{
-        public void init() throws Exception {
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader(""));
-//            bufferedReader.lines().map(s -> {
-//                String[] infos = s.split("#");
-//                new Block(1,1,1,1,1);
-//            })
+        public void init() {
+            JsonParser jsonParser = new JsonParser();
+            BufferedReader bufferedReaderBlock = null;
+            BufferedReader bufferedReaderUTXOs = null;
+            try {
+                bufferedReaderBlock = Files.newBufferedReader(Paths.get("block.txt"));
+                bufferedReaderUTXOs = Files.newBufferedReader(Paths.get("UTXOs.txt"));
+                JsonArray blockArray = jsonParser.parse(bufferedReaderBlock.lines().collect(Collectors.joining(""))).getAsJsonArray();
+                JsonObject UTXOsObject = jsonParser.parse(bufferedReaderUTXOs.lines().collect(Collectors.joining(""))).getAsJsonObject();
+                initBlock(blockArray);
+                initUTXOs(UTXOsObject);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+            String result  = "어떻게 나올까?";
         }
-        public void destroy()throws Exception {
-//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(""));
+        public void destroy() throws Exception {
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+            objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+            objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT,true);
+
+            objectMapper.writeValue(new File("block.txt"),blockChain);
+            objectMapper.writeValue(new File("UTXOs.txt"),UTXOs);
         }
     }
-
+    public static void check(){
+        int x = 0;
+        int y = 0;
+    }
+    private void initUTXOs(JsonObject utxOsObject) {
+        for (Map.Entry<String, JsonElement> stringJsonElementEntry : utxOsObject.entrySet()) {
+            String key = stringJsonElementEntry.getKey();
+            TransactionOutput transactionOutput = initOutputs(stringJsonElementEntry.getValue().getAsJsonObject());
+            UTXOs.put(key,transactionOutput);
+        }
+    }
+    private static boolean genesis = true;
     public static ArrayList<Block> blockChain = new ArrayList<>();
     public static int difficulty = 3; //  채굴 난이도. hash에서 앞에 0이붙는 개수
     // 아직 사용되지 않은 transactionout들, 잔고개념으로 볼 수 있다.
@@ -89,7 +119,7 @@ public class CookChain {
         Block block1 = new Block(genesis.hash);
         System.out.println("\nWalletA's balance is: " + walletA.getBalance());
         System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
-        block1.addTransaction(walletA.sendFunds(walletB.publicKey, 40f));
+//        block1.addTransaction(walletA.sendFunds(walletB.publicKey, 40f));
         addBlock(block1);
         System.out.println("\nWalletA's balance is: " + walletA.getBalance());
         System.out.println("WalletB's balance is: " + walletB.getBalance());
@@ -101,30 +131,20 @@ public class CookChain {
         System.out.println("\nWalletA's balance is: " + walletA.getBalance());
         System.out.println("WalletB's balance is: " + walletB.getBalance());
 
-//        Block block3 = new Block(block2.hash);
-//        System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
+        Block block3 = new Block(block2.hash);
+        System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
 //        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 20));
 //        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 1));
 //        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 2));
 //        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 3));
 //        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 4));
-//        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-//        System.out.println("WalletB's balance is: " + walletB.getBalance());
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
-        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT,true);
-        String x= "";
-        JsonParser jsonParser = new JsonParser();
-        try {
-            objectMapper.writeValue(new File("im.txt"),blockChain);
-            x = objectMapper.writeValueAsString(blockChain);
-            BufferedReader bufferedReader = Files.newBufferedReader(Paths.get("im.txt"));
-            JsonArray jsonArray = jsonParser.parse(bufferedReader.lines().collect(Collectors.joining(""))).getAsJsonArray();
-            initConverter(jsonArray);
-            jsonArray.forEach(jsonElement -> jsonElement.getAsJsonObject().entrySet().stream().forEach(stringJsonElementEntry -> System.out.println(stringJsonElementEntry.getKey()+":"+stringJsonElementEntry.getValue())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
+        System.out.println("WalletB's balance is: " + walletB.getBalance());
+
+
+//        Wallet test = new Wallet();
+//        Wallet convertTest = new Wallet(test.privateKey.getEncoded(),test.publicKey.getEncoded());
+
         isChainValid();
 
     }
@@ -134,7 +154,16 @@ public class CookChain {
         Block previousBlock;
         String hashTarget = new String(new char[difficulty]).replace('\0', '0');
         HashMap<String,TransactionOutput> tempUTXOs = new HashMap<String,TransactionOutput>(); //a temporary working list of unspent transactions at a given block state.
-        tempUTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
+
+        Transaction genesis = blockChain.stream()
+                .map(block ->
+                        block.transactions.stream()
+                                .filter(transaction ->{return transaction.transactionId.equals("0");
+                }).findFirst().orElse(null))
+                .findFirst()
+                .get();
+//        tempUTXOs.put(genesisTransaction.outputs.get(0).id, genesisTransaction.outputs.get(0));
+        tempUTXOs.put(genesis.outputs.get(0).id, genesis.outputs.get(0));
 
         //loop through blockchain to check hashes:
         for(int i=1; i < blockChain.size(); i++) {
@@ -211,35 +240,89 @@ public class CookChain {
         newBlock.mineBlock(difficulty);
         blockChain.add(newBlock);
     }
-
-    private static void initBlock(Block newBlock) {
-        blockChain.add(newBlock);
-    }
     private static ObjectMapper objectMapper = new ObjectMapper();
-    private static void initConverter(JsonArray jsonArray){
+
+    private static void initBlock(JsonArray jsonArray){
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
 
-//        jsonArray.forEach(jsonElement -> initBlock(new Block()));
-        jsonArray.forEach(jsonElement -> System.out.println(jsonElement.getAsJsonObject().get("transactions")));
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             String hash = jsonObject.get("hash").getAsString();
             String previousHash = jsonObject.get("previousHash").getAsString();
-            String merkleRoot = jsonObject.get("merkleRoot").getAsString();
-            Date timeStamp = new Date(jsonObject.get("timeStamp").getAsLong());
+//            String merkleRoot = jsonObject.get("merkleRoot").getAsString();
+            Long timeStamp = jsonObject.get("timeStamp").getAsLong();
             int nonce = jsonObject.get("nonce").getAsInt();
-            JsonArray array = jsonObject.getAsJsonArray("transactions");
-            String x= "";
+            JsonArray jsonTransactions = jsonObject.getAsJsonArray("transactions");
+
+            ArrayList<Transaction> transactionList = initTransaction(jsonTransactions);
+
+            blockChain.add(new Block(hash,previousHash,transactionList,timeStamp,nonce));
         }
     }
 
-    private void initTransaction(JsonArray jsonArray){
+    private static ArrayList<Transaction> initTransaction(JsonArray jsonArray){
+        ArrayList<Transaction> transactions = new ArrayList<>();
         for (JsonElement jsonElement : jsonArray) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
-            int transactionId = jsonObject.get("transactionId").getAsInt();
+            String transactionId = jsonObject.get("transactionId").getAsString();
             float value =jsonObject.get("value").getAsFloat();
-//            String from = jsonObject.get("")
+            JsonArray from = jsonObject.get("from").getAsJsonArray();
+            JsonArray to = jsonObject.get("to").getAsJsonArray();
+            JsonArray signature = jsonObject.get("sign").getAsJsonArray();
+            JsonArray inputs = jsonObject.get("inputs").getAsJsonArray();
+            JsonArray outputs = jsonObject.get("outputs").getAsJsonArray();
+            float outputsValue = jsonObject.get("outputsValue").getAsFloat();
+            float inputsValue = jsonObject.get("inputsValue").getAsFloat();
+
+            ArrayList<TransactionInput> inputArrayList = initInputs(inputs);
+            ArrayList<TransactionOutput> outputArrayList = initOutputs(outputs);
+
+            transactions.add(new Transaction(transactionId,Utils.toPublicKey(from),Utils.toPublicKey(to),value,inputArrayList,outputArrayList,signature));
         }
+        return transactions;
+    }
+
+    private static ArrayList<TransactionOutput> initOutputs(JsonArray outputs) {
+        ArrayList<TransactionOutput> transactionOutputs = new ArrayList<>();
+        for (JsonElement jsonElement : outputs) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            transactionOutputs.add(initOutputs(jsonObject));
+        }
+        return transactionOutputs;
+    }
+
+    private static TransactionOutput initOutputs(JsonObject output) {
+
+        String id = output.get("id").getAsString();
+        float value = 0;
+        String parentTransactionId = null;
+        JsonArray recipe = null;
+        PublicKey publicKey = null;
+
+        try {
+            value =output.get("value").getAsFloat();
+            parentTransactionId = output.get("parentTransactionId").getAsString();
+            if(parentTransactionId.equals("0")) { // 최초의 코인인지 확인한다.
+                CookChain.genesis = false;
+            }
+            recipe = output.get("recipe").getAsJsonArray();
+            publicKey = Utils.toPublicKey(recipe);
+        }catch (Exception e){
+            return null;
+        }
+        return new TransactionOutput(publicKey,value,parentTransactionId);
+    }
+
+    private static ArrayList<TransactionInput> initInputs(JsonArray inputs) {
+        ArrayList<TransactionInput> transactionInputs = new ArrayList<>();
+        for (JsonElement jsonElement : inputs) {
+            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            String transactionOutputId = jsonObject.get("transactionOutputId").getAsString();
+            JsonObject UTXO = jsonObject.getAsJsonObject("UTXO");
+
+            transactionInputs.add(new TransactionInput(transactionOutputId,initOutputs(UTXO)));
+        }
+        return transactionInputs;
     }
 }
