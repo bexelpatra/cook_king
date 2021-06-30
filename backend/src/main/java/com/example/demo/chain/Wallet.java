@@ -42,6 +42,7 @@ public class Wallet {
 
             privateKey = keyPair.getPrivate();
             publicKey = keyPair.getPublic();
+
             this.privatekey = privateKey.getEncoded();
             this.publickey = publicKey.getEncoded();
         }catch (Exception e){

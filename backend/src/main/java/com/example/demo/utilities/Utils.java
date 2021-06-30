@@ -8,6 +8,7 @@ import com.example.demo.testing.MyEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.JsonArray;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -356,5 +360,43 @@ public abstract class Utils<T, E> {
         // we want image in png format
         ImageIO.write(newResizedImage, fileExtension, target.toFile());
 
+    }
+    public static byte[] toBytes(JsonArray jsonArray){
+        byte[] bytes = new byte[jsonArray.size()];
+        for(int i=0; i< jsonArray.size();i++) bytes[i] = jsonArray.get(i).getAsByte();
+        return bytes;
+    }
+    public static PublicKey toPublicKey(List<Byte> key){
+        byte[] bytes = new byte[key.size()];
+        for(int i=0; i< key.size();i++) bytes[i] = key.get(i);
+        return keyConverter(bytes,PublicKey.class);
+    }
+    public static PublicKey toPublicKey(JsonArray key){
+        return keyConverter(toBytes(key),PublicKey.class);
+    }
+    public static PrivateKey toPrivateKey(JsonArray key){
+        return keyConverter(toBytes(key),PrivateKey.class);
+    }
+    public static PrivateKey toPrivateKey(List<Byte> key){
+        byte[] bytes = new byte[key.size()];
+        for(int i=0; i< key.size();i++)bytes[i] = key.get(i);
+        return keyConverter(bytes,PrivateKey.class);
+    }
+    public static PublicKey toPublicKey(byte[] key){ return keyConverter(key,PublicKey.class); }
+    public static PrivateKey toPrivateKey(byte[] key){ return keyConverter(key,PrivateKey.class); }
+
+    private static <T,F extends Key> F keyConverter(byte[] key, Class<F> aclass){
+            Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("ECDSA","BC");
+            if(aclass.getName().equals(PrivateKey.class.getName())){
+                return (F) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(key));
+            }else if(aclass.getName().equals(PublicKey.class.getName())){
+                return (F) keyFactory.generatePublic(new X509EncodedKeySpec(key));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
