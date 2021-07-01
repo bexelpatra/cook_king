@@ -63,4 +63,12 @@ public class CookChainController {
     }
     
     // 트랜잭션 검색 및 조회하기
+    @GetMapping(value = "/transaction")
+    public ResponseEntity getTransaction(){
+        Map<String,Object> result = new HashMap<>();
+        HttpStatus httpStatus = null;
+
+        httpStatus = HttpStatus.OK;
+        return new ResponseEntity(result,httpStatus);
+    }
 }
