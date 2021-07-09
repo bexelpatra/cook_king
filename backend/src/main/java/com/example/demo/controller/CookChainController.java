@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.chain.CookChain;
+import com.example.demo.chain.Transaction;
 import com.example.demo.chain.Wallet;
+import com.example.demo.dto.TransationDto;
 import com.example.demo.entity.KeyEntity;
 import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.KeyRepository;
@@ -12,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/chain")
@@ -64,10 +65,15 @@ public class CookChainController {
     
     // 트랜잭션 검색 및 조회하기
     @GetMapping(value = "/transaction")
-    public ResponseEntity getTransaction(){
+    public ResponseEntity getTransaction(@RequestParam(value = "from",required = false)String from,@RequestParam(value = "to",required = false)String to){
         Map<String,Object> result = new HashMap<>();
         HttpStatus httpStatus = null;
+        List<Transaction> transactions = new ArrayList<>();
+        CookChain.blockChain.stream().forEach(block -> transactions.addAll(block.transactions));
 
+        List<TransationDto> transationDtos = TransationDto.convert(transactions);
+        result.put("transactions", transationDtos);
+        result.put("desc","성공적으로 조회했습니다.");
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
