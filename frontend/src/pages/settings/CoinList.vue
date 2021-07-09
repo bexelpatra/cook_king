@@ -1,11 +1,14 @@
 <!--fixme 상세정보-->
 <template>
+  <q-page>
     <q-table
-      title="Treats"
+      title="트랜잭션"
       :data="rows"
       :columns="columns"
       row-key="name"
     />
+    <q-btn @click="getTransactions" class="full-width" label="더보기"/>
+  </q-page>
 </template>
 
 
@@ -23,22 +26,33 @@
       return{
         util : new myUtil(this),
         columns: [
-          {name: 'name', required: true, label: 'Dessert (100g serving)', align: 'left', field: row => row.name, format: val => `${val}`, sortable: true},
-          { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-          { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-          { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-          { name: 'protein', label: 'Protein (g)', field: 'protein' },
-          { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
+          {name: 'Transacion_Id', required: true, label: 'Id', align: 'left', field: row => row.name, format: val => `${val}`, sortable: true},
+          { name: 'from', align: 'left', label: 'Sender', field: 'from', sortable: true },
+          { name: 'to',align: 'left', label: 'Receiver', field: 'to', sortable: true },
+          { name: 'value', label: 'Value', field: 'amount' },
+          // { name: 'time', label: 'Time', field: 'protein' },
         ],
         rows: [
-          {name: 'Frozen Yogurt', calories: 159, fat: 6.0, carbs: 24, protein: 4.0, sodium: 87, calcium: '14%', iron: '1%'},
+          // {name: 'Frozen Yogurt', from: 159, to: 6.0, amount: 24},
         ]
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
-
+      ...mapActions(['fetchServer']),
+      getTransactions(){
+        let self = this;
+        this.fetchServer({path : 'chain/transaction'})
+        .then(result =>{
+          console.log(result);
+          let list = [];
+          if(result.status ==200){
+            list = result.transactions;
+            list.filter(value =>self.rows.push({name : value.transactionId =='0'?"Genesis":value.transactionId,from : value.f,to:value.t,amount : value.value}) )
+          }
+        })
+        .catch(reason => {console.log(reason)})
+      },
       /**======================================
        * 클릭 이벤트
        ========================================*/
