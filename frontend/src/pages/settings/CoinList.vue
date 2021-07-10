@@ -53,6 +53,19 @@
         })
         .catch(reason => {console.log(reason)})
       },
+      getMore(){
+        let self = this;
+        this.fetchServer({path : 'chain/transaction'})
+          .then(result =>{
+            console.log(result);
+            let list = [];
+            if(result.status ==200){
+              list = result.transactions;
+              list.filter(value =>self.rows.push({name : value.transactionId =='0'?"Genesis":value.transactionId,from : value.f,to:value.t,amount : value.value}) )
+            }
+          })
+          .catch(reason => {console.log(reason)})
+      },
       /**======================================
        * 클릭 이벤트
        ========================================*/
