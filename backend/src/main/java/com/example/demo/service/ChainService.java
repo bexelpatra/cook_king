@@ -1,11 +1,11 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.KeyEntity;
+import com.example.demo.entity.WalletEntity;
 import com.example.demo.entity.UsersEntity;
 
 public interface ChainService {
     String makePublicKeyToQRCode(String publicKey);
-    KeyEntity makeWallet(UsersEntity usersEntity);
+    WalletEntity makeWallet(UsersEntity usersEntity);
 
-    boolean send(KeyEntity from,KeyEntity to,float value);
+    boolean send(WalletEntity from, WalletEntity to, float value);
 }

@@ -91,9 +91,10 @@ export async function getMapping(state,args) {
     headers : {
       "Content-Type" : "application/json",
       ...args.header,
-        ...COMMON_HEADER
+        // ...COMMON_HEADER
     },
   };
+  console.log(requestInit);
   const response = await fetch(url,requestInit);
   const data = await response.json();
   Object.assign(data,{status:response.status});
