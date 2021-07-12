@@ -3,9 +3,9 @@ package com.example.demo.serviceImpl;
 import com.example.demo.chain.Block;
 import com.example.demo.chain.CookChain;
 import com.example.demo.chain.Wallet;
-import com.example.demo.entity.KeyEntity;
+import com.example.demo.entity.WalletEntity;
 import com.example.demo.entity.UsersEntity;
-import com.example.demo.repository.KeyRepository;
+import com.example.demo.repository.WalletRepository;
 import com.example.demo.service.ChainService;
 import com.example.demo.utilities.Utils;
 import com.google.gson.JsonParser;
@@ -25,7 +25,7 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class ChainServiceImpl implements ChainService {
 
-    private final KeyRepository keyRepository;
+    private final WalletRepository walletRepository;
     @Override
     public String makePublicKeyToQRCode(String publicKey) {
         if(publicKey == null || publicKey.equals("")) return null;
@@ -62,14 +62,14 @@ public class ChainServiceImpl implements ChainService {
     }
 
     @Override
-    public KeyEntity makeWallet(UsersEntity usersEntity) {
+    public WalletEntity makeWallet(UsersEntity usersEntity) {
         if(usersEntity == null) return null;
         Wallet wallet = new Wallet();
-        return keyRepository.save(new KeyEntity(join(wallet.publicKey.getEncoded()),join(wallet.privateKey.getEncoded()),usersEntity));
+        return walletRepository.save(new WalletEntity(join(wallet.publicKey.getEncoded()),join(wallet.privateKey.getEncoded()),usersEntity));
     }
 
     @Override
-    public boolean send(KeyEntity from, KeyEntity to, float value) {
+    public boolean send(WalletEntity from, WalletEntity to, float value) {
         JsonParser jsonParser = new JsonParser();
         byte[] fromPublicKey = Utils.toBytes(jsonParser.parse(from.getPublicKey()).getAsJsonArray());
         byte[] fromPrivateKey = Utils.toBytes(jsonParser.parse(from.getPrivateKey()).getAsJsonArray());

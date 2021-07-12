@@ -1,17 +1,21 @@
 package com.example.demo.entity;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.security.PublicKey;
 import java.util.Objects;
 
 @Entity
-@Table(name = "key", schema = "mydb")
-public class KeyEntity {
+@Table(name = "wallet", schema = "mydb")
+@NoArgsConstructor
+public class WalletEntity {
     private int id;
     private String publicKey;
     private String privateKey;
     private UsersEntity usersEntity;
 
-    public KeyEntity(String publicKey, String privateKey, UsersEntity usersEntity) {
+    public WalletEntity(String publicKey, String privateKey, UsersEntity usersEntity) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
         this.usersEntity = usersEntity;
@@ -58,14 +62,15 @@ public class KeyEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        KeyEntity keyEntity = (KeyEntity) o;
-        return id == keyEntity.id &&
-                Objects.equals(publicKey, keyEntity.publicKey) &&
-                Objects.equals(privateKey, keyEntity.privateKey);
+        WalletEntity walletEntity = (WalletEntity) o;
+        return id == walletEntity.id &&
+                Objects.equals(publicKey, walletEntity.publicKey) &&
+                Objects.equals(privateKey, walletEntity.privateKey);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, publicKey, privateKey);
     }
+
 }

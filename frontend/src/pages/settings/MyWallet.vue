@@ -14,15 +14,22 @@
 
     <!--fixme QR 생성 -->
     <section class="q-pa-lg flex flex-center">
-      <q-btn flat class="bg-grey-4" style="width: 33vw; height: 33vw;">
-        <q-icon name="add" color="blue" size="12vw"/>
-      </q-btn>
+      <div v-if="!publicKey">
+        <q-btn flat class="bg-grey-4" style="width: 33vw; height: 33vw;" @click="makeQRCode()">
+            <q-icon name="add" color="blue" size="12vw"/>
+        </q-btn>
+      </div>
+      <div v-else>
+        <img :src="'data:image/jpeg;base64,'+publicKey" class="" style="width: 50vw; height: 50vw;">
+      </div>
     </section>
 
     <!--fixme 문구  -->
-    <section class="text-center text-grey-8">
-      버튼을 누르면 <span class="text-weight-bold">QR</span>이 생성됩니다.
-    </section>
+    <div v-if="!publicKey">
+      <section class="text-center text-grey-8">
+        버튼을 누르면 <span class="text-weight-bold">QR</span>이 생성됩니다.
+      </section>
+    </div>
     <q-separator class="q-mt-lg" style="height: 2px"/>
 
     <!--fixme 유의사항  -->
@@ -42,6 +49,7 @@
 <script>
   import {mapGetters,mapMutations,mapActions} from 'vuex';
   import {LocalStorage} from 'quasar';
+  import {myUtil} from "boot/myUtil";
 
   export default {
     name: 'MyWalet',
@@ -50,12 +58,27 @@
     },
     data(){
       return{
+        util : new myUtil(this),
+        publicKey : null,
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
-
+      ...mapActions(['fetchServer',]),
+      makeQRCode(){
+        this.fetchServer({
+          path:'chain/wallet',
+          method : 'get',
+          param:{token : LocalStorage.getItem('t')}
+        })
+        .then(result => {
+          console.log(result)
+          if(result.status == 200){
+            this.publicKey = result.publicKey;
+          }
+        })
+        .catch(reason => {console.log(reason)})
+      },
       /**======================================
        * 클릭 이벤트
        ========================================*/
@@ -75,7 +98,9 @@
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
     },
-    mounted() {},
+    mounted() {
+      this.makeQRCode();
+    },
     beforeUpdate() {},
     updated() {},
     beforeDestroy() {},
