@@ -9,6 +9,7 @@ import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.WalletRepository;
 import com.example.demo.service.ChainService;
 import com.example.demo.service.UserService;
+import com.example.demo.utilities.AES;
 import com.example.demo.utilities.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
@@ -18,6 +19,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.util.*;
 
 @Controller
@@ -37,21 +46,32 @@ public class CookChainController {
         Optional<WalletEntity> keyEntity = walletRepository.findByUsersEntityId(usersEntity.getId());
         WalletEntity key = null;
         JsonParser jsonParser = new JsonParser();
-
+        String pk = "";
         if(!keyEntity.isPresent()){
             key = chainService.makeWallet(usersEntity);
-            JsonArray publicKey = jsonParser.parse(key.getPublicKey()).getAsJsonArray();
+//            JsonArray publicKey = jsonParser.parse(key.getPublicKey()).getAsJsonArray();
             String x= chainService.makePublicKeyToQRCode(key.getPublicKey());
             result.put("desc","새롭게 지갑을 만들었습니다.");
             result.put("publicKey",x);
+
         }else{
             key = keyEntity.get();
             JsonArray publicKey = jsonParser.parse(key.getPublicKey()).getAsJsonArray();
             String x= chainService.makePublicKeyToQRCode(key.getPublicKey());
             result.put("desc","기존의 지갑에서 키를 받아왔습니다.");
             result.put("publicKey",x);
+            String b64 = Base64.getEncoder().encodeToString(Utils.toPublicKey(publicKey).getEncoded());
+            byte[] xy = Base64.getDecoder().decode(b64);
+            PublicKey publicKey1 = Utils.toPublicKey(xy);
+            byte[] xyz = publicKey1.getEncoded();
+            String xasdf = " ";
         }
-
+        try {
+            pk = new String(key.getPublicKey().getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        result.put("pk",pk);
         httpStatus = HttpStatus.OK;
         return new ResponseEntity(result,httpStatus);
     }
