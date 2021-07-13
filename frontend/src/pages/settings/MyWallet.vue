@@ -13,11 +13,13 @@
     <q-separator class="" style="height: 2px"/>
 
     <!--fixme QR 생성 -->
-    <section class="q-pa-lg flex flex-center">
-      <div v-if="!publicKey">
+<!--    <section class="q-pa-lg flex flex-center" style="border: 1px solid red;">-->
+    <section class="q-pa-lg flex flex-center" style="height: 50vw">
+      <div v-if="!publicKey" class="">
         <q-btn flat class="bg-grey-4" style="width: 33vw; height: 33vw;" @click="makeQRCode()">
             <q-icon name="add" color="blue" size="12vw"/>
         </q-btn>
+
       </div>
       <div v-else>
         <img :src="'data:image/jpeg;base64,'+publicKey" class="" style="width: 50vw; height: 50vw;">
@@ -25,9 +27,14 @@
     </section>
 
     <!--fixme 문구  -->
-    <div v-if="!publicKey">
+    <div>
       <section class="text-center text-grey-8">
+        <div v-if="!publicKey">
         버튼을 누르면 <span class="text-weight-bold">QR</span>이 생성됩니다.
+        </div>
+        <div v-else>
+          <span class="text-weight-bold">{{pk}}</span>
+        </div>
       </section>
     </div>
     <q-separator class="q-mt-lg" style="height: 2px"/>
@@ -60,6 +67,7 @@
       return{
         util : new myUtil(this),
         publicKey : null,
+        pk : '',
       }
     },
     methods:{
@@ -75,6 +83,7 @@
           console.log(result)
           if(result.status == 200){
             this.publicKey = result.publicKey;
+            this.pk =  result.pk;
           }
         })
         .catch(reason => {console.log(reason)})
@@ -99,7 +108,7 @@
       this.getLayout.addcontent = false;
     },
     mounted() {
-      this.makeQRCode();
+      // this.makeQRCode();
     },
     beforeUpdate() {},
     updated() {},
