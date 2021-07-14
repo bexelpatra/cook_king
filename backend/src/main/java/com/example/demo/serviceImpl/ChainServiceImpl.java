@@ -79,7 +79,7 @@ public class ChainServiceImpl implements ChainService {
         Wallet sender = new Wallet(fromPrivateKey,fromPublicKey);
 
         Block block = CookChain.blockChain.get(CookChain.blockChain.size()-1);
-        if(block.transactions.size()>1000){
+        if(block.transactions.size()>=1000){
             CookChain.addBlock(new Block(block.hash));
         }
 

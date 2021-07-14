@@ -27,7 +27,7 @@
     </section>
 
     <!--fixme 문구  -->
-    <div>
+    <div class="full-width">
       <section class="text-center text-grey-8">
         <div v-if="!publicKey">
         버튼을 누르면 <span class="text-weight-bold">QR</span>이 생성됩니다.
@@ -108,7 +108,7 @@
       this.getLayout.addcontent = false;
     },
     mounted() {
-      // this.makeQRCode();
+      this.makeQRCode();
     },
     beforeUpdate() {},
     updated() {},

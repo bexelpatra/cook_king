@@ -83,6 +83,9 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
+      this.util.getQuery();
+
+      this.getTransactions();
     },
     mounted() {},
     beforeUpdate() {},

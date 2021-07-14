@@ -47,9 +47,10 @@ public class TransationDto {
         transationDto.setValue(transaction.value);
         transationDto.setOutputList(transaction.outputs.stream().map(transactionOutput -> transactionOutput.id).collect(Collectors.toList()));
         transationDto.setInputList(transaction.inputs.stream().map(transactionInput -> transactionInput.transactionOutputId).collect(Collectors.toList()));
-        transationDto.setF(Base64.getEncoder().encodeToString(transaction.sender.getEncoded()));
-        transationDto.setT(Base64.getEncoder().encodeToString(transaction.recipient.getEncoded()));
-        transationDto.setS(Base64.getEncoder().encodeToString(transaction.signature));
+
+        transationDto.setF(Base64.getEncoder().encodeToString(Utils.join(transaction.sender.getEncoded()).getBytes()));
+        transationDto.setT(Base64.getEncoder().encodeToString(Utils.join(transaction.recipient.getEncoded()).getBytes()));
+        transationDto.setS(Base64.getEncoder().encodeToString(Utils.join(transaction.signature).getBytes()));
 
         return transationDto;
     }

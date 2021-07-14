@@ -1,14 +1,17 @@
 package com.example.demo.utilities;
 
+import com.example.demo.chain.Wallet;
 import com.example.demo.dto.ContentDto;
 import com.example.demo.dto.MultiFileDto;
 import com.example.demo.entity.UsersEntity;
+import com.example.demo.entity.WalletEntity;
 import com.example.demo.enums.ContentKind;
 import com.example.demo.testing.MyEnum;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -398,5 +401,29 @@ public abstract class Utils<T, E> {
             e.printStackTrace();
         }
         return null;
+    }
+    public static String hex(byte[] bytes){
+        StringBuilder builder = new StringBuilder();
+        for(int i=0;i<bytes.length;i++){
+            builder.append(Integer.toHexString(bytes[i]));
+        }
+        return builder.toString();
+    }
+    private static JsonParser jsonParser = new JsonParser();
+
+    public static Wallet wallet(WalletEntity walletEntity){
+        return new Wallet(toBytes(jsonParser.parse(walletEntity.getPrivateKey()).getAsJsonArray()),toBytes(jsonParser.parse(walletEntity.getPublicKey()).getAsJsonArray()));
+    }
+
+    public static String join(byte[] bytes){
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for (byte aByte : bytes) {
+            builder.append(aByte);
+            builder.append(",");
+        }
+        builder.deleteCharAt(builder.length()-1);
+        builder.append("]");
+        return builder.toString();
     }
 }
