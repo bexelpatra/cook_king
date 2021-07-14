@@ -31,7 +31,13 @@ public class TransactionOutput {
     public List<Byte> getRecipe() { return recipe; }public void setRecipe(List<Byte> recipe) { this.recipe = recipe; }
 
     public boolean isMine(PublicKey publicKey){
-        return (publicKey == recipient);
+        for(int i=0;i<publicKey.getEncoded().length;i++){
+            if(publicKey.getEncoded()[i]!=recipient.getEncoded()[i]) {
+                return false;
+            }
+        }
+//        return (publicKey == recipient);
+        return true;
     }
 
     @Override

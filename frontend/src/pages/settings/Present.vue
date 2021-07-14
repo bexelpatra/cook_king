@@ -8,7 +8,7 @@
           내 포인트
         </div>
         <div class="text-right col">
-          0
+          {{myPoint}}
           <span class="text-weight-bold">포인트</span>
         </div>
       </section>
@@ -18,7 +18,7 @@
           선물 가능 포인트
         </div>
         <div class="text-right col">
-          0
+          {{myPoint}}
           <span class="text-weight-bold">포인트</span>
         </div>
       </section>
@@ -50,7 +50,7 @@
             dense
             square
             outlined
-            placeholder="최소 100"
+            placeholder="최소 0.1"
             v-model="point"
             type="number"
           >
@@ -87,7 +87,7 @@
         style="height: 15vw"
         size="lg"
         label="선물하기"
-        @click=""
+        @click="sendPoint"
       />
     </q-footer>
 
@@ -107,13 +107,44 @@
     data(){
       return{
         util : new myUtil(this),
+        myPoint : 0,
         point: '',
         text : '',
       }
     },
     methods:{
       ...mapMutations([]),
-      ...mapActions([]),
+      ...mapActions(['fetchServer']),
+
+      getMyPoint(){
+        this.fetchServer({path : 'chain/balance',param :{token : LocalStorage.getItem('t')}})
+        .then(result =>{
+          console.log(result)
+          this.myPoint = result.balance;
+        })
+        .catch(reason => {
+          console.log(reason)
+        })
+      },
+      sendPoint(){
+        this.fetchServer({
+          path : 'chain/coin',
+          param :{
+            token : LocalStorage.getItem('t'),
+            publicKey : this.text,
+            value : this.point
+          },
+          method : 'post'
+        })
+          .then(result =>{
+            console.log(result)
+            // this.myPoint = result.balance;
+            this.util.goTo('cookcoin')
+          })
+          .catch(reason => {
+            console.log(reason)
+          })
+      },
 
       /**======================================
        * 클릭 이벤트
@@ -133,6 +164,7 @@
       this.getLayout.bookmarkbtn = false;
       this.getLayout.bottomFooter = false;
       this.getLayout.addcontent = false;
+      this.getMyPoint();
     },
     mounted() {},
     beforeUpdate() {},

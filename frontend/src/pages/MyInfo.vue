@@ -1,6 +1,12 @@
 <!--fixme 내 정보-->
 <template>
   <q-page class="bg-white">
+    <section>
+      <div class="text-h6 text-grey-7 text-center">
+        "{{email}}" 님의 정보입니다.
+      </div>
+      <q-separator/>
+    </section>
     <!--fixme Mycontent 내 게시물-->
     <section>
       <q-btn
@@ -68,6 +74,7 @@
       return{
         appVersion: LocalStorage.getItem("US_VS"),
         util :new myUtil(this),
+        email : '',
       }
     },
     methods:{
@@ -88,10 +95,11 @@
         this.$router.push('mycontent');
       },
       cookCoin(){
-        this.$q.notify({
-          message : '기능 추가 예정 입니다.',
-          type : 'info'
-        })
+        // this.$q.notify({
+        //   message : '기능 추가 예정 입니다.',
+        //   type : 'info'
+        // })
+        this.$router.push('cookcoin');
       }
     },
 
@@ -103,6 +111,7 @@
         .then(success => {
           // 로그인 성공시
           if(success.status==200){
+            this.email = success.user.email;
             this.setFavorite(success.user.favorite);
             this.setLogIn(true);
           }else{

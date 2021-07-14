@@ -1,5 +1,7 @@
 package com.example.demo.chain;
 
+import com.example.demo.repository.WalletRepository;
+import com.example.demo.service.ChainService;
 import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +10,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,10 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,11 +85,11 @@ public class CookChain {
     public static HashMap<String,TransactionOutput> UTXOs = new HashMap<>();
 
     // 임의의 지갑 두개
-    public static Wallet walletA;
-    public static Wallet walletB;
+    public static Wallet adminWallet;
 
     public static float minimumTransaction = 0.1f; // 최소 전송 금액
     public static Transaction genesisTransaction; // 시작 트랜잭션
+
     public static void dostuffs() {
 
         // security provider로 bouncyCastle을 사용
@@ -96,15 +97,22 @@ public class CookChain {
 
         // 지갑 생성하기
         // 지갑은 트랜잭션 결과와 잔액을 저장한다.
-        walletA = new Wallet();
-        walletB = new Wallet();
+        String publ ="[48,73,48,19,6,7,42,-122,72,-50,61,2,1,6,8,42,-122,72,-50,61,3,1,1,3,50,0,4,-48,122,-121,-51,-107,113,91,34,105,32,79,73,-106,-36,0,-51,109,70,-108,-50,79,59,-15,95,-63,99,42,-59,-107,88,58,84,-114,-85,-86,-16,-125,7,-31,-98,-58,-35,-37,-107,22,-37,126,94]";
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jsonArray = jsonParser.parse(publ).getAsJsonArray();
+        PublicKey adminPublicKey = Utils.toPublicKey(jsonArray);
+        adminWallet = new Wallet();
+
+
+        // 전체 물량을 생성할 최초의 지갑
         Wallet coinbase = new Wallet();
 
         //최초 트랜잭션 생성하기, 100NoobChain을 지급
         // 이외의 지급 조건이 없으므로 100Noob이 끝
         // 비트코인의 경우 새롭게 블록을 채굴하면 처음 50bit 부터 시작해서 4년마다 반감기를 거치면서 지급한다. 2021년 기준 블록 1개를 채굴하면 6.25bit 지급
         // 비트코인에서 새로운 채굴 난이도는 10분에 한개가 생성되도록 조정된다. 하루 2,102,000개 생성
-        genesisTransaction = new Transaction(coinbase.publicKey, walletA.publicKey, 100f, null);
+//        genesisTransaction = new Transaction(coinbase.publicKey, adminWallet.publicKey, 100000000000f, null);
+        genesisTransaction = new Transaction(coinbase.publicKey, adminPublicKey, 100000000000f, null);
         genesisTransaction.generateSignature(coinbase.privateKey);	 //manually sign the genesis transaction
         genesisTransaction.transactionId = "0"; //manually set the transaction id
         genesisTransaction.outputs.add(new TransactionOutput(genesisTransaction.recipient, genesisTransaction.value, genesisTransaction.transactionId)); //manually add the Transactions Output
@@ -117,34 +125,9 @@ public class CookChain {
 
         //testing
         Block block1 = new Block(genesis.hash);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("\nWalletA is Attempting to send funds (40) to WalletB...");
-//        block1.addTransaction(walletA.sendFunds(walletB.publicKey, 40f));
         addBlock(block1);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
-
         Block block2 = new Block(block1.hash);
-        System.out.println("\nWalletA Attempting to send more funds (1000) than it has...");
-        block2.addTransaction(walletA.sendFunds(walletB.publicKey, 1000f));
         addBlock(block2);
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
-
-        Block block3 = new Block(block2.hash);
-        System.out.println("\nWalletB is Attempting to send funds (20) to WalletA...");
-//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 20));
-//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 1));
-//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 2));
-//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 3));
-//        block3.addTransaction(walletB.sendFunds( walletA.publicKey, 4));
-        System.out.println("\nWalletA's balance is: " + walletA.getBalance());
-        System.out.println("WalletB's balance is: " + walletB.getBalance());
-
-
-//        Wallet test = new Wallet();
-//        Wallet convertTest = new Wallet(test.privateKey.getEncoded(),test.publicKey.getEncoded());
-
         isChainValid();
 
     }

@@ -9,17 +9,8 @@ public class Block {
     public String previousHash;
     public String merkleRoot;
     public ArrayList<Transaction> transactions = new ArrayList<Transaction>();
-//    private String data;
     private long timeStamp;
     private int nonce;
-
-    //constructor
-//    public Block(String data, String previousHash) {
-//        this.previousHash = previousHash;
-//        this.data = data;
-//        this.timeStamp = new Date().getTime();
-//        this.hash = calculateHash();
-//    }
 
     public Block(String previousHash) {
         this.previousHash = previousHash;
