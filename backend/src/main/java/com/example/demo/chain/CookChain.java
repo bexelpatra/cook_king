@@ -56,7 +56,6 @@ public class CookChain {
                 e.printStackTrace();
                 return;
             }
-            String result  = "어떻게 나올까?";
         }
         public void destroy() throws Exception {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
