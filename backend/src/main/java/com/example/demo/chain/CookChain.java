@@ -26,16 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/*
-    참고자료 : https://medium.com/programmers-blockchain/create-simple-blockchain-java-tutorial-from-scratch-6eeed3cb03fa
-
-    참고자료라기 보다는 필사하는 느낌으로 공부해봤다.
-
-    1. 블록체인을 만들고 data를 저장한다.
-    2. 전자서명을 통해 블록을 연결한다.
-    3. pow 알고리즘을 이용해서 새로운 블록의 타당성을 검증한다.
-
- */
 @Configuration
 public class CookChain {
     @Bean(initMethod = "init",destroyMethod = "destroy")
