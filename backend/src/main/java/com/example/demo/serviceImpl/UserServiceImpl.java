@@ -11,6 +11,7 @@ import com.example.demo.utilities.AES;
 import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -58,9 +59,9 @@ public class UserServiceImpl implements UserService {
         if(usersDto.getPassword().length()<8) return Optional.empty();
         if(usersRepository.findUsersEntityByEmail(email).isPresent()) return Optional.empty();
         String password = "";
-
         try {
-            password = new AES().aesEncode(usersDto.getPassword());
+//            password = new AES().aesEncode(usersDto.getPassword());
+            password = BCrypt.hashpw(usersDto.getPassword(),BCrypt.gensalt());
         } catch (Exception e) {
             e.printStackTrace();
         }
