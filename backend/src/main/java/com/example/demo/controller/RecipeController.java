@@ -104,6 +104,7 @@ public class RecipeController {
 
         // 1. token 검증
         UsersEntity usersEntity = userService.findUsersEntityByToken(token).orElse(null);
+
         if(usersEntity==null){
             httpStatus = HttpStatus.ACCEPTED;
             result.put("desc","토큰 오류");

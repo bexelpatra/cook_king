@@ -14,31 +14,31 @@
       <q-separator/>
     </section>
 
-    <!--fixme security 핀/생체-->
-    <section>
-      <q-btn
-        class="full-width items-start flex text-h6 text-grey-7"
-        style="height: 17vw"
-        icon="admin_panel_settings"
-        flat
-        label="핀/생체"
-        @click="securitybtn"
-      />
-      <q-separator/>
-    </section>
+<!--    &lt;!&ndash;fixme security 핀/생체&ndash;&gt;-->
+<!--    <section>-->
+<!--      <q-btn-->
+<!--        class="full-width items-start flex text-h6 text-grey-7"-->
+<!--        style="height: 17vw"-->
+<!--        icon="admin_panel_settings"-->
+<!--        flat-->
+<!--        label="핀/생체"-->
+<!--        @click="securitybtn"-->
+<!--      />-->
+<!--      <q-separator/>-->
+<!--    </section>-->
 
-    <!--fixme setting 설정-->
-    <section>
-        <q-btn
-          class="full-width items-start flex text-h6 text-grey-7"
-          style="height: 17vw"
-          icon="savings"
-          flat
-          label="쿡_코인"
-          @click="cookCoin"
-        />
-      <q-separator/>
-    </section>
+<!--    &lt;!&ndash;fixme setting 코인&ndash;&gt;-->
+<!--    <section>-->
+<!--        <q-btn-->
+<!--          class="full-width items-start flex text-h6 text-grey-7"-->
+<!--          style="height: 17vw"-->
+<!--          icon="savings"-->
+<!--          flat-->
+<!--          label="쿡_코인"-->
+<!--          @click="cookCoin"-->
+<!--        />-->
+<!--      <q-separator/>-->
+<!--    </section>-->
 
     <!--fixme version 버전-->
     <section>

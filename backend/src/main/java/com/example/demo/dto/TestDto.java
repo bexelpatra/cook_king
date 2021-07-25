@@ -1,7 +1,6 @@
 package com.example.demo.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import javafx.beans.property.adapter.JavaBeanBooleanPropertyBuilder;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

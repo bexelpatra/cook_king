@@ -10,6 +10,8 @@ import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 import com.example.demo.utilities.Utils;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @CrossOrigin
 public class UserController {
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     private final UserService userService;
     private final EmailService emailService;
     private final RecipeService recipeService;
@@ -155,6 +158,7 @@ public class UserController {
             usersEntity = userService.signUp(usersDto);
         }catch (Exception e){
             result.put("desc","회원 가입 실패 [이미 등록되었습니다]");
+            logger.info("회원가입실패 : 이미 회원가입되었습니다.");
             httpStatus = HttpStatus.ACCEPTED;
             return new ResponseEntity(result,httpStatus);
         }
@@ -163,6 +167,7 @@ public class UserController {
             result.put("user", UsersDto.fix(Utils.to(UsersDto.class,usersEntity.get())));
             httpStatus = HttpStatus.OK;
         }else{
+            logger.info("회원가입실패 : 입력값 오류");
             result.put("desc","회원 가입 실패 [입력값이 잘못되었습니다]");
             httpStatus = HttpStatus.ACCEPTED;
         }

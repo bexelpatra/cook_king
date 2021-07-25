@@ -13,10 +13,7 @@ import com.example.demo.service.UserService;
 import com.example.demo.utilities.AES;
 import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
-import com.mchange.v2.io.IndentedWriter;
-import javafx.scene.image.Image;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,13 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
-import javax.imageio.stream.ImageOutputStream;
-import javax.persistence.EntityManager;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -45,11 +36,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-
-import static java.util.stream.Collectors.groupingBy;
 
 @CrossOrigin
 @RestController

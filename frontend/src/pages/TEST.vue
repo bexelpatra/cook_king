@@ -308,7 +308,7 @@
         this.updateImage({path : 'recipe/recipe',method:'put',param:{token:'test'}})
       },
       test17(){ // 서버에서 이미지 받아오기
-        this.fetchServer({path : 'test/test24',param:{pathA:encodeURI('D:/class/cook_king/frontend/public/imgs/1')}})
+        this.fetchServer({path : 'test/test24',param:{pathA:encodeURI('D:/prj/cook_king/frontend/public/imgs/1')}})
         .then(value =>{
           console.log(value.dirs)
           console.log(value.file)
@@ -343,7 +343,7 @@
         let y = this.userInfo({token : 't'})
       },
       test21(){
-        this.fetchServer({path : 'test/test27',param:{path : 'D:/class/cook_king/frontend/public/imgs/5000/3000/1.JPG'}})
+        this.fetchServer({path : 'test/test27',param:{path : 'D:/prj/cook_king/frontend/public/imgs/5000/3000/1.JPG'}})
         .then(success =>{
           console.log(success.bytes)
           this.byteImg = 'data:image/jpeg;base64,'+success.bytes;

@@ -33,9 +33,9 @@ import java.util.Optional;
 @PropertySource(value = "classpath:application.properties")
 public class RecipeServiceImpl implements RecipeService {
     @Value("${file.absolutepath}")
-    private final String absolutePath="D:/class/cook_king/frontend/public/imgs/";
+    private final String absolutePath="D:/prj/cook_king/frontend/public/imgs/";
     @Value("${file.localpath}")
-    private final String localPath = "D:/class/cook_king/frontend/public/imgs/";
+    private final String localPath = "D:/prj/cook_king/frontend/public/imgs/";
     @Value("${file.url}")
     private final String urlPath = "imgs/";
     private final RecipeRepository recipeRepository;
@@ -90,7 +90,9 @@ public class RecipeServiceImpl implements RecipeService {
         recipesEntity.setUsersEntity(usersEntity);
 
         recipesEntity = recipeRepository.save(recipesEntity);
-        saveContentEntity(multiFileDto,recipesEntity,urlPath+usersEntity.getId()+"/"+recipesEntity.getId()+"/");
+        recipesEntity.setContentEntities(
+            saveContentEntity(multiFileDto,recipesEntity,urlPath+usersEntity.getId()+"/"+recipesEntity.getId()+"/")
+        );
 
         // 이미지 저장
         Utils.saveImage(multiFileDto.getFile(),usersEntity,recipesEntity.getId());
