@@ -11,9 +11,10 @@ import java.util.Properties;
 
 @Service
 public class SMTP {
+    private static final String user = "coookkingofficial@gmail.com";
+    private static final String pw = "dyfldhkd0$";
+
     public static boolean send(String receiver,String subject,String text){
-        final String user = "coookkingofficial@gmail.com";
-        final String pw = "dyfldhkd0$";
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host","smtp.gmail.com");
@@ -49,8 +50,6 @@ public class SMTP {
      * @param text 내용
      */
     public static boolean send(String[] receiver,String subject,String text){
-        final String user = "coookkingofficial@gmail.com";
-        final String pw = "dyfldhkd0$";
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host","smtp.gmail.com");
@@ -85,5 +84,10 @@ public class SMTP {
             e.printStackTrace();
             return false;
         }
+    }
+    public static boolean send(){
+        boolean result = false;
+
+        return result;
     }
 }

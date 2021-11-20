@@ -78,14 +78,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer addFavoriteRecipe(int usersId, int recipeId) {
         Integer result = 0;
-        String m = "";
+        String message = "";
         try{
             result = usersRepository.addFavoriteRecipe(usersId,recipeId);
         }catch (Exception e){
-            m = e.getMessage().split(";")[2];
-            if(m.contains("null")){
+            message = e.getMessage().split(";")[2];
+            if(message.contains("null")){
                 result = 3;
-            }else if(m.toLowerCase().contains("primary")){
+            }else if(message.toLowerCase().contains("primary")){
                 result = usersRepository.deleteFavoriteRecipe(usersId,recipeId);
                 if(result == 1) result = 2;
             }

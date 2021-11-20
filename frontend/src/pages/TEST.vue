@@ -75,13 +75,15 @@
           <q-btn @click="test21" label="test21 : binary를 img로"/>
           <q-img :src="byteImg"/>
           <div>{{fromServer}}</div>
+          <div class="text-weight-bold">
+            투썸플레이스
+          </div>
         </div>
 <!--        <v-btn type="button" hidden @click="onClickImageUpload">이미지 업로드</v-btn>-->
         <q-input type="file" v-model="file" @change="onChangeImages"/>
         <q-img :src="imageUrl"
                :ratio="3/4"
         ></q-img>
-
       </section>
     </q-page>
 </template>

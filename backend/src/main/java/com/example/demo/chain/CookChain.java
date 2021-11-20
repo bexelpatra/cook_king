@@ -1,7 +1,10 @@
 package com.example.demo.chain;
 
+import com.example.demo.entity.UsersEntity;
 import com.example.demo.repository.WalletRepository;
 import com.example.demo.service.ChainService;
+import com.example.demo.service.UserService;
+import com.example.demo.utilities.SMTP;
 import com.example.demo.utilities.Utils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,8 +32,12 @@ import java.util.stream.Collectors;
 @Configuration
 public class CookChain {
     @Bean(initMethod = "init",destroyMethod = "destroy")
-    public Coin coin(){ return new Coin(); }
+    public Coin coin(UserService userService){ return new Coin(userService); }
+
+    @RequiredArgsConstructor
     public class Coin{
+        private final UserService userService;
+        // 트랜잭션 정보들을 메모리에 올린다.
         public void init() {
             JsonParser jsonParser = new JsonParser();
             BufferedReader bufferedReaderBlock = null;
@@ -47,6 +54,7 @@ public class CookChain {
                 return;
             }
         }
+        // 종료 직전 메모리에 있는 트랜잭션들을 txt로 옮긴다.
         public void destroy() throws Exception {
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
             objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
